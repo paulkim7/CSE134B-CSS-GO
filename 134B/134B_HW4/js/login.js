@@ -3,21 +3,18 @@
 //   signUpText.style.display = "block";
 // }
 
-$(document).ready(function(){
 
-	function onClickSignup() {
-		var email = document.getElementById("usermail");
-		var pass = document.getElementById("password");
+function onClickSignup() {
+	var email = document.getElementById("usermail");
+	var pass = document.getElementById("password");
 
-		authenticate(email,pass).then(function(parseObj) {
-			if(parseObj != null) {
-				alert("Login success!");
-				window.href = "list.html";
-			}
-			else {
-				alert("Login failure!");
-			}
-		});
-	}
-
-});
+	authenticate(email,pass).then(function(parseObj) {
+		if(parseObj != null) {
+			alert("Login success!");
+			window.href = "list.html";
+		}
+		else {
+			alert("Login failure!");
+		}
+	});
+}
