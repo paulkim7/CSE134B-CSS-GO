@@ -134,7 +134,7 @@ window.onload = function () {
             del.setAttribute("type", "button");
 
             done.setAttribute("onclick", "showMsg(this);");
-            edit.setAttribute("onclick", "location.href='edit.html'; editHabit(this)");
+            edit.setAttribute("onclick", "editHabit(this); location.href='edit.html'");
             del.setAttribute("onclick", "deleteHabit(this);");
 
 

@@ -8,6 +8,8 @@ function editHabit(element) {
 	var habitToEdit = localStorage.getItem("habitList");
 	var arrayHabit = JSON.parse(habitToEdit);
 
+
+
 	var i = 0;
 
 	while( i < arrayHabit.length ) {
@@ -18,9 +20,8 @@ function editHabit(element) {
             console.log("Id matched");
             console.log(individualHabit);
 
-            var header = document.createElement("h2");
-            
-            
+            localStorage.setItem("editHabit", JSON.stringify(individualHabit));
+
             break;
         }
 

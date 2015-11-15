@@ -65,6 +65,9 @@ function createHabit()
     }
     var freqString = JSON.stringify(freqData);
     var otherValue = document.getElementById("others").value;
+
+    console.log(otherValue);
+
     var d = new Date();
     var n = d.getTime();
     var idStr = n.toString();
