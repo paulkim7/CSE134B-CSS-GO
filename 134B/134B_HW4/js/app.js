@@ -5,20 +5,21 @@ Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb",
 
 /**
  * authenticate()
- * Description: Look for username and compare password input with what is
+ * Description: Look for email in the database and compare password input with what is
  *              stored on the database.
  * Inputs:
- *    username - String value of username input
- *    pass     - String value of password input to be compared
+ *    email - String value of email input
+ *    pass  - String value of password input to be compared
  * Return Val: Returns the Parse object if the username is found and
  *             the password matches, returns null if nah
  **/
 
-function authenticate(username,pass) {
+function authenticate(email,pass) {
     return new Promise(function(resolve,reject) {
         var UserClass = Parse.Object.extend('UserAccount');
         var userQuery = new Parse.Query(FileClass);
-        fileQuery.get(id).then(function(result){
+        userQuery.contains('email', email);
+        fileQuery.get(email).then(function(result){
             if(result.size != 0)
                 return null;
             else {
