@@ -1,11 +1,11 @@
-function onClickSignUp() {
-  var signUpText = document.getElementById("signInMessage");
-  signUpText.style.display = "block";
-}
+// function onClickSignUp() {
+//   var signUpText = document.getElementById("signInMessage");
+//   signUpText.style.display = "block";
+// }
 
-$(document).ready(function() ){
+$(document).ready(function(){
 
-	onClickSignup() {
+	function onClickSignup() {
 		var email = document.getElementById("usermail");
 		var pass = document.getElementById("password");
 
@@ -13,6 +13,9 @@ $(document).ready(function() ){
 			if(parseObj != null) {
 				alert("Login success!");
 				window.href = "list.html";
+			}
+			else {
+				alert("Login failure!");
 			}
 		});
 	}

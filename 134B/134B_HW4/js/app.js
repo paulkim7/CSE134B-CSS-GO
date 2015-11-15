@@ -17,7 +17,7 @@ Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb",
 function authenticate(email,pass) {
     return new Promise(function(resolve,reject) {
         var UserClass = Parse.Object.extend('UserAccount');
-        var userQuery = new Parse.Query(FileClass);
+        var userQuery = new Parse.Query(UserClass);
         userQuery.contains('email', email);
         fileQuery.get(email).then(function(result){
             if(result.size != 0)
