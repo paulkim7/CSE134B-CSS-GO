@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Virtue / Vice</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../css/list.css">
+        <script src="../js/list.js">
+        </script>
+        <script src="../js/edit.js"></script>
+    </head>
+
+    <body>
+        <section>
+            <h1>Habit List</h1>
+            <ul id="habit-list">
+            </ul>
+        </section>
+
+        <button type="button" id="addHabit" onclick="location.href = 'add.html'" title="add habit">+</button>
+
+        <script type="text/javascript">
+            function showMsg(element) {
+                var msgElement = (element.parentNode.parentNode.getElementsByClassName("message"))[0];
+                // alert(msgElement.innerHTML);
+                msgElement.style.visibility = "visible";
+            }
+
+            function deleteHabit(element) {
+                var child = element.parentNode.parentNode;
+                var parent = child.parentNode;
+                parent.removeChild(child);
+
+                // Must delete the habit from the habit array as well
+                var removedHabit = localStorage.getItem("habitList");
+                var arrayHabit = JSON.parse(removedHabit);
+
+                var j = 0;
+
+                // If I have the index number in which it's in, it's easier (figure out more efficient way)
+
+                // Inefficient way
+                while( j < arrayHabit.length ) {
+                    
+                    var individualHabit = JSON.parse(arrayHabit[j]);
+
+                    if(child.id == ("habit-" + individualHabit.id) ) {
+                        console.log("Id matched");
+                        arrayHabit.splice(j, 1);
+                        break;
+                    }
+
+                    j++;
+                }
+
+                //remove the habit of which you clicked the delete button 
+
+                localStorage.setItem("habitList", JSON.stringify(arrayHabit));
+
+                
+                console.log(arrayHabit.length);
+
+            }
+
+        </script>
+    </body>
+</html>
