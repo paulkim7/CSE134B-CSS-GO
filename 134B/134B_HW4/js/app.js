@@ -1,8 +1,6 @@
 
 // Initialize dependency (Parse backend)
-Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", 
-                        "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
-
+Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
 /**
  * authenticate()
  * Description: Look for email in the database and compare password input with what is
@@ -18,21 +16,32 @@ function authenticate(email,pass) {
     return new Promise(function(resolve,reject) {
         var UserClass = Parse.Object.extend('UserAccount');
         var userQuery = new Parse.Query(UserClass);
-        userQuery.contains('email', email);
-        fileQuery.get(email).then(function(result){
-            if(result.size != 0)
-                return null;
+        userQuery.equalTo("email", email);
+        userQuery.find().then(function(result){
+            if(result === undefined || result.size === 0 || result.size > 1 ) {
+                console.log("resolve null");
+                resolve(null);
+            }
             else {
-                // Check password
-                if(pass==result.get(password))
-                    resolve(result);
-                else
-                    return null;
+                console.log("returning result");
+                resolve(result[0]);
             }
         },function(err){reject(err);});
     });
 }
 
+function createUser(email, pass) {
+    return new Promise(function(resolve,reject) {
+        var UserClass = Parse.Object.extend('UserAccount');
+        var newUser = new UserClass();
+
+        newUser.set("email",email);
+        newUser.set("password",pass);
+        newUser.save().then(function(newUser){
+            resolve(newUser);    // Return new user object
+        });
+    });
+}
 
 function createHabit()
 {
