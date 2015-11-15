@@ -3,6 +3,34 @@
 Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", 
                         "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
 
+/**
+ * authenticate()
+ * Description: Look for username and compare password input with what is
+ *              stored on the database.
+ * Inputs:
+ *    username - String value of username input
+ *    pass     - String value of password input to be compared
+ * Return Val: Returns the Parse object if the username is found and
+ *             the password matches, returns null if nah
+ **/
+
+function authenticate(username,pass) {
+    return new Promise(function(resolve,reject) {
+        var UserClass = Parse.Object.extend('UserAccount');
+        var userQuery = new Parse.Query(FileClass);
+        fileQuery.get(id).then(function(result){
+            if(result.size != 0)
+                return null;
+            else {
+                // Check password
+                if(pass==result.get(password))
+                    resolve(result);
+                else
+                    return null;
+            }
+        },function(err){reject(err);});
+    });
+}
 
 
 function createHabit()
