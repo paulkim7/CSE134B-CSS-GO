@@ -1,3 +1,10 @@
+
+// Initialize dependency (Parse backend)
+Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", 
+                        "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
+
+
+
 function createHabit()
 {
     var titleValue = document.getElementById("title").value;
