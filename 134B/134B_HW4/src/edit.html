@@ -5,22 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Edit a habit</title>
         <link rel="stylesheet" href="../css/forms.css">
-        <script src="../js/update.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="../js/edit.js"></script>
     </head>
     <body>
         <script>
             function onStart() {
-
                 var habitToEdit = localStorage.getItem("editHabit");
                 var habitToEditObj = JSON.parse(habitToEdit);
-
                 localStorage.setItem("habitEditID", habitToEditObj.id);
-
-
                 document.getElementById("title").value = habitToEditObj.title;
-
                 var i = 1;
-
                 while (i < 5) {
                     if (document.getElementById("icon" + i).alt === habitToEditObj.icon) {
                         console.log("While");
@@ -35,19 +30,12 @@
                 }
 
                 var arrayDays = JSON.parse(habitToEditObj.day);
-
                 console.log("Array of Days Selected: " + arrayDays);
-
                 console.log("Array length" + arrayDays.length);
-
                 var j = 0;
-
                 while (j < arrayDays.length) {
-
                     console.log("Boolean " + arrayDays[j]);
-
                     if (arrayDays[j] === true) {
-
                         if (j === 0) {
                             document.getElementById("sun").checked = true;
                         }
@@ -128,9 +116,9 @@
 
                 <p><label>Daily Frequency</label></p>
                 <div id="daily-button">
-                    <label> <input id="f1" type="checkbox" name="day[]" value="one" ><span>1</span></label>
-                    <label> <input id="f2" type="checkbox" name="day[]" value="two" ><span>2</span></label>
-                    <label> <input id="f3" type="checkbox" name="day[]" value="three"><span>3</span></label>
+                    <label> <input id="freq1Btn" type="checkbox" name="day[]" value="one" ><span>1</span></label>
+                    <label> <input id="freq2Btn" type="checkbox" name="day[]" value="two" ><span>2</span></label>
+                    <label> <input id="freq3Btn" type="checkbox" name="day[]" value="three"><span>3</span></label>
                     <span id="times">times</span>
                 </div>
                 <p><label><span id="others_text">Others: </span><input id="others" type="number" name="day" placeholder="More than 3 times"></label></p>

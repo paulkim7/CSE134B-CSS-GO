@@ -21,49 +21,27 @@ function validateCustomDays(input) {
 
 // JQuery, create listeners when the document is ready
 $(document).ready(function() {
-	// Handle checkbox
-	$("#freq1Btn").click(function() {
-		$("#freq1Btn").toggle();
-		$("#freq2Btn").prop("checked", false);
-		$("#freq3Btn").prop("checked", false);
-
-		// If enabling, make text input readonly
-		if(document.getElementById('freq1Btn').checked)  {
-			$("#others").prop("readonly",true);
-		} else {
-			document.getElementById("others").readonly = false;	
-			$("#others").prop("readonly",false);
-
-		}
-	});
-
-	$("#freq2Btn").click(function() {
-		$("#freq2Btn").toggle();
-		$("#freq1Btn").prop("checked", false);
-		$("#freq3Btn").prop("checked", false);
-
-		// If enabling, make text input readonly
-		if(document.getElementById('freq2Btn').checked)  {
-			$("#others").prop("readonly",true);
-		} else {
-			document.getElementById("others").readonly = false;	
-			$("#others").prop("readonly",false);
-
-		}
-	});
-
-	$("#freq3Btn").click(function() {	
-		$("#freq3Btn").toggle();
-		$("#freq1Btn").prop("checked", false);
-		$("#freq2Btn").prop("checked", false);
-
-		// If enabling, make text input readonly
-		if(document.getElementById('freq3Btn').checked)  {
-			$("#others").prop("readonly",true);
-		} else {
-			document.getElementById("others").readonly = false;	
-			$("#others").prop("readonly",false);
-
-		}
-	});
+    // Handle checkbox for daily frequency, allow only one to be selected at a time,
+    // or, only the custom input
+    $("#freq1Btn").click(function() {
+        $("#freq1Btn").toggle();
+        $("#freq2Btn").prop("checked", false);
+        $("#freq3Btn").prop("checked", false);
+    });
+    $("#freq2Btn").click(function() {
+        $("#freq2Btn").toggle();
+        $("#freq1Btn").prop("checked", false);
+        $("#freq3Btn").prop("checked", false);
+    });
+    $("#freq3Btn").click(function() {   
+        $("#freq3Btn").toggle();
+        $("#freq1Btn").prop("checked", false);
+        $("#freq2Btn").prop("checked", false);
+    });
+    $("#others").click(function() {
+        console.log("other click");
+        $("#freq1Btn").prop("checked", false);
+        $("#freq2Btn").prop("checked", false);
+        $("#freq3Btn").prop("checked", false);
+    });
 });

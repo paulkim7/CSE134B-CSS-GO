@@ -5,13 +5,13 @@
 
 // Returns true on valid, false on invalid
 function validateEmail(email) {
-    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
 
 // Check for one cap letter, one numerical character, and a pass length of 5<=x<=15
 function validatePassword(pass) {
-	var re = ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}$;
+	var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}$/;
 	return re.test(email);
 
 }

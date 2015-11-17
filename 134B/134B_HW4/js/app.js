@@ -1,6 +1,7 @@
 
 // Initialize dependency (Parse backend)
 Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
+
 /**
  * authenticate()
  * Description: Look for email in the database and compare password input with what is
@@ -11,7 +12,6 @@ Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M
  * Return Val: Returns the Parse object if the username is found and
  *             the password matches, returns null if nah
  **/
-
 function authenticate(email,pass) {
     return new Promise(function(resolve,reject) {
         var UserClass = Parse.Object.extend('UserAccount');
@@ -30,6 +30,12 @@ function authenticate(email,pass) {
     });
 }
 
+
+//*****************************
+//*
+//*  Parse Functions go here
+//*
+//*****************************
 function createUser(email, pass) {
     return new Promise(function(resolve,reject) {
         var UserClass = Parse.Object.extend('UserAccount');
@@ -42,6 +48,87 @@ function createUser(email, pass) {
         });
     });
 }
+
+/**
+ * validateImageUpload()
+ * Description: Checks a filename and determines whether it is an
+ *              image or not by comparing the filename extension with
+ *              an array of acceptable image formats.
+ * 
+ * Inputs:
+ *    filename -- The filename to be validated
+ * Return Value: Returns true if the filename is valid for an image file, false if not
+ **/
+function validateImageUpload(filename) {
+    // Check for a file-extension, return false if none
+    if(filename.lastIndexOf(".")===(-1)) {
+        return false;
+    }
+
+    var extension = filename.substring(filename.lastIndexOf(".")+1,filename.length);
+    var extList = ['jpg','jpeg','png','gif'];         // Array of all common image formats
+
+    for(String ext of extList) {
+        if(extension === ext) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+// <form id="fileupload" name="fileupload" enctype="multipart/form-data" method="post">
+//   <fieldset>
+//     <input type="file" name="fileselect" id="fileselect"></input>
+//     <input id="uploadbutton" type="button" value="Upload to Parse"/>
+//   </fieldset>
+// </form>
+
+
+/**
+ * uploadImage() 
+ * Description: Take form data and use it to upload an image to parse using a post method.
+ *              Image upload is stored at data.url.
+ * TODO: Check for recurring filenames or something
+ * Inputs: None, directly accessed from DOM
+ * Outputs: Returns file URL on success, throw error on failure
+ **/
+function uploadImage(imageFormData) {
+    var file;
+    // Set an event listener on the Choose File field.
+    $('#fileselect').bind("change", function(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      // Our file var now holds the selected file
+      file = files[0];
+    });
+
+    // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
+    $('#uploadbutton').click(function() {
+      var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+
+      $.ajax({
+        type: "POST",
+        beforeSend: function(request) {
+          request.setRequestHeader("X-Parse-Application-Id", 'MY-APP-ID');
+          request.setRequestHeader("X-Parse-REST-API-Key", 'MY-REST-API-ID');
+          request.setRequestHeader("Content-Type", file.type);
+        },
+        url: serverUrl,
+        data: file,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          alert("File available at: " + data.url);
+        },
+        error: function(data) {
+          var obj = jQuery.parseJSON(data);
+          alert(obj.error);
+        }
+      });
+    });
+}
+
 
 function checkDuplicateTitle() {
     var titleValue = document.getElementById("title").value;
