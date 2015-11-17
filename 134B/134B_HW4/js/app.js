@@ -43,6 +43,36 @@ function createUser(email, pass) {
     });
 }
 
+function checkDuplicateTitle() {
+    var titleValue = document.getElementById("title").value;
+
+    if( localStorage.getItem("habitList") == null ) {
+        createHabit(); // create first habit
+        return;
+    }
+    
+    var habitArray = JSON.parse(localStorage.getItem("habitList"));
+
+    var j = 0
+
+    console.log(titleValue);
+    while( j < habitArray.length ) {
+                    
+        var individualHabit = JSON.parse(habitArray[j]);
+
+        if( titleValue === individualHabit.title ) {
+            alert("The following habit title already exists. Please edit the existing habit.");
+            return;
+        }
+
+        j++;
+
+    }
+
+    createHabit(); // create habit after confirming unique title
+
+}
+
 function createHabit()
 {
     var titleValue = document.getElementById("title").value;

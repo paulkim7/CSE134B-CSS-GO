@@ -135,7 +135,7 @@ window.onload = function () {
 
             done.setAttribute("onclick", "showMsg(this);");
             edit.setAttribute("onclick", "editHabit(this); location.href='edit.html'");
-            del.setAttribute("onclick", "deleteHabit(this);");
+            del.setAttribute("onclick", "confirmDelete(this);");
 
 
             del.appendChild(delImg);
@@ -159,3 +159,11 @@ window.onload = function () {
 
 
 };
+
+function confirmDelete(element) {
+    var deleteConfirm = confirm("Are you sure you want to delete this habit?");
+
+    if(deleteConfirm) {
+        deleteHabit(element);
+    }
+}
