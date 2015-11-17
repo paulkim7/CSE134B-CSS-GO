@@ -18,6 +18,9 @@ function updateHabit() {
             console.log("Id matched");
             var titleValue = document.getElementById("title").value;
             var habitValue = document.getElementById("habits").value;
+
+            console.log("update.js Icon Name: " + habitValue);
+
             var dayArray = document.getElementsByName("date[]");
             var dayLength = dayArray.length;
             var dayData = Array();

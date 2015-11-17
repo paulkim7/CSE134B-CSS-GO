@@ -1,14 +1,12 @@
 function editHabit(element) {
-	var output = document.getElementsByClassName("forms");
+	//var output = document.getElementsByClassName("forms");
 
 	var child = element.parentNode.parentNode;
 
-	console.log(child);
+	console.log("Edit Habit JS " + child.id);
 
 	var habitToEdit = localStorage.getItem("habitList");
 	var arrayHabit = JSON.parse(habitToEdit);
-
-
 
 	var i = 0;
 
@@ -18,7 +16,7 @@ function editHabit(element) {
 
         if(child.id == ("habit-" + individualHabit.id) ) {
             console.log("Id matched");
-            console.log(individualHabit);
+            console.log(JSON.stringify(individualHabit));
 
             localStorage.setItem("editHabit", JSON.stringify(individualHabit));
 
