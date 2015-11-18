@@ -134,13 +134,38 @@ function validateInputs() {
     }
 
     if( inputsValidated === true ) {
-        updateHabit();
+        checkDuplicateTitle();
     }
     else {
         alert(inputMsg);
     }
 
 }
+
+function checkDuplicateTitle() {
+    var titleValue = document.getElementById("title").value;
+    
+    var habitArray = JSON.parse(localStorage.getItem("habitList"));
+
+    var j = 0
+
+    while( j < habitArray.length ) {
+                    
+        var individualHabit = JSON.parse(habitArray[j]);
+
+        if( titleValue === individualHabit.title ) {
+            alert("The following habit title already exists. Please edit the existing habit.");
+            return;
+        }
+
+        j++;
+
+    }
+
+    updateHabit(); // update habit after confirming unique title
+
+}
+
 
 // JQuery, create listeners when the document is ready
 $(document).ready(function() {
