@@ -18,7 +18,6 @@ function validateCustomDays(input) {
 	}
 }
 
-
 // JQuery, create listeners when the document is ready
 $(document).ready(function() {
     // Handle checkbox for daily frequency, allow only one to be selected at a time,

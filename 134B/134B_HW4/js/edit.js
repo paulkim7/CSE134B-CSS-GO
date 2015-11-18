@@ -50,6 +50,8 @@ function updateHabit() {
 
     }
     localStorage.setItem("habitList", JSON.stringify(arrayHabit));
+
+    location.href = 'list.html';
 }
 
 
@@ -79,6 +81,65 @@ function editHabit(element) {
 
         i++;
     }
+}
+
+function validateInputs() {
+    var titleValue = document.getElementById("title").value;
+    var habitValue = document.getElementById("habits").value;
+    
+    var dayArray = document.getElementsByName("date[]");
+    var dailyFreqArray = document.getElementsByName("day[]");
+    var otherValue = document.getElementById("others").value;
+
+    var numDaysChecked = 0;
+    var numFreqChecked = 0;
+
+    var inputsValidated = true;
+    var inputMsg = "";
+
+    if( titleValue === "" ) {
+        inputMsg = "- Please enter a habit title.\n";
+        inputsValidated = false;
+    }
+    
+    if( habitValue === "unselected" ) {
+        inputMsg = inputMsg + "- Please select an icon image.\n"
+        inputsValidated = false;
+    }
+    
+    // Checks whether days are selected for the habit
+    for( i = 0; i < dayArray.length; i++) {
+        if( dayArray[i].checked === true ) {
+            numDaysChecked++;
+        }   
+    }
+
+    if( numDaysChecked === 0 ) {
+        inputMsg = inputMsg + "- Please select at least ONE day.\n";
+        inputsValidated = false;
+    }
+
+    // Checks whether daily frequency is checked
+    for( j = 0; j < dailyFreqArray.length; j++ ) {
+        if( dailyFreqArray[j].checked === true ) {
+            numFreqChecked++;
+            break;
+        }
+    }
+
+    // If both daily frequency NOT checked and other value doesn't exist
+    if( numFreqChecked === 0 && otherValue === "" ) {
+        inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
+        inputsValidated = false;
+    }
+
+    if( inputsValidated === true ) {
+        updateHabit();
+    }
+    else {
+        alert(inputMsg);
+    }
+
 }
 
 // JQuery, create listeners when the document is ready

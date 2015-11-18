@@ -33,6 +33,7 @@
                     <label> <input type="checkbox" name="date[]" value="saturday" id="saturday"><span>Sat</span></label>
                 </div>
                 <select id = "habits" name="images" hidden>
+                    <option id="unselected" value="unselected"> Unselected by Default </option>
                     <option id="img1" value="../img/sleep.jpg">Select  </option>
                     <option id="img2" value="../img/salad.jpg">gold  </option>
                     <option id="img3" value="../img/run.jpg">silver  </option>
@@ -46,7 +47,7 @@
                     <span id="times">times</span>
                 </div>
                 <p><label><span id="others_text">Others: </span><input id="others" type="number" name="day" placeholder="More than 3 times"></label></p>
-                <p id="save_p"><input id="save" type="button" value="Save It" onclick="checkDuplicateTitle(); location.href='list.html'"></p>
+                <p id="save_p"><input id="save" type="button" value="Save It" onclick="validateInputs();"></p>
 
             </form>
 

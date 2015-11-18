@@ -69,13 +69,13 @@
                 while (k < arrayFreq.length) {
                     if (arrayFreq[k] === true) {
                         if (k === 0) {
-                            document.getElementById("f1").checked = true;
+                            document.getElementById("freq1Btn").checked = true;
                         }
                         if (k === 1) {
-                            document.getElementById("f2").checked = true;
+                            document.getElementById("freq2Btn").checked = true;
                         }
                         if (k === 2) {
-                            document.getElementById("f3").checked = true;
+                            document.getElementById("freq3Btn").checked = true;
                         }
                     }
                     k++;
@@ -122,7 +122,7 @@
                     <span id="times">times</span>
                 </div>
                 <p><label><span id="others_text">Others: </span><input id="others" type="number" name="day" placeholder="More than 3 times"></label></p>
-                <p id="save_p"><input id="save" type="button" value="Save It" onclick="updateHabit(); location.href='list.html'"></p>
+                <p id="save_p"><input id="save" type="button" value="Save It" onclick="validateInputs();"></p>
 
             </form>
 
