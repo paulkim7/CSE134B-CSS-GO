@@ -55,6 +55,8 @@ window.onload = function () {
             var editImg = document.createElement("img");
             var delImg = document.createElement("img");
             var br = document.createElement("br");
+            var progress = document.createElement("progress");
+
             list.setAttribute("id", "habit-" + i);
             nameLi.setAttribute("id", "nameLi-" + i);
             nameDiv.setAttribute("id", "nameDiv-" + i);
@@ -105,13 +107,20 @@ window.onload = function () {
             messSvg.appendChild(messLine1);
             messSvg.appendChild(messLine2);
 
+            // Progress value & max
+            progress.value = habit1.streak;
+            progress.max = 5; //CHANGE
+
             // Streak and record number added
-            totalSpan.innerHTML = "<strong> " + habit1.streak + "</strong> days in a row! Best Record: <strong> " + habit1.record +"</strong><br>";
+            totalSpan.innerHTML = "<strong> " + habit1.streak + "</strong> days in a row! Best Record: <strong> " + habit1.record +"</strong><br><br>";
 
             today.innerHTML = "Completed <strong>1/1</strong> for today!";
             today.setAttribute("class", "message-today");
             messDiv.setAttribute("class", "message");
-            totalSpan.appendChild(messSvg);
+            //totalSpan.appendChild(messSvg);
+            //totalSpan.appendChild(br);
+            totalSpan.appendChild(progress);
+
             messDiv.appendChild(totalSpan);
             messDiv.appendChild(br);
             messDiv.appendChild(today);
