@@ -146,6 +146,7 @@ function checkDuplicateTitle() {
     var titleValue = document.getElementById("title").value;
     
     var habitArray = JSON.parse(localStorage.getItem("habitList"));
+    var updatedHabitID = localStorage.getItem("habitEditID"); // ID of the habit you're editing
 
     var j = 0
 
@@ -154,8 +155,10 @@ function checkDuplicateTitle() {
         var individualHabit = JSON.parse(habitArray[j]);
 
         if( titleValue === individualHabit.title ) {
-            alert("The following habit title already exists. Please edit the existing habit.");
-            return;
+            if( individualHabit.id != updatedHabitID ) {
+                alert("The following habit title already exists. Please edit the existing habit.");
+                return;
+            }
         }
 
         j++;
