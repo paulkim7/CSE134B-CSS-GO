@@ -55,12 +55,13 @@ function updateHabit() {
             var freqArray = document.getElementsByName("day[]");
             var freqLength = freqArray.length;
             var freqData = Array();
+            var dailyFreq = 0;;
             for (i = 0; i < freqLength; i++)
             {
                 freqData[i] = freqArray[i].checked;
 
                 if( freqArray[i].checked === true ) {
-                    var dailyFreq = i + 1;
+                    dailyFreq = i + 1;
                     individualHabit.dailyFreq = dailyFreq;
                 }
             }
@@ -77,13 +78,15 @@ function updateHabit() {
             var freqString = JSON.stringify(freqData);
             var otherValue = document.getElementById("others").value;
 
+            console.log("otherValue = " + otherValue);
+
             individualHabit.iconNum = iconImgNum;
             individualHabit.title = titleValue;
             individualHabit.icon = habitValue;
             individualHabit.day = dayString;
-            if( dailyFreq === 0 ) {
+            //if( dailyFreq === null ) {
                 individualHabit.freqOther = otherValue;
-            }
+            //}
 
             individualHabit.freq = freqString;
             arrayHabit[j] = JSON.stringify(individualHabit);
