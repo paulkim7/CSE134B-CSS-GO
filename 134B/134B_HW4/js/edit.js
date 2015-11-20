@@ -15,6 +15,7 @@ function readURL(input) {
         }
 
         reader.readAsDataURL(input.files[0]);
+        selectImage('icon4', 'img4');
     }
 }
 
@@ -81,7 +82,9 @@ function updateHabit() {
 
             individualHabit.iconNum = iconImgNum;
             individualHabit.title = titleValue;
-            individualHabit.icon = habitValue;
+            var iconUploader = document.getElementById("iconUploaderEdit");
+            if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+                individualHabit.icon = habitValue;           // and user icon was selected before
             individualHabit.day = dayString;
 
             individualHabit.freq = freqString;

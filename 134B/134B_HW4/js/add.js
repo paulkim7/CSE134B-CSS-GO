@@ -35,6 +35,7 @@ function readURL(input) {
         }
 
         reader.readAsDataURL(input.files[0]);
+        selectImage('icon4', 'img4');
     }
 }
 
