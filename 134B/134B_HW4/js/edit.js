@@ -10,16 +10,17 @@ function updateHabit() {
 
         var individualHabit = JSON.parse(arrayHabit[j]);
         var updatedHabitID = localStorage.getItem("habitEditID");
-        //var habitBeforeEdit = localStorage.getItem("habitBeforeChanges");
+        var habitBeforeEdit = JSON.parse(localStorage.getItem("habitBeforeChanges"));
 
-        console.log(habitBeforeEdit);
+
+        console.log("habitBeforeEdit " + habitBeforeEdit.dailyFreq);
 
         if (updatedHabitID === individualHabit.id) {
-            console.log("Id matched");
+            //console.log("Id matched");
             var titleValue = document.getElementById("title").value;
             var habitValue = document.getElementById("habits").value;
 
-            console.log("update.js Icon Name: " + habitValue);
+            //console.log("update.js Icon Name: " + habitValue);
 
             var dayArray = document.getElementsByName("date[]");
             var dayLength = dayArray.length;
@@ -39,17 +40,30 @@ function updateHabit() {
 
                 if( freqArray[i].checked === true ) {
                     var dailyFreq = i + 1;
+                    individualHabit.dailyFreq = dailyFreq;
                 }
             }
 
+
+
+            if( dailyFreq != habitBeforeEdit.dailyFreq ) {
+                individualHabit.progVal = 0;
+                individualHabit.streak = 0;
+                individualHabit.record = 0;
+            }
             console.log("dailyFreq = " + dailyFreq);
 
             var freqString = JSON.stringify(freqData);
             var otherValue = document.getElementById("others").value;
+
+            //individualHabit.dailyFreq = dailyFreq;
             individualHabit.title = titleValue;
             individualHabit.icon = habitValue;
             individualHabit.day = dayString;
-            individualHabit.freqOther = otherValue;
+            if( dailyFreq === 0 ) {
+                individualHabit.freqOther = otherValue;
+            }
+            
             individualHabit.freq = freqString;
             arrayHabit[j] = JSON.stringify(individualHabit);
 

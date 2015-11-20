@@ -14,13 +14,13 @@
             function onStart() {
                 var habitToEdit = localStorage.getItem("editHabit");
                 var habitToEditObj = JSON.parse(habitToEdit);
+                
                 localStorage.setItem("habitEditID", habitToEditObj.id);
-                //localStorage.setItem("habitBeforeChanges", JSON.stringifyhabitToEditObj);
+                localStorage.setItem("habitBeforeChanges", JSON.stringify(habitToEditObj));
                 document.getElementById("title").value = habitToEditObj.title;
                 var i = 1;
                 while (i < 5) {
                     if (document.getElementById("icon" + i).alt === habitToEditObj.icon) {
-                        console.log("While");
 
                         document.getElementById("icon" + i).style.border = "5px solid #42A5F5";
                         document.getElementById("img" + i).selected = "true";    
@@ -32,11 +32,9 @@
                 }
 
                 var arrayDays = JSON.parse(habitToEditObj.day);
-                console.log("Array of Days Selected: " + arrayDays);
-                console.log("Array length" + arrayDays.length);
+                
                 var j = 0;
                 while (j < arrayDays.length) {
-                    console.log("Boolean " + arrayDays[j]);
                     if (arrayDays[j] === true) {
                         if (j === 0) {
                             document.getElementById("sun").checked = true;
@@ -83,7 +81,6 @@
                     k++;
                 }
                 document.getElementById("others").value=habitToEditObj.freqOther;
-                console.log("Daily Frequency: " + habitToEditObj.freq);
 
             }
 
