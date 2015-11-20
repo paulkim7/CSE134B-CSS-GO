@@ -47,13 +47,13 @@
                     
 
                     if( habitID === ("habit-" + individualHabit.id) ) {
-
-                        if( individualHabit.dailyFreq === 0 ) {
-                            dailyFreqType = individualHabit.freqOther;
-                        }
-                        else {
-                            dailyFreqType = individualHabit.dailyFreq;
-                        }
+                        dailyFreqType = individualHabit.dailyFreq;
+                        // if( individualHabit.dailyFreq === 0 ) {
+                        //     dailyFreqType = individualHabit.freqOther;
+                        // }
+                        // else {
+                        //     dailyFreqType = individualHabit.dailyFreq;
+                        // }
 
                         if( individualHabit.progVal === dailyFreqType ) {
                             return;

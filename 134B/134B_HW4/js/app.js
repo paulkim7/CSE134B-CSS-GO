@@ -239,7 +239,9 @@ function createHabit()
         }
     }
     var freqString = JSON.stringify(freqData);
-    var otherValue = document.getElementById("others").value;
+
+    if(numDailyFreq===0)
+        var numDailyFreq = document.getElementById("others").value;
 
     var d = new Date();
     var n = d.getTime();
@@ -248,7 +250,7 @@ function createHabit()
     var idClean = id.replace(/ /g,'');
     var progValue = 0;
 
-    var habitObject = {id: idClean, title: titleValue, icon: habitValue, iconNum: iconImgNum, day: dayString, freq: freqString, progVal: progValue, dailyFreq: numDailyFreq, freqOther: otherValue, streak: 0, record: 0};
+    var habitObject = {id: idClean, title: titleValue, icon: habitValue, iconNum: iconImgNum, day: dayString, freq: freqString, progVal: progValue, dailyFreq: numDailyFreq, streak: 0, record: 0};
     var habit = JSON.stringify(habitObject);
     var habitList = localStorage.getItem("habitList");
     

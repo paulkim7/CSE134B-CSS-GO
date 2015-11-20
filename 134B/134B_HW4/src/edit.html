@@ -76,8 +76,9 @@
                     }
                     k++;
                 }
-                document.getElementById("others").value=habitToEditObj.freqOther;
-
+                var otherFreq = document.getElementById("others");
+                if(habitToEditObj.dailyFreq>3)
+                    document.getElementById("others").value=habitToEditObj.dailyFreq;
             }
 
             window.onload = onStart;
