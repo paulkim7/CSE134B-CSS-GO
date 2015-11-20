@@ -8,7 +8,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.6.7.min.js"></script>
         <script src="../js/app.js"></script>
-
         <script src="../js/add.js"></script>
 
     </head>
@@ -23,7 +22,10 @@
                 <img id="icon1" class="icon" onclick="selectImage('icon1', 'img1');" src="../img/sleep.jpg" alt="sleep image"/>
                 <img id="icon2" class="icon" onclick="selectImage('icon2', 'img2');" src="../img/salad.jpg" alt="eat image"/>
                 <img id="icon3" class="icon" onclick="selectImage('icon3', 'img3');" src="../img/run.jpg" alt="run image"/>
-                <img id="icon4" class="icon" src="../img/add.png" alt="find a image"/>
+                <input type="file" id='iconUploaderAdd' class ="hidden" accept=".png,.jpg,.jpeg,.gif" onchange="readURL(this)" name='Upload Own Image'>
+                <img id="userIconAdd" class="icon" onclick="$('#iconUploaderAdd').click();selectImage('userIconAdd', 'userImg');" src="../img/add.png" alt="user image"/>
+
+                <!-- <img id="icon4" class="icon" src="../img/add.png" alt="find a image"/> -->
                 <p><label>Weekly Frequency</label></p>
                 <div id="ck-button">
                     <label> <input type="checkbox" name="date[]" ><span>Sun</span></label>
@@ -39,6 +41,7 @@
                     <option id="img1" value="../img/sleep.jpg">Select  </option>
                     <option id="img2" value="../img/salad.jpg">gold  </option>
                     <option id="img3" value="../img/run.jpg">silver  </option>
+                    <option id="userImg">bronze </option>
                 </select>
 
                 <p><label>Daily Frequency</label></p>
@@ -60,6 +63,7 @@
                 document.getElementById('icon1').style.border = "none";
                 document.getElementById('icon2').style.border = "none";
                 document.getElementById('icon3').style.border = "none";
+                document.getElementById('userIconAdd').style.border = "none";
                 var image = document.getElementById(name);
                 image.style.border = "5px solid #42A5F5";
                 document.getElementById(select).selected = "true";

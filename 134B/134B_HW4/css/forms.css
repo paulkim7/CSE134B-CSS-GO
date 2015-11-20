@@ -80,12 +80,21 @@ img.icon{
 	-webkit-transition: .3s ease-in-out;
 	transition: .3s ease-in-out;
   }
+
+
+
+
   
   p{
 	color:#6c6c6c;
 	font-size: small;
 	}	
   
+}
+
+.hidden {
+	position: absolute;
+	display: none;
 }
 
 h2{

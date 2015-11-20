@@ -87,47 +87,49 @@ function validateImageUpload(filename) {
 
 
 /**
- * uploadImage() 
- * Description: Take form data and use it to upload an image to parse using a post method.
+ * uploadUserIcon() 
+ * Description: Take user icon data and use it to upload an image to parse using a post method.
  *              Image upload is stored at data.url.
  * TODO: Check for recurring filenames or something
  * Inputs: None, directly accessed from DOM
  * Outputs: Returns file URL on success, throw error on failure
  **/
-function uploadImage(imageFormData) {
-    var file;
-    // Set an event listener on the Choose File field.
-    $('#fileselect').bind("change", function(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      // Our file var now holds the selected file
-      file = files[0];
-    });
+// function uploadUserIcon(imageId, savename) {
+//     var fileUploadControl = $("#"+imageId)[0];
+//     if (fileUploadControl.files.length > 0) {
+//         var file = fileUploadControl.files[0];
+//         var name = savename;
 
-    // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
-    $('#uploadbutton').click(function() {
-      var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+//         var parseFile = new Parse.File(name, file);
 
-      $.ajax({
-        type: "POST",
-        beforeSend: function(request) {
-          request.setRequestHeader("X-Parse-Application-Id", 'MY-APP-ID');
-          request.setRequestHeader("X-Parse-REST-API-Key", 'MY-REST-API-ID');
-          request.setRequestHeader("Content-Type", file.type);
-        },
-        url: serverUrl,
-        data: file,
-        processData: false,
-        contentType: false,
-        success: function(data) {
-          alert("File available at: " + data.url);
-        },
-        error: function(data) {
-          var obj = jQuery.parseJSON(data);
-          alert(obj.error);
-        }
-      });
-    });
-}
+//         //put this inside if {
+//         parseFile.save().then(function() {
+//         // The file has been saved to Parse.
+//         }, function(error) {
+//         // The file either could not be read, or could not be saved to Parse.
+//             return -1;
+//         });
+
+
+
+//         // Upload file to parse
+//         prod.set("picture", parseFile);
+//         prod.save();
+//         return 1;
+//    }
+// }
+
+
+
+// Sample code for using readURL
+    // <form id="form1" runat="server">
+    //     <input type='file' id="imgInp" />
+    //     <img id="userIco" src="#" alt="your image" />
+    // </form>
+
+
+
+
 
 function validateInputs() {
     var titleValue = document.getElementById("title").value;

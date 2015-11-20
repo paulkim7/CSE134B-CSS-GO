@@ -18,6 +18,27 @@ function validateCustomDays(input) {
 	}
 }
 
+/** 
+ * readURL()
+ * Description: Reads an image and displays it as a preview.
+ *              Image will be uploaded to parse Database later.
+ *
+ * Inputs: 
+ *       input -- The File input DOM element
+ * Return Val: N/A.
+ **/
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#userIconAdd').attr('src', e.target.result);
+        }
+
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 // JQuery, create listeners when the document is ready
 $(document).ready(function() {
     // Handle checkbox for daily frequency, allow only one to be selected at a time,
