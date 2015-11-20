@@ -99,6 +99,37 @@ function updateHabit() {
     location.href = 'list.html';
 }
 
+// recurring code, TODO remove and merge app.js calls with this file
+function uploadUserIcon(fileInput) {
+    return new Promise(function(resolve, reject){
+        var file = fileInput.files[0];
+    
+        var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function(request) {
+                request.setRequestHeader("X-Parse-Application-Id", 'd2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb');
+                request.setRequestHeader("X-Parse-REST-API-Key", 'F74LnjmLlP0yCRE9wUEyoo0H3T23UWrf9UqZ5eAR');
+                request.setRequestHeader("Content-Type", file.type);
+            },
+            url: serverUrl,
+            data: file,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                alert("File available at: " + data.url);
+                document.getElementById("img4").value = data.url;
+                resolve(0);
+            },
+            error: function(data) {
+                var obj = jQuery.parseJSON(data);
+                reject(obj.error);
+            }
+        }); 
+    });
+}
+
 
 function editHabit(element) {
 	//var output = document.getElementsByClassName("forms");
@@ -209,9 +240,16 @@ function checkDuplicateTitle() {
         j++;
 
     }
-
-    updateHabit(); // update habit after confirming unique title
-
+    if(document.getElementById('habits').selectedIndex===4) {
+        uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function() {
+        updateHabit();
+        }).catch(function(err){
+            alert(err);
+        }); 
+    }
+    else {
+        updateHabit();
+    }
 }
 
 

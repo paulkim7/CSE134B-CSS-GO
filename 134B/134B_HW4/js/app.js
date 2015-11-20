@@ -77,7 +77,7 @@ function validateImageUpload(filename) {
     return false;
 }
 
-function uploadUserIconV2(fileInput, savename) {
+function uploadUserIcon(fileInput) {
     return new Promise(function(resolve, reject){
         var file = fileInput.files[0];
     
@@ -105,39 +105,6 @@ function uploadUserIconV2(fileInput, savename) {
             }
         }); 
     });
-}
-
-
-function uploadUserIcon(fileInput, savename) {
-
-    var fileUploadControl = fileInput;
-    if (fileUploadControl.files.length > 0) {
-        var file = fileUploadControl.files[0];
-        var name = Math.random()*1000;     // Do this for now since we aren't getting unique habit ID's from parse
-
-        // TODO, change this when we refactor code for Parse, should support HTML5 promises
-        // instead of relying on setting the doc value directly
-        document.getElementById("img4").value = name;
-
-
-        var parseFile = new Parse.File(name, file);
-
-        //put this inside if {
-        parseFile.save().then(function() {
-        // The file has been saved to Parse.
-            alert("File successfully saved to parse");
-            alert(name);
-        }, function(error) {
-        // The file either could not be read, or could not be saved to Parse.
-            return null;
-        });
-
-        // Upload file to parse, do later since we have no parse DB for habits yet
-        // prod.set("picture", parseFile);
-        // prod.save();
-        return name;
-   }
-   return null; // Return this if false if statement
 }
 
 function validateInputs() {
@@ -194,7 +161,7 @@ function validateInputs() {
         if(!isDuplicateHabitTitle(titleValue)) {
             // Filename parameter currently unused
             if(document.getElementById('habits').selectedIndex===4)
-                uploadUserIconV2(document.getElementById("iconUploaderAdd"),"notAny").then(function() {
+                uploadUserIcon(document.getElementById("iconUploaderAdd")).then(function() {
                 createHabit();
                 }).catch(function(err){
                     alert(err);
