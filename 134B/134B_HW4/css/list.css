@@ -19,7 +19,7 @@ body{
 .habit-name{margin:0; padding:0; height:100%; display:inline-block; vertical-align: middle; line-height:60px;color:#888;font-size: 24px;}
 .habit-icon{margin:0; border-radius:5px;width:100px; height:100px;}
 
-.message{position:absolute; display:inline-block; visibility: hidden; text-align:center; color:#888;}
+.message{position:absolute; display:inline-block; visibility: visible; text-align:center; color:#888;}
 .message-total{visibility: visible;}
 .message-total>svg{margin: 15px auto;}
 
