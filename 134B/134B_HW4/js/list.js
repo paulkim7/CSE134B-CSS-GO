@@ -5,16 +5,23 @@ window.onload = function () {
     var habitArray = JSON.parse(localStorage.getItem("habitList"));
     var habitLength = habitArray.length;
     console.log(habitArray);
-    console.log(habitLength);
+    console.log("Habit List Length: " + habitLength);
     var ind = 0;
+
+    var currentDate = new Date();
+    var currentDay = currentDate.getDay();
 
     while (ind < habitLength)
     {
         var habit1 = JSON.parse(habitArray[ind]);
         var i = habit1.id;
 
+        console.log(JSON.parse(habit1.day));
+
+
         
-        console.log(i);
+        console.log("Habit ID: " + i);
+        console.log("Current Day " + currentDay);
         if (!document.getElementById('habit-' + i) &&
                 !document.getElementById('nameLi-' + i) &&
                 !document.getElementById('nameDiv-' + i) &&
@@ -34,7 +41,7 @@ window.onload = function () {
                 !document.getElementById('iconImg-' + i) &&
                 !document.getElementById('info-' + i))
         {
-            console.log("Hello");
+        
             var list = document.createElement("li");
             var nameLi = document.createElement("li");
             var nameDiv = document.createElement("div");
@@ -80,6 +87,7 @@ window.onload = function () {
             iconImg.setAttribute("class", "habit-icon");
             iconImg.setAttribute("src", habit1.icon);
             iconImg.setAttribute("alt", "habit icon");
+            progress.setAttribute("class", "progressBar");
             nameDiv.innerHTML = habit1.title;
 
             // Habit info
@@ -108,13 +116,16 @@ window.onload = function () {
             messSvg.appendChild(messLine2);
 
             // Progress value & max
-            progress.value = habit1.streak;
-            progress.max = 5; //CHANGE
+            progress.value = habit1.progVal;
+
+
+            // add if/else statement to determine if dailyFreq is from button or OTHER RECORD
+            progress.max = habit1.dailyFreq;
 
             // Streak and record number added
             totalSpan.innerHTML = "<strong> " + habit1.streak + "</strong> days in a row! Best Record: <strong> " + habit1.record +"</strong><br><br>";
 
-            today.innerHTML = "Completed <strong>1/1</strong> for today!";
+            today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
             today.setAttribute("class", "message-today");
             messDiv.setAttribute("class", "message");
             //totalSpan.appendChild(messSvg);
@@ -142,7 +153,7 @@ window.onload = function () {
             edit.setAttribute("type", "button");
             del.setAttribute("type", "button");
 
-            done.setAttribute("onclick", "showMsg(this);");
+            done.setAttribute("onclick", "updateMsgProgBar(this);");
             edit.setAttribute("onclick", "editHabit(this); location.href='edit.html'");
             del.setAttribute("onclick", "confirmDelete(this);");
 
@@ -161,6 +172,19 @@ window.onload = function () {
             list.appendChild(habitOp);
 
             output.appendChild(list);
+
+            var arrayDaysChecked = JSON.parse(habit1.day);
+
+            for( k = 0; k < arrayDaysChecked.length; k++ ) {
+                console.log(arrayDaysChecked[k]);
+                if( (arrayDaysChecked[k] === false) && (k === currentDay) ) {
+                    console.log("DATE CHECKING");
+                    progress.style.visibility = "hidden";
+                    today.style.visibility = "hidden";
+                    // PUT MESSAGE IF HABIT'S NOT AVAILABLE THAT DAY
+                    // "This habit is available on MON WED FRI"
+                }
+            }
         }
 
         ind++;

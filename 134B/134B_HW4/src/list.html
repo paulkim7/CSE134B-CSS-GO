@@ -22,12 +22,88 @@
         <button type="button" id="addHabit" onclick="location.href = 'add.html'" title="add habit">+</button>
 
         <script type="text/javascript">
-            function showMsg(element) {
+            function updateMsgProgBar(element) {
 
-                var msgElement = (element.parentNode.parentNode.getElementsByClassName("message"))[0];
-                // alert(msgElement.innerHTML);
-                console.log("msgElement " + msgElement);
-                msgElement.style.visibility = "visible";
+                var liElem = element.parentNode.parentNode;
+                var habitID = liElem.id;
+
+                // Gets access to progress element
+                var progressElem = liElem.getElementsByClassName("progressBar")[0];
+                var streakRecordMsg = liElem.getElementsByClassName("message-total")[0];
+                var msgElement = liElem.getElementsByClassName("message-today")[0];
+
+
+                var arrayHabit = JSON.parse(localStorage.getItem("habitList"));
+
+                console.log(arrayHabit);
+
+                // update streak & record value in the actual local storage
+
+                console.log("liElem ID: " + liElem.id);
+
+                var i = 0;
+
+                // identifies which habit's progress bar & message to update
+                while( i < arrayHabit.length ) {
+
+                    var individualHabit = JSON.parse(arrayHabit[i]);
+
+                    console.log(individualHabit);
+
+                    if( habitID === ("habit-" + individualHabit.id) ) {
+
+                        if( individualHabit.progVal === individualHabit.dailyFreq ) {
+                            return;
+                        }
+
+                        if( individualHabit.progVal === (individualHabit.dailyFreq - 1) ) {
+                            individualHabit.streak++;
+                            individualHabit.progVal = individualHabit.dailyFreq;
+
+                            if( individualHabit.record === 0 ) {
+                                individualHabit.record = individualHabit.streak;
+                            }
+
+                            progressElem.value = individualHabit.dailyFreq;
+
+                            streakRecordMsg.innerHTML = "<strong> " + individualHabit.streak + "</strong> days in a row! Best Record: <strong> " + individualHabit.record +"</strong><br><br>\n<progress value='" + individualHabit.dailyFreq + "'" + "max='" + individualHabit.dailyFreq + "'" + "></progress" ;
+
+                            console.log(streakRecordMsg);
+
+                            msgElement.innerHTML = "Completed <strong>" + individualHabit.dailyFreq + "/" + individualHabit.dailyFreq + "</strong> for today!";
+
+                            arrayHabit[i] = JSON.stringify(individualHabit);
+
+                        }
+                        else {
+                        
+                        console.log("HELLO");
+
+                        individualHabit.progVal++;
+                        console.log("individualHabit.progVal = " + individualHabit.progVal);
+                        console.log(progressElem);
+                        console.log(progressElem.value);
+                        progressElem.value = individualHabit.progVal;
+
+                        arrayHabit[i] = JSON.stringify(individualHabit);
+
+                        msgElement.innerHTML = "Completed <strong>" + individualHabit.progVal + "/" + individualHabit.dailyFreq + "</strong> for today!";
+
+                        }
+
+                        break;
+                    }
+
+                    console.log("WHILE");
+
+                    i++;
+                }
+
+
+
+                localStorage.setItem("habitList", JSON.stringify(arrayHabit));
+
+                //msgElement.style.visibility = "visible";
             }
 
             function deleteHabit(element) {

@@ -10,6 +10,9 @@ function updateHabit() {
 
         var individualHabit = JSON.parse(arrayHabit[j]);
         var updatedHabitID = localStorage.getItem("habitEditID");
+        //var habitBeforeEdit = localStorage.getItem("habitBeforeChanges");
+
+        console.log(habitBeforeEdit);
 
         if (updatedHabitID === individualHabit.id) {
             console.log("Id matched");
@@ -33,7 +36,14 @@ function updateHabit() {
             for (i = 0; i < freqLength; i++)
             {
                 freqData[i] = freqArray[i].checked;
+
+                if( freqArray[i].checked === true ) {
+                    var dailyFreq = i + 1;
+                }
             }
+
+            console.log("dailyFreq = " + dailyFreq);
+
             var freqString = JSON.stringify(freqData);
             var otherValue = document.getElementById("others").value;
             individualHabit.title = titleValue;

@@ -236,9 +236,14 @@ function createHabit()
     var freqArray = document.getElementsByName("day[]");
     var freqLength = freqArray.length;
     var freqData = Array();
+    var numDailyFreq = 0;
     for (i = 0; i < freqLength; i++)
     {
         freqData[i] = freqArray[i].checked;
+
+        if(freqArray[i].checked === true) {
+            numDailyFreq = i + 1;
+        }
     }
     var freqString = JSON.stringify(freqData);
     var otherValue = document.getElementById("others").value;
@@ -250,7 +255,9 @@ function createHabit()
     var idStr = n.toString();
     var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
     var idClean = id.replace(/ /g,'');
-    var habitObject = {id: idClean, title: titleValue, icon: habitValue, day: dayString, freq: freqString, freqOther: otherValue, streak: 0, record: 0};
+    var progValue = 0;
+
+    var habitObject = {id: idClean, title: titleValue, icon: habitValue, day: dayString, freq: freqString, progVal: progValue, dailyFreq: numDailyFreq, freqOther: otherValue, streak: 0, record: 0};
     var habit = JSON.stringify(habitObject);
     var habitList = localStorage.getItem("habitList");
     
