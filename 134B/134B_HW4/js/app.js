@@ -77,47 +77,70 @@ function validateImageUpload(filename) {
     return false;
 }
 
+function uploadUserIconV2(fileInput, savename) {
+    return new Promise(function(resolve, reject){
+        console.log(fileInput);
+        var file = fileInput.files[0];
+        console.log(file.name);
+        var serverUrl = 'https://api.parse.com/1/files/' + file.name;
 
-// <form id="fileupload" name="fileupload" enctype="multipart/form-data" method="post">
-//   <fieldset>
-//     <input type="file" name="fileselect" id="fileselect"></input>
-//     <input id="uploadbutton" type="button" value="Upload to Parse"/>
-//   </fieldset>
-// </form>
-
-
-/**
- * uploadUserIcon() 
- * Description: Take user icon data and use it to upload an image to parse using a post method.
- *              Image upload is stored at data.url.
- * TODO: Check for recurring filenames or something
- * Inputs: None, directly accessed from DOM
- * Outputs: Returns file URL on success, throw error on failure
- **/
-// function uploadUserIcon(imageId, savename) {
-//     var fileUploadControl = $("#"+imageId)[0];
-//     if (fileUploadControl.files.length > 0) {
-//         var file = fileUploadControl.files[0];
-//         var name = savename;
-
-//         var parseFile = new Parse.File(name, file);
-
-//         //put this inside if {
-//         parseFile.save().then(function() {
-//         // The file has been saved to Parse.
-//         }, function(error) {
-//         // The file either could not be read, or could not be saved to Parse.
-//             return -1;
-//         });
+        $.ajax({
+            type: "POST",
+            beforeSend: function(request) {
+                request.setRequestHeader("X-Parse-Application-Id", 'd2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb');
+                request.setRequestHeader("X-Parse-REST-API-Key", 'F74LnjmLlP0yCRE9wUEyoo0H3T23UWrf9UqZ5eAR');
+                request.setRequestHeader("Content-Type", file.type);
+            },
+            url: serverUrl,
+            data: file,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                alert("File available at: " + data.url);
+                document.getElementById("userImg").value = data.url;
+                resolve(0);
+            },
+            error: function(data) {
+                var obj = jQuery.parseJSON(data);
+                reject(obj.error);
+            }
+        }); 
+    });
+}
 
 
+function uploadUserIcon(fileInput, savename) {
+    console.log("uploadusericoncalled");
+    console.log(fileInput);
+    var fileUploadControl = fileInput;
+    if (fileUploadControl.files.length > 0) {
+        var file = fileUploadControl.files[0];
+        var name = Math.random()*1000;     // Do this for now since we aren't getting unique habit ID's from parse
 
-//         // Upload file to parse
-//         prod.set("picture", parseFile);
-//         prod.save();
-//         return 1;
-//    }
-// }
+        // TODO, change this when we refactor code for Parse, should support HTML5 promises
+        // instead of relying on setting the doc value directly
+        document.getElementById("userImg").value = name;
+
+
+        var parseFile = new Parse.File(name, file);
+
+        //put this inside if {
+        parseFile.save().then(function() {
+        // The file has been saved to Parse.
+            alert("File successfully saved to parse");
+            alert(name);
+        }, function(error) {
+        // The file either could not be read, or could not be saved to Parse.
+            return null;
+        });
+
+        // Upload file to parse, do later since we have no parse DB for habits yet
+        // prod.set("picture", parseFile);
+        // prod.save();
+        return name;
+   }
+   return null; // Return this if false if statement
+}
 
 
 
@@ -182,7 +205,16 @@ function validateInputs() {
     }
 
     if( inputsValidated === true ) {
-        checkDuplicateTitle();
+        if(!isDuplicateHabitTitle(titleValue)) {
+            // Filename parameter currently unused
+            uploadUserIconV2(document.getElementById("iconUploaderAdd"),"notAny").then(function() {
+                createHabit();
+            }).catch(function(err){
+                alert(err);
+            }); 
+        }
+        else 
+            return;
     }
     else {
         alert(inputMsg);
@@ -190,34 +222,38 @@ function validateInputs() {
 
 }
 
-function checkDuplicateTitle() {
-    var titleValue = document.getElementById("title").value;
-
+/**
+ * isDuplicateHabitTitle() 
+ * Description: Check if the habit title already exists.
+ * 
+ * Inputs:
+ *   titleValue -- The title value to be checked.
+ * Return Val: Returns true if a habit with the same name already exists.
+ *             False if titleValue does not exist as a habit title already.
+ **/
+function isDuplicateHabitTitle(titleValue) {
     if( localStorage.getItem("habitList") == null ) {
-        createHabit(); // create first habit
-        return;
+        return false;
     }
     
     var habitArray = JSON.parse(localStorage.getItem("habitList"));
 
     var j = 0
 
-    console.log(titleValue);
     while( j < habitArray.length ) {
                     
         var individualHabit = JSON.parse(habitArray[j]);
 
         if( titleValue === individualHabit.title ) {
             alert("The following habit title already exists. Please edit the existing habit.");
-            return;
+            return true;
         }
 
         j++;
 
     }
 
-    createHabit(); // create habit after confirming unique title
-
+    return false;
 }
 
 function createHabit()
@@ -278,7 +314,7 @@ function createHabit()
     console.log(JSON.parse(localStorage.getItem("habitList")));
     //var formData = new FormData(document.querySelector('form'));
     //console.log(localStorage.getItem("habit"));
-    location.href='list.html';
+    //location.href='list.html'; TODO put back
 }
 
 
