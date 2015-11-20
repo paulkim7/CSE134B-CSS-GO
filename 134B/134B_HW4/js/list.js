@@ -8,12 +8,20 @@ window.onload = function () {
     console.log("Habit List Length: " + habitLength);
     var ind = 0;
 
+    var currentDate = new Date();
+    var currentDay = currentDate.getDay();
+
     while (ind < habitLength)
     {
         var habit1 = JSON.parse(habitArray[ind]);
         var i = habit1.id;
+
+        console.log(JSON.parse(habit1.day));
+
+
         
         console.log("Habit ID: " + i);
+        console.log("Current Day " + currentDay);
         if (!document.getElementById('habit-' + i) &&
                 !document.getElementById('nameLi-' + i) &&
                 !document.getElementById('nameDiv-' + i) &&
@@ -164,6 +172,19 @@ window.onload = function () {
             list.appendChild(habitOp);
 
             output.appendChild(list);
+
+            var arrayDaysChecked = JSON.parse(habit1.day);
+
+            for( k = 0; k < arrayDaysChecked.length; k++ ) {
+                console.log(arrayDaysChecked[k]);
+                if( (arrayDaysChecked[k] === false) && (k === currentDay) ) {
+                    console.log("DATE CHECKING");
+                    progress.style.visibility = "hidden";
+                    today.style.visibility = "hidden";
+                    // PUT MESSAGE IF HABIT'S NOT AVAILABLE THAT DAY
+                    // "This habit is available on MON WED FRI"
+                }
+            }
         }
 
         ind++;
