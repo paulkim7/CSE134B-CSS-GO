@@ -140,18 +140,6 @@ function uploadUserIcon(fileInput, savename) {
    return null; // Return this if false if statement
 }
 
-
-
-// Sample code for using readURL
-    // <form id="form1" runat="server">
-    //     <input type='file' id="imgInp" />
-    //     <img id="userIco" src="#" alt="your image" />
-    // </form>
-
-
-
-
-
 function validateInputs() {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
@@ -285,8 +273,6 @@ function createHabit()
     }
     var freqString = JSON.stringify(freqData);
     var otherValue = document.getElementById("others").value;
-
-    console.log(otherValue);
 
     var d = new Date();
     var n = d.getTime();

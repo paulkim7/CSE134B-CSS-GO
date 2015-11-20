@@ -1,3 +1,23 @@
+/** 
+ * readURL()
+ * Description: Reads an image and displays it as a preview.
+ *              Image will be uploaded to parse Database later.
+ *
+ * Inputs: 
+ *       input -- The File input DOM element
+ * Return Val: N/A.
+ **/
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#icon4').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 function updateHabit() {
     var removedHabit = localStorage.getItem("habitList");
     var arrayHabit = JSON.parse(removedHabit);
