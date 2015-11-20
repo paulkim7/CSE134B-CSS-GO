@@ -72,8 +72,9 @@ function updateHabit() {
                 individualHabit.dailyFreq = dailyFreq;
 
 
-
-            if( dailyFreq != habitBeforeEdit.dailyFreq ) {
+            // change individualHabit.dailyFreq to dailyFreq if there's a problem
+            if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
+                console.log("HELLLO");
                 individualHabit.progVal = 0;
                 individualHabit.streak = 0;
                 individualHabit.record = 0;
