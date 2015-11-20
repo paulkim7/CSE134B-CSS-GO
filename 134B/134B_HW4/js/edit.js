@@ -33,16 +33,11 @@ function updateHabit() {
         var updatedHabitID = localStorage.getItem("habitEditID");
         var habitBeforeEdit = JSON.parse(localStorage.getItem("habitBeforeChanges"));
 
-
-        console.log("habitBeforeEdit " + habitBeforeEdit.dailyFreq);
-
         if (updatedHabitID === individualHabit.id) {
-            //console.log("Id matchedreadurl
+            
             var titleValue = document.getElementById("title").value;
             var habitValue = document.getElementById("habits").value;
             var iconImgNum = document.getElementById("habits").selectedIndex;
-
-            //console.log("update.js Icon Name: " + habitValue);
 
             var dayArray = document.getElementsByName("date[]");
             var dayLength = dayArray.length;
@@ -74,7 +69,6 @@ function updateHabit() {
 
             // change individualHabit.dailyFreq to dailyFreq if there's a problem
             if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
-                console.log("HELLLO");
                 individualHabit.progVal = 0;
                 individualHabit.streak = 0;
                 individualHabit.record = 0;
@@ -135,10 +129,7 @@ function uploadUserIcon(fileInput) {
 
 
 function editHabit(element) {
-	//var output = document.getElementsByClassName("forms");
 	var child = element.parentNode.parentNode;
-
-	console.log("Edit Habit JS " + child.id);
 
 	var habitToEdit = localStorage.getItem("habitList");
 	var arrayHabit = JSON.parse(habitToEdit);
@@ -150,8 +141,6 @@ function editHabit(element) {
         var individualHabit = JSON.parse(arrayHabit[i]);
 
         if(child.id == ("habit-" + individualHabit.id) ) {
-            console.log("Id matched");
-            console.log(JSON.stringify(individualHabit));
 
             localStorage.setItem("editHabit", JSON.stringify(individualHabit));
 
@@ -276,7 +265,6 @@ $(document).ready(function() {
         $("#freq2Btn").prop("checked", false);
     });
     $("#others").click(function() {
-        console.log("other click");
         $("#freq1Btn").prop("checked", false);
         $("#freq2Btn").prop("checked", false);
         $("#freq3Btn").prop("checked", false);

@@ -1,5 +1,3 @@
-//var ind = 0; // remove if it messes things up
-
 window.onload = function () {
     var output = document.getElementById('habit-list');
     var habitArray = JSON.parse(localStorage.getItem("habitList"));
@@ -11,21 +9,11 @@ window.onload = function () {
     var currentDate = new Date();
     var currentDay = currentDate.getDay();
 
-    //var freqChanged = localStorage.getItem("resetProgress");
-
-    //console.log("freqChanged = " + freqChanged);
-
     while (ind < habitLength)
     {
         var habit1 = JSON.parse(habitArray[ind]);
         var i = habit1.id;
 
-        //console.log(JSON.parse(habit1.day));
-
-
-        
-        //console.log("Habit ID: " + i);
-        //console.log("Current Day " + currentDay);
         if (!document.getElementById('habit-' + i) &&
                 !document.getElementById('nameLi-' + i) &&
                 !document.getElementById('nameDiv-' + i) &&
@@ -168,7 +156,6 @@ window.onload = function () {
             edit.setAttribute("onclick", "editHabit(this); location.href='edit.html'");
             del.setAttribute("onclick", "confirmDelete(this);");
 
-
             del.appendChild(delImg);
             edit.appendChild(editImg);
             done.appendChild(doneImg);
@@ -187,14 +174,10 @@ window.onload = function () {
             var arrayDaysChecked = JSON.parse(habit1.day);
 
             for( k = 0; k < arrayDaysChecked.length; k++ ) {
-                //console.log(arrayDaysChecked[k]);
                 if( (arrayDaysChecked[k] === false) && (k === currentDay) ) {
-                    console.log("DATE CHECKING");
                     progress.style.visibility = "hidden";
                     //today.style.visibility = "hidden";
                     today.innerHTML = "Habit is not available today.";
-                    // PUT MESSAGE IF HABIT'S NOT AVAILABLE THAT DAY
-                    // "This habit is available on MON WED FRI"
                 }
                 
             }

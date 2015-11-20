@@ -21,9 +21,6 @@
                 document.getElementById("title").value = habitToEditObj.title;
                 var i = 1;
 
-                console.log("Habit Object Icon Alt " + habitToEditObj.icon);
-                console.log("icon4 Alt " + document.getElementById("icon4").alt)
-
                 var iconNum = habitToEditObj.iconNum;
                 selectImage("icon"+iconNum,"img"+iconNum);
 
@@ -128,7 +125,6 @@
         </div>
         <script>
             function selectImage(name, select) {
-                console.log(name);
                 //Clear all the other effects
                 document.getElementById('icon1').style.border = "none";
                 document.getElementById('icon2').style.border = "none";

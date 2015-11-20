@@ -59,7 +59,6 @@ $(document).ready(function() {
         $("#freq2Btn").prop("checked", false);
     });
     $("#others").click(function() {
-        console.log("other click");
         $("#freq1Btn").prop("checked", false);
         $("#freq2Btn").prop("checked", false);
         $("#freq3Btn").prop("checked", false);

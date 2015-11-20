@@ -19,11 +19,9 @@ function authenticate(email,pass) {
         userQuery.equalTo("email", email);
         userQuery.find().then(function(result){
             if(result === undefined || result.size === 0 || result.size > 1 ) {
-                console.log("resolve null");
                 resolve(null);
             }
             else {
-                console.log("returning result");
                 resolve(result[0]);
             }
         },function(err){reject(err);});
@@ -268,10 +266,10 @@ function createHabit()
         localStorage.setItem("habitList", JSON.stringify(parList));
         //location.href='list.html';
     }
-    console.log(JSON.parse(localStorage.getItem("habitList")));
+    
     //var formData = new FormData(document.querySelector('form'));
-    //console.log(localStorage.getItem("habit"));
-    location.href='list.html'; //TODO put back
+    
+    location.href='list.html';
 }
 
 

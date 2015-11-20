@@ -71,8 +71,6 @@
 
                             streakRecordMsg.innerHTML = "<strong> " + individualHabit.streak + "</strong> days in a row! Best Record: <strong> " + individualHabit.record +"</strong><br><br>\n<progress value='" + dailyFreqType + "'" + "max='" + dailyFreqType + "'" + "></progress" ;
 
-                      //      console.log(streakRecordMsg);
-
                             msgElement.innerHTML = "Completed <strong>" + dailyFreqType + "/" + dailyFreqType + "</strong> for today!";
 
                             arrayHabit[i] = JSON.stringify(individualHabit);
@@ -96,8 +94,6 @@
                     i++;
                 }
 
-
-
                 localStorage.setItem("habitList", JSON.stringify(arrayHabit));
 
                 //msgElement.style.visibility = "visible";
@@ -118,13 +114,11 @@
                 // jquery slideUp or fadeOut animations in easily that way
                 // If I have the index number in which it's in, it's easier (figure out more efficient way)
 
-                // Inefficient way
                 while( j < arrayHabit.length ) {
                     
                     var individualHabit = JSON.parse(arrayHabit[j]);
 
                     if(child.id == ("habit-" + individualHabit.id) ) {
-                        console.log("Id matched");
                         arrayHabit.splice(j, 1);
                         break;
                     }
@@ -135,9 +129,6 @@
                 //remove the habit of which you clicked the delete button 
 
                 localStorage.setItem("habitList", JSON.stringify(arrayHabit));
-
-                
-                console.log(arrayHabit.length);
 
             }
 
