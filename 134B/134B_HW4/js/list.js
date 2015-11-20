@@ -191,10 +191,12 @@ window.onload = function () {
                 if( (arrayDaysChecked[k] === false) && (k === currentDay) ) {
                     console.log("DATE CHECKING");
                     progress.style.visibility = "hidden";
-                    today.style.visibility = "hidden";
+                    //today.style.visibility = "hidden";
+                    today.innerHTML = "Habit is not available today.";
                     // PUT MESSAGE IF HABIT'S NOT AVAILABLE THAT DAY
                     // "This habit is available on MON WED FRI"
                 }
+                
             }
         }
 
