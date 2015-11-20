@@ -8,6 +8,7 @@
         <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.6.7.min.js"></script>
         <link rel="stylesheet" href="../css/forms.css">
         <script src="../js/edit.js"></script>
+        
     </head>
     <body>
         <script>
@@ -19,7 +20,14 @@
                 localStorage.setItem("habitBeforeChanges", JSON.stringify(habitToEditObj));
                 document.getElementById("title").value = habitToEditObj.title;
                 var i = 1;
-                while (i < 5) {
+
+                console.log("Habit Object Icon Alt " + habitToEditObj.icon);
+                console.log("icon4 Alt " + document.getElementById("icon4").alt)
+
+                var iconNum = habitToEditObj.iconNum;
+                selectImage("icon"+iconNum,"img"+iconNum);
+                /*while (i < 5) {
+
                     if (document.getElementById("icon" + i).alt === habitToEditObj.icon) {
 
                         document.getElementById("icon" + i).style.border = "5px solid #42A5F5";
@@ -29,7 +37,7 @@
 
                     }
                     i++;
-                }
+                }*/
 
                 var arrayDays = JSON.parse(habitToEditObj.day);
                 
@@ -96,7 +104,7 @@
 				<img id="icon2" class="icon" onclick="selectImage('icon2','img2');" src="../img/salad.jpg" alt="../img/salad.jpg"/>
 				<img id="icon3" class="icon" onclick="selectImage('icon3','img3');" src="../img/run.jpg" alt="../img/run.jpg"/>
 				<input type="file" id='iconUploaderEdit' class ="hidden" accept=".png,.jpg,.jpeg,.gif" onchange="readURL(this)" name='Upload Own Image'>
-                <img id="userIconEdit" class="icon" onclick="$('#iconUploaderEdit').click();selectImage('userIconEdit', 'userImg');" src="../img/add.png" alt="user image"/>
+                <img id="icon4" class="icon" onclick="$('#iconUploaderEdit').click();selectImage('icon4', 'img4');" src="../img/add.png" alt="../img/add.png"/>
                 
                 <p><label>Weekly Frequency</label></p>
                 <div id="ck-button">
@@ -109,10 +117,11 @@
                     <label> <input type="checkbox" name="date[]" value="saturday" id="sat"><span>Sat</span></label>
                 </div>
                 <select id = "habits" name="images" hidden>
+                    <option id="unselected" value="unselected"> Unselected by Default </option>
                     <option id="img1" value="../img/sleep.jpg">Select  </option>
                     <option id="img2" value="../img/salad.jpg">gold  </option>
                     <option id="img3" value="../img/run.jpg">silver  </option>
-                    <option id="userImg">bronze  </option>
+                    <option id="img4">bronze  </option>
                 </select>
 
                 <p><label>Daily Frequency</label></p>
@@ -130,11 +139,12 @@
         </div>
         <script>
             function selectImage(name, select) {
+                console.log(name);
                 //Clear all the other effects
                 document.getElementById('icon1').style.border = "none";
                 document.getElementById('icon2').style.border = "none";
                 document.getElementById('icon3').style.border = "none";
-                document.getElementById('userIconEdit').style.border = "none";
+                document.getElementById('icon4').style.border = "none";
                 var image = document.getElementById(name);
                 image.style.border = "5px solid #42A5F5";
                 document.getElementById(select).selected = "true";

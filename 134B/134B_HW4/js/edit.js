@@ -16,9 +16,10 @@ function updateHabit() {
         console.log("habitBeforeEdit " + habitBeforeEdit.dailyFreq);
 
         if (updatedHabitID === individualHabit.id) {
-            //console.log("Id matched");
+            //console.log("Id matchedreadurl
             var titleValue = document.getElementById("title").value;
             var habitValue = document.getElementById("habits").value;
+            var iconImgNum = document.getElementById("habits").selectedIndex;
 
             //console.log("update.js Icon Name: " + habitValue);
 
@@ -56,14 +57,14 @@ function updateHabit() {
             var freqString = JSON.stringify(freqData);
             var otherValue = document.getElementById("others").value;
 
-            //individualHabit.dailyFreq = dailyFreq;
+            individualHabit.iconNum = iconImgNum;
             individualHabit.title = titleValue;
             individualHabit.icon = habitValue;
             individualHabit.day = dayString;
             if( dailyFreq === 0 ) {
                 individualHabit.freqOther = otherValue;
             }
-            
+
             individualHabit.freq = freqString;
             arrayHabit[j] = JSON.stringify(individualHabit);
 

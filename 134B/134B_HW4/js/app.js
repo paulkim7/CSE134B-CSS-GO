@@ -79,9 +79,8 @@ function validateImageUpload(filename) {
 
 function uploadUserIconV2(fileInput, savename) {
     return new Promise(function(resolve, reject){
-        console.log(fileInput);
         var file = fileInput.files[0];
-        console.log(file.name);
+    
         var serverUrl = 'https://api.parse.com/1/files/' + file.name;
 
         $.ajax({
@@ -97,7 +96,7 @@ function uploadUserIconV2(fileInput, savename) {
             contentType: false,
             success: function(data) {
                 alert("File available at: " + data.url);
-                document.getElementById("userImg").value = data.url;
+                document.getElementById("img4").value = data.url;
                 resolve(0);
             },
             error: function(data) {
@@ -110,8 +109,7 @@ function uploadUserIconV2(fileInput, savename) {
 
 
 function uploadUserIcon(fileInput, savename) {
-    console.log("uploadusericoncalled");
-    console.log(fileInput);
+
     var fileUploadControl = fileInput;
     if (fileUploadControl.files.length > 0) {
         var file = fileUploadControl.files[0];
@@ -119,7 +117,7 @@ function uploadUserIcon(fileInput, savename) {
 
         // TODO, change this when we refactor code for Parse, should support HTML5 promises
         // instead of relying on setting the doc value directly
-        document.getElementById("userImg").value = name;
+        document.getElementById("img4").value = name;
 
 
         var parseFile = new Parse.File(name, file);
@@ -207,11 +205,14 @@ function validateInputs() {
     if( inputsValidated === true ) {
         if(!isDuplicateHabitTitle(titleValue)) {
             // Filename parameter currently unused
-            uploadUserIconV2(document.getElementById("iconUploaderAdd"),"notAny").then(function() {
+            if(document.getElementById('habits').selectedIndex===4)
+                uploadUserIconV2(document.getElementById("iconUploaderAdd"),"notAny").then(function() {
                 createHabit();
-            }).catch(function(err){
-                alert(err);
-            }); 
+                }).catch(function(err){
+                    alert(err);
+                }); 
+            else
+                createHabit();
         }
         else 
             return;
@@ -260,6 +261,7 @@ function createHabit()
 {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
+    var iconImgNum = document.getElementById("habits").selectedIndex;
     var dayArray = document.getElementsByName("date[]");
     var dayLength = dayArray.length;
     var dayData = Array();
@@ -293,7 +295,7 @@ function createHabit()
     var idClean = id.replace(/ /g,'');
     var progValue = 0;
 
-    var habitObject = {id: idClean, title: titleValue, icon: habitValue, day: dayString, freq: freqString, progVal: progValue, dailyFreq: numDailyFreq, freqOther: otherValue, streak: 0, record: 0};
+    var habitObject = {id: idClean, title: titleValue, icon: habitValue, iconNum: iconImgNum, day: dayString, freq: freqString, progVal: progValue, dailyFreq: numDailyFreq, freqOther: otherValue, streak: 0, record: 0};
     var habit = JSON.stringify(habitObject);
     var habitList = localStorage.getItem("habitList");
     
@@ -314,7 +316,7 @@ function createHabit()
     console.log(JSON.parse(localStorage.getItem("habitList")));
     //var formData = new FormData(document.querySelector('form'));
     //console.log(localStorage.getItem("habit"));
-    //location.href='list.html'; TODO put back
+    location.href='list.html'; //TODO put back
 }
 
 

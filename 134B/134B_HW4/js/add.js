@@ -31,7 +31,7 @@ function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            $('#userIconAdd').attr('src', e.target.result);
+            $('#icon4').attr('src', e.target.result);
         }
 
         reader.readAsDataURL(input.files[0]);
