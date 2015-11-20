@@ -11,17 +11,21 @@ window.onload = function () {
     var currentDate = new Date();
     var currentDay = currentDate.getDay();
 
+    //var freqChanged = localStorage.getItem("resetProgress");
+
+    //console.log("freqChanged = " + freqChanged);
+
     while (ind < habitLength)
     {
         var habit1 = JSON.parse(habitArray[ind]);
         var i = habit1.id;
 
-        console.log(JSON.parse(habit1.day));
+        //console.log(JSON.parse(habit1.day));
 
 
         
-        console.log("Habit ID: " + i);
-        console.log("Current Day " + currentDay);
+        //console.log("Habit ID: " + i);
+        //console.log("Current Day " + currentDay);
         if (!document.getElementById('habit-' + i) &&
                 !document.getElementById('nameLi-' + i) &&
                 !document.getElementById('nameDiv-' + i) &&
@@ -120,12 +124,19 @@ window.onload = function () {
 
 
             // add if/else statement to determine if dailyFreq is from button or OTHER RECORD
-            progress.max = habit1.dailyFreq;
+            if( habit1.dailyFreq === 0 ) {
+                progress.max = habit1.freqOther;
+                today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.freqOther + "</strong> for today!";
+            }
+            else {
+                progress.max = habit1.dailyFreq;
+                today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
+            }
 
             // Streak and record number added
             totalSpan.innerHTML = "<strong> " + habit1.streak + "</strong> days in a row! Best Record: <strong> " + habit1.record +"</strong><br><br>";
 
-            today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
+            //today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
             today.setAttribute("class", "message-today");
             messDiv.setAttribute("class", "message");
             //totalSpan.appendChild(messSvg);
@@ -176,7 +187,7 @@ window.onload = function () {
             var arrayDaysChecked = JSON.parse(habit1.day);
 
             for( k = 0; k < arrayDaysChecked.length; k++ ) {
-                console.log(arrayDaysChecked[k]);
+                //console.log(arrayDaysChecked[k]);
                 if( (arrayDaysChecked[k] === false) && (k === currentDay) ) {
                     console.log("DATE CHECKING");
                     progress.style.visibility = "hidden";

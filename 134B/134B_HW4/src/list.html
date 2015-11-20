@@ -35,11 +35,7 @@
 
                 var arrayHabit = JSON.parse(localStorage.getItem("habitList"));
 
-                console.log(arrayHabit);
-
                 // update streak & record value in the actual local storage
-
-                console.log("liElem ID: " + liElem.id);
 
                 var i = 0;
 
@@ -47,54 +43,55 @@
                 while( i < arrayHabit.length ) {
 
                     var individualHabit = JSON.parse(arrayHabit[i]);
-
-                    console.log(individualHabit);
+                    var dailyFreqType;
+                    
 
                     if( habitID === ("habit-" + individualHabit.id) ) {
 
-                        if( individualHabit.progVal === individualHabit.dailyFreq ) {
+                        if( individualHabit.dailyFreq === 0 ) {
+                            dailyFreqType = individualHabit.freqOther;
+                        }
+                        else {
+                            dailyFreqType = individualHabit.dailyFreq;
+                        }
+
+                        if( individualHabit.progVal === dailyFreqType ) {
                             return;
                         }
 
-                        if( individualHabit.progVal === (individualHabit.dailyFreq - 1) ) {
+                        if( individualHabit.progVal === (dailyFreqType - 1) ) {
                             individualHabit.streak++;
-                            individualHabit.progVal = individualHabit.dailyFreq;
+                            individualHabit.progVal = dailyFreqType;
 
                             if( individualHabit.record === 0 ) {
                                 individualHabit.record = individualHabit.streak;
                             }
 
-                            progressElem.value = individualHabit.dailyFreq;
+                            progressElem.value = dailyFreqType;
 
-                            streakRecordMsg.innerHTML = "<strong> " + individualHabit.streak + "</strong> days in a row! Best Record: <strong> " + individualHabit.record +"</strong><br><br>\n<progress value='" + individualHabit.dailyFreq + "'" + "max='" + individualHabit.dailyFreq + "'" + "></progress" ;
+                            streakRecordMsg.innerHTML = "<strong> " + individualHabit.streak + "</strong> days in a row! Best Record: <strong> " + individualHabit.record +"</strong><br><br>\n<progress value='" + dailyFreqType + "'" + "max='" + dailyFreqType + "'" + "></progress" ;
 
-                            console.log(streakRecordMsg);
+                      //      console.log(streakRecordMsg);
 
-                            msgElement.innerHTML = "Completed <strong>" + individualHabit.dailyFreq + "/" + individualHabit.dailyFreq + "</strong> for today!";
+                            msgElement.innerHTML = "Completed <strong>" + dailyFreqType + "/" + dailyFreqType + "</strong> for today!";
 
                             arrayHabit[i] = JSON.stringify(individualHabit);
 
                         }
                         else {
                         
-                        console.log("HELLO");
-
                         individualHabit.progVal++;
-                        console.log("individualHabit.progVal = " + individualHabit.progVal);
-                        console.log(progressElem);
-                        console.log(progressElem.value);
+                        
                         progressElem.value = individualHabit.progVal;
 
                         arrayHabit[i] = JSON.stringify(individualHabit);
 
-                        msgElement.innerHTML = "Completed <strong>" + individualHabit.progVal + "/" + individualHabit.dailyFreq + "</strong> for today!";
+                        msgElement.innerHTML = "Completed <strong>" + individualHabit.progVal + "/" + dailyFreqType + "</strong> for today!";
 
                         }
 
                         break;
                     }
-
-                    console.log("WHILE");
 
                     i++;
                 }
