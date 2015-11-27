@@ -189,6 +189,20 @@ window.onload = function () {
 
 };
 
+function getParseHabits(userId){
+    // Get user account using userId
+    var userClass = Parse.object.extend("UserAccount");
+    var userQuery = new Parse.query(userClass);
+    return new Promise(function(resolve,reject){
+        userQuery.equalTo("id",userId).find().then(function(userList){
+            if(userList===undefined || userList.size!==1) {
+                reject();
+            }
+            resolve(userList[0].get(habits));
+        });
+    });
+}
+
 function confirmDelete(element) {
     var deleteConfirm = confirm("Are you sure you want to delete this habit?");
 

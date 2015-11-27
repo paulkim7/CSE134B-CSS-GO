@@ -14,34 +14,66 @@ Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M
  **/
 function authenticate(email,pass) {
     return new Promise(function(resolve,reject) {
-        var UserClass = Parse.Object.extend('UserAccount');
-        var userQuery = new Parse.Query(UserClass);
-        userQuery.equalTo("email", email);
-        userQuery.find().then(function(result){
-            if(result === undefined || result.size === 0 || result.size > 1 ) {
-                resolve(null);
-            }
-            else {
-                resolve(result[0]);
-            }
-        },function(err){reject(err);});
+    Parse.User.logIn(email, pass, {
+          success: function(user) {
+            // Do stuff after successful login.
+          },
+          error: function(user, error) {
+            // The login failed. Check error to see why.
+            reject(error);
+          }
     });
 }
 
+/** 
+ * checkForCacheUser() 
+ * Description: Check if a user is cached.
+ *              If found, show the users info immediately.
+ *              If not, then show the user login page.
+ **/
+function checkForCacheUser() {
+    var currentUser = Parse.User.current();
+    if (currentUser) {
+        // do stuff with the user
+        return currentUser;
+    } else {
+        // show the signup or login page
+        return null;
+    }
+}
+
+/**
+ * Removes current user
+ * Return Value: Returns false on failure (current user val not changed to null)
+ *               or true on success.
+ **/
+function logOut() {
+    Parse.User.logOut();
+    if(Parse.User.current())
+        return false;
+    else
+        return true;
+}
 
 //*****************************
 //*
 //*  Parse Functions go here
 //*
 //*****************************
+/**
+ * createUser()
+ * Description: Create new Parse user using the
+ *              Parse specific User class
+ **/
 function createUser(email, pass) {
     return new Promise(function(resolve,reject) {
+        var newUser = new Parse.User();
         var UserClass = Parse.Object.extend('UserAccount');
         var newUser = new UserClass();
 
-        newUser.set("email",email);
+        newUser.set("username",email);    // Username is email in this app
         newUser.set("password",pass);
-        newUser.save().then(function(newUser){
+        newUser.signUp().then(function(newUser){
             resolve(newUser);    // Return new user object
         });
     });
@@ -209,6 +241,87 @@ function isDuplicateHabitTitle(titleValue) {
 
     return false;
 }
+
+
+/** 
+ * createParseHabit() 
+ * Description: Creates Parse Habit object by pulling values
+ *              from the DOM and creating a new Object.
+ *              also creates a relationship with the userId
+ *              when done.
+ * Inputs: N/A
+ * Return Value: Returns a Promise to return a resolve on success,
+ *               or rejects Promise on failure.
+ **/
+function createParseHabit(userId)
+{
+    var titleValue = document.getElementById("title").value;
+    var habitValue = document.getElementById("habits").value;
+    var iconImgNum = document.getElementById("habits").selectedIndex;
+    var dayArray = document.getElementsByName("date[]");
+    var dayLength = dayArray.length;
+    var dayData = Array();
+    for (k = 0; k < dayLength; k++)
+    {
+        dayData[k] = dayArray[k].checked;
+    }
+    var dayString = JSON.stringify(dayData);
+
+    var freqArray = document.getElementsByName("day[]");
+    var freqLength = freqArray.length;
+    var freqData = Array();
+    var numDailyFreq = 0;
+    for (i = 0; i < freqLength; i++)
+    {
+        freqData[i] = freqArray[i].checked;
+
+        if(freqArray[i].checked === true) {
+            numDailyFreq = i + 1;
+        }
+    }
+    var freqString = JSON.stringify(freqData);
+
+    if(numDailyFreq===0)
+        var numDailyFreq = document.getElementById("others").value;
+
+    var d = new Date();
+    var n = d.getTime();
+    var idStr = n.toString();
+    var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
+    var idClean = id.replace(/ /g,'');
+    var progValue = 0;
+    
+    return new Promise(function(resolve,reject) {
+        // Create new habit and add to current user, then resolve
+        var HabitClass =  Parse.Object.extend("Habit");
+        newHabit.set("id",idClean);
+        newHabit.set("title", titleValue);
+        newHabit.set("icon", habitValue);
+        newHabit.set("iconNum", iconImgNum);  // Change later to reference file directly
+        newHabit.set("day", dayString);
+        newHabit.set("freq", freqString);
+        newHabit.set("progVal", progValue);
+        newHabit.set("dailyFreq", numDailyFreak);
+        newHabit.set("streak", 0);
+        newHabit.set("record", 0);
+        var userQuery = new Parse.Query("UserAccountClass");
+        var user = Parse.User.current();
+        newHabit.save().then(function(habitParseObj){
+            userQuery.equalTo("id",userId).find(function(userArray){
+                    // We have the UserAccount, create parse relationship
+                    var relation = user.relation('habits');
+                    relation.add(habitParseObj);
+                    user.save();
+                    resolve();
+                }
+            });
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+
 
 function createHabit()
 {
