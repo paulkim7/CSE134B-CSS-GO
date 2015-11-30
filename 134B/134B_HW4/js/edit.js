@@ -19,6 +19,83 @@ function readURL(input) {
     }
 }
 
+
+/**
+ * updateParseHabit()
+ * Description: Updates Parse Habit Object, then saves to Parse.
+ * 
+ * Parameters:
+ *     habit - The Parse habit name as a String object
+ * Return Value: Returns a Promise to resolve if saved succesfully,
+ *               rejects on failure.
+ **/
+function updateParseHabit(habit) {
+    return new Promise(function(resolve,reject){
+        var user = Parse.User.current();
+        var habitQuery = new Parse.query(user);
+        habitQuery.equalTo()
+        habitQuery.find().then(function(habitList){
+            if(habitList!==1)
+                reject("Error retrieving habit");
+
+            var habit = habitList[0];
+            // You have one habit now, do stuff
+
+            // Set values
+            var titleValue = document.getElementById("title").value;
+            var habitValue = document.getElementById("habits").value;
+            var iconImgNum = document.getElementById("habits").selectedIndex;
+
+            var dayArray = document.getElementsByName("date[]");
+            var dayLength = dayArray.length;
+            var dayData = Array();
+            for (k = 0; k < dayLength; k++)
+            {
+                dayData[k] = dayArray[k].checked;
+            }
+            var dayString = JSON.stringify(dayData);
+
+            var freqArray = document.getElementsByName("day[]");
+            var freqLength = freqArray.length;
+            var freqData = Array();
+            var dailyFreq = 0;
+            for (i = 0; i < freqLength; i++)
+            {
+                freqData[i] = freqArray[i].checked;
+
+                if( freqArray[i].checked === true ) {
+                    dailyFreq = i + 1;
+                }
+            }
+
+            if(dailyFreq===0)
+                dailyFreq = document.getElementById("others").value;
+
+            // change individualHabit.dailyFreq to dailyFreq if there's a problem
+            if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
+                habit.set("progVal", 0);
+                habit.set("streak", 0);
+                habit.set("record", 0);
+            }
+            var freqString = JSON.stringify(freqData);
+            var iconUploader = document.getElementById("iconUploaderEdit");
+            if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+                habit.set("icon", habitValue);                 // and user icon was selected before
+            habit.set("title", titleValue);
+            habit.set("iconNum", iconImgNum);  // Change later to reference file directly
+            habit.set("day", dayString);
+            habit.set("freq", freqString);
+            habit.set("dailyFreq", numDailyFreak);
+            habit.save().then(function(){
+                resolve();
+            },function(err){
+                reject(err);
+            });
+        });
+    });
+    //location.href = 'list.html'; Do this on sucess maybe
+}
+
 function updateHabit() {
     var removedHabit = localStorage.getItem("habitList");
     var arrayHabit = JSON.parse(removedHabit);
