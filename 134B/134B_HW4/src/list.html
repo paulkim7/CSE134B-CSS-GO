@@ -4,6 +4,7 @@
         <title>Virtue / Vice</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="../css/list.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.6.7.min.js"></script>
@@ -44,16 +45,15 @@
 
                     var individualHabit = JSON.parse(arrayHabit[i]);
                     var dailyFreqType;
+
+                    if( msgElement.innerHTML === "Habit is not available today.") {
+                        return;
+                    }
                     
 
                     if( habitID === ("habit-" + individualHabit.id) ) {
                         dailyFreqType = individualHabit.dailyFreq;
-                        // if( individualHabit.dailyFreq === 0 ) {
-                        //     dailyFreqType = individualHabit.freqOther;
-                        // }
-                        // else {
-                        //     dailyFreqType = individualHabit.dailyFreq;
-                        // }
+ 
 
                         if( individualHabit.progVal === dailyFreqType ) {
                             return;
@@ -64,6 +64,10 @@
                             individualHabit.progVal = dailyFreqType;
 
                             if( individualHabit.record === 0 ) {
+                                individualHabit.record = individualHabit.streak;
+                            }
+
+                            if( (individualHabit.record != 0) && (individualHabit.streak > individualHabit.record) ) {
                                 individualHabit.record = individualHabit.streak;
                             }
 

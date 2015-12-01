@@ -111,6 +111,8 @@ window.onload = function () {
             progress.value = habit1.progVal;
 
 
+
+
             // add if/else statement to determine if dailyFreq is from button or OTHER RECORD
             if( habit1.dailyFreq === 0 ) {
                 progress.max = habit1.freqOther;
@@ -120,6 +122,7 @@ window.onload = function () {
                 progress.max = habit1.dailyFreq;
                 today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
             }
+
 
             // Streak and record number added
             totalSpan.innerHTML = "<strong> " + habit1.streak + "</strong> days in a row! Best Record: <strong> " + habit1.record +"</strong><br><br>";
@@ -171,21 +174,45 @@ window.onload = function () {
 
             output.appendChild(list);
 
+
             var arrayDaysChecked = JSON.parse(habit1.day);
 
             for( k = 0; k < arrayDaysChecked.length; k++ ) {
-                if( (arrayDaysChecked[k] === false) && (k === currentDay) ) {
+                if( (arrayDaysChecked[k] === false) && (k === 5) ) {
                     progress.style.visibility = "hidden";
                     //today.style.visibility = "hidden";
                     today.innerHTML = "Habit is not available today.";
+
+                    
                 }
                 
-            }
+                if( (arrayDaysChecked[k] === true) && (k === 5) ) {
+
+                    
+                    if(k != localStorage.getItem("recentCheckedDay")) {
+                        if(habit1.progVal === 0) {
+                            habit1.streak = 0;
+                        }
+
+                        progress.value = 0;
+                        habit1.progVal = 0;
+                    }
+
+                    localStorage.setItem("recentCheckedDay", k);
+
+                    today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
+
+                }  
+
+                habitArray[ind] = JSON.stringify(habit1);
+            }            
         }
 
         ind++;
     }
 
+    // place here?
+    localStorage.setItem("habitList", JSON.stringify(habitArray));
 
 };
 
