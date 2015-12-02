@@ -12,16 +12,18 @@ Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M
  * Return Val: Returns the Parse object if the username is found and
  *             the password matches, returns null if nah
  **/
-function authenticate(email,pass) {
+function login(email,pass) {
     return new Promise(function(resolve,reject) {
-    Parse.User.logIn(email, pass, {
-          success: function(user) {
-            // Do stuff after successful login.
-          },
-          error: function(user, error) {
-            // The login failed. Check error to see why.
-            reject(error);
-          }
+        Parse.User.logIn(email, pass, {
+              success: function(user) {
+                // Do stuff after successful login.
+                resolve(user);
+              },
+              error: function(user, error) {
+                // The login failed. Check error to see why.
+                reject(error);
+              }
+        });
     });
 }
 
@@ -48,11 +50,14 @@ function checkForCacheUser() {
  *               or true on success.
  **/
 function logOut() {
-    Parse.User.logOut();
-    if(Parse.User.current())
-        return false;
-    else
-        return true;
+    Parse.User.logOut().then(function(){
+        var user = Parse.User.current();
+        if(user === null)
+            return true;
+        else
+            return false;
+    });
+
 }
 
 //*****************************
@@ -67,14 +72,31 @@ function logOut() {
  **/
 function createUser(email, pass) {
     return new Promise(function(resolve,reject) {
+        logOut(); // For testing purposes, should never have to use
         var newUser = new Parse.User();
-        var UserClass = Parse.Object.extend('UserAccount');
-        var newUser = new UserClass();
+        if(!isValidEmail(email)){
+            alert("Is invalid email");
+            reject("invalid email");
+            return;
+        }
 
+        // Check for one cap letter, one numerical character, and a pass length of 5<=x<=15
+        if(!isValidPassword(pass)) {
+            alert("Password must contain one capital letter, one number, and must be between 5 and 15 characters");
+            reject("invalid pass");
+            return;
+        }
+        console.log(Parse.User.current());
+
+        console.log(email);
+        console.log(pass);
         newUser.set("username",email);    // Username is email in this app
         newUser.set("password",pass);
         newUser.signUp().then(function(newUser){
             resolve(newUser);    // Return new user object
+            alert("success save");
+        },function(err){
+            reject(err);
         });
     });
 }
@@ -253,7 +275,7 @@ function isDuplicateHabitTitle(titleValue) {
  * Return Value: Returns a Promise to return a resolve on success,
  *               or rejects Promise on failure.
  **/
-function createParseHabit(userId)
+function createParseHabit(userId) 
 {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
@@ -307,15 +329,12 @@ function createParseHabit(userId)
         var userQuery = new Parse.Query("UserAccountClass");
         var user = Parse.User.current();
         newHabit.save().then(function(habitParseObj){
-            userQuery.equalTo("id",userId).find(function(userArray){
-                    // We have the UserAccount, create parse relationship
-                    var relation = user.relation('habits');
-                    relation.add(habitParseObj);
-                    user.save();
-                    resolve();
-                }
-            });
-        }).catch(function(err){
+            // We have the UserAccount, create parse relationship
+            var relation = user.relation('habits');
+            relation.add(habitParseObj);
+            user.save();
+            resolve();
+        },function(err){
             reject(err);
         });
     });
