@@ -170,7 +170,7 @@ function updateHabit() {
     }
     localStorage.setItem("habitList", JSON.stringify(arrayHabit));
 
-    location.href = 'list.html';
+  //  location.href = 'list.html';
 }
 
 // recurring code, TODO remove and merge app.js calls with this file

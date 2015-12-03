@@ -1,4 +1,22 @@
+// Initialize dependency (Parse backend)
+Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
+
 window.onload = function () {
+
+    var user = Parse.User.current();
+    var tagList = [];
+    var relations = user.relation('habits');
+    var query = relations.query();
+    query.equalTo("Habit");
+    relations.query().find().then(function(result){
+        for(habit of result)
+        {
+            // For each habit, do stuff in this for each loop to make it RESTFUL
+            console.log("Habit: " + habit.get("title"));
+        }
+    });
+
+
     var output = document.getElementById('habit-list');
     var habitArray = JSON.parse(localStorage.getItem("habitList"));
     var habitLength = habitArray.length;

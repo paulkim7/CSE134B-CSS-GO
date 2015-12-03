@@ -275,7 +275,7 @@ function isDuplicateHabitTitle(titleValue) {
  * Return Value: Returns a Promise to return a resolve on success,
  *               or rejects Promise on failure.
  **/
-function createParseHabit(userId) 
+function createParseHabit() 
 {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
@@ -301,7 +301,7 @@ function createParseHabit(userId)
             numDailyFreq = i + 1;
         }
     }
-    var freqString = JSON.stringify(freqData);
+    //var freqString = JSON.stringify(freqData);
 
     if(numDailyFreq===0)
         var numDailyFreq = document.getElementById("others").value;
@@ -316,25 +316,27 @@ function createParseHabit(userId)
     return new Promise(function(resolve,reject) {
         // Create new habit and add to current user, then resolve
         var HabitClass =  Parse.Object.extend("Habit");
-        newHabit.set("id",idClean);
+        var newHabit = new HabitClass();
+        //newHabit.set("id",idClean);
         newHabit.set("title", titleValue);
-        newHabit.set("icon", habitValue);
+        newHabit.set("iconLoc", habitValue);
         newHabit.set("iconNum", iconImgNum);  // Change later to reference file directly
         newHabit.set("day", dayString);
-        newHabit.set("freq", freqString);
+        newHabit.set("freq", freqData);
         newHabit.set("progVal", progValue);
-        newHabit.set("dailyFreq", numDailyFreak);
+        newHabit.set("dailyFreq", numDailyFreq);
         newHabit.set("streak", 0);
         newHabit.set("record", 0);
-        var userQuery = new Parse.Query("UserAccountClass");
         var user = Parse.User.current();
         newHabit.save().then(function(habitParseObj){
             // We have the UserAccount, create parse relationship
             var relation = user.relation('habits');
             relation.add(habitParseObj);
             user.save();
+            alert("Save success");
             resolve();
         },function(err){
+            console.log(err);
             reject(err);
         });
     });
@@ -401,7 +403,7 @@ function createHabit()
     
     //var formData = new FormData(document.querySelector('form'));
     
-    location.href='list.html';
+    // location.href='list.html';
 }
 
 
