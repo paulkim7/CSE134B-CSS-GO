@@ -42,3 +42,47 @@ function onClickLogin() {
 		console.log(err);
 	});
 }
+
+function switchButton() {
+	
+	var button = document.getElementsByClassName("loginButton")[0];
+	var accountQues = document.getElementById("loginOrSignup");
+
+	if(button.value === "Login") {
+		button.value = "Signup";
+		accountQues.innerHTML = "Already have an account? <a href='#'' onclick='switchButton()'>Login</a>";
+	}
+	else {
+		button.value = "Login";
+		accountQues.innerHTML = "Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>";
+	}
+
+	// Change later
+	localStorage.setItem("buttonStatus", button.value);
+	
+}
+
+window.onload = function() {
+
+	if(localStorage.getItem("buttonStatus") === null) {
+		return;
+	}
+
+	var button = document.getElementsByClassName("loginButton")[0];
+	var accountQues = document.getElementById("loginOrSignup");
+
+	if(localStorage.getItem("buttonStatus") === "Signup") {
+		button.value = "Signup";
+		button.onclick = function(){ onClickSignup(); };
+		accountQues.innerHTML = "Already have an account? <a href='#'' onclick='switchButton()'>Login</a>";
+		//alert("Signup Button");
+	}
+	else {
+		button.value = "Login";
+		button.onclick = function(){ onClickLogin(); };
+		accountQues.innerHTML = "Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>";
+		//alert("Login Button");
+	}
+
+}
+

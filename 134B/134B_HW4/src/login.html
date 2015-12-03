@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 		<title>Welcome to Virtue/Vice!</title>
 		<link rel="stylesheet" href="../css/login.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -35,9 +37,11 @@
        	<p id="signInMessage">Sign in successful! <span style="color: #4caf50">&#10004;</span></p>
        	<div class="buttons">
        		<input class="loginButton" type="button" value="Login" onclick="onClickLogin()">
-          <input class="signUpButton" type="button" value="Signup" onclick="onClickSignup()">
+          <!--<input class="signUpButton" type="button" value="Signup" onclick="onClickSignup()">-->
         </div>
       </form>
+
+      <p id="loginOrSignup" style="text-align: center">Don't have an account? <a href="#" onclick="switchButton()">Sign Up</a></p>
     </div>
 
     <script src="../js/login.js"></script>
