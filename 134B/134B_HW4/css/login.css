@@ -6,7 +6,7 @@ html {
 }
 
 body {
-  font-family: 'Helvetica', sans-serif;
+  font-family: 'Roboto Slab';
   background: -webkit-linear-gradient(left top, #BBDEFB, #B0C4DE); /* For Safari 5.1 to 6.0 */
   background: -o-linear-gradient(bottom right,#BBDEFB, #B0C4DE); /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(bottom right, #BBDEFB, #B0C4DE); /* For Firefox 3.6 to 15 */
@@ -14,13 +14,14 @@ body {
   height: 100%;
   width: 100%;
   padding: 0;
+  width: auto;
   margin: 0;
   overflow: hidden;
 }
 
 .login {
-	position: relative;
-	margin: 0 auto;
+  position: relative;
+  margin: 0 auto;
   top: 15%;
   width: 500px;
   /*
@@ -34,7 +35,6 @@ body {
 
 @media (max-width: 450px) {
   .login {
-  	width: auto;
   	margin: 0 20px;
   }
 }
@@ -42,12 +42,12 @@ body {
 .login h1 {
   font-size: 3.5em;
   text-align: center;
-  color: #808080;
+  color: #5E7CE2;
 }
 
 .login h1 i {
   color: #333;
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: 'Pacifico';
   font-style: italic;
 }
 
@@ -72,7 +72,7 @@ body {
 
 .login .loginForm input {
 	font-size: 1.0em;
-	font-family: 'Helvetica', sans-serif;
+	font-family: 'Roboto Slab';
 	width: 100%;
 	-webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -117,7 +117,8 @@ body {
 	width: 100%;
 	margin: 0;
 	padding: 0;
-	padding-left: 2px;
+	/*padding-left: 2px;*/
+  text-align: center;
 	-webkit-transition: bottom 1s, height 0.5s;
 	transition: bottom 1s, height 0.5s;
   -webkit-appearance:none;
