@@ -160,12 +160,12 @@ function uploadUserIcon(fileInput) {
 }
 
 /** 
- * isValidAddHabit()
+ * isValidHabitInput()
  * Description: Takes the add habit inputs and makes sure they are valid.
  *
  * Return Value: Returns a tuple containing true if valid, false if invalid, and a err msg.
  **/
-function isValidHabitInputs() {
+function isValidHabitInput() {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
     
@@ -215,9 +215,17 @@ function isValidHabitInputs() {
         inputsValidated = false;
     }
 
-    var tuple = [inputsValidated,inputMsg];
-
-    return tuple;
+    return new Promise(function(resolve,reject){
+        isDuplicateHabitTitle(titleValue).then(function(isDup){
+            if(isDup) {
+                reject("Habit title already exists, please change.");
+            }
+            var tuple = [inputsValidated,inputMsg];
+            console.log(tuple[0]);
+            console.log(tuple[1]);
+            resolve(tuple); 
+        });
+    }); 
 }
 
 function validateInputs() {
@@ -301,31 +309,43 @@ function validateInputs() {
  *             False if titleValue does not exist as a habit title already.
  **/
 function isDuplicateHabitTitle(titleValue) {
-    if( localStorage.getItem("habitList") == null ) {
-        return false;
-    }
-    
-    var habitArray = JSON.parse(localStorage.getItem("habitList"));
-
-    var j = 0
-
-    while( j < habitArray.length ) {
-                    
-        var individualHabit = JSON.parse(habitArray[j]);
-
-        if( titleValue === individualHabit.title ) {
-            alert("The following habit title already exists. Please edit the existing habit.");
-            return true;
-        }
-
-        j++;
-
-    }
-
-    return false;
+    return new Promise(function(resolve,reject){
+        getUserHabits().then(function(habits){
+            for(habit of habits) {
+                if(habit.get('title') === titleValue)
+                    resolve(true);
+            }
+            resolve(false);
+        });
+    });
 }
 
 
+/**
+ * clickAddHabit()
+ * Description: Button handler to handle everything it leads to more concise code
+ **/
+function clickAddHabit() {
+    return new Promise(function(resolve,reject){
+        isValidHabitInput().then(function(validationReturn){
+            var tuple = validationReturn;
+            if(!tuple[0]) {
+                alert(tuple[1]);
+                reject(false);
+            }
+
+            createParseHabit().then(function(){
+                location.href='list.html';
+                resolve(true);
+            }).catch(function(err){
+                alert(err);
+            });
+        });
+    });
+}
+
+
+// TODO handle verification input in seperate function
 /** 
  * createParseHabit() 
  * Description: Creates Parse Habit object by pulling values
@@ -338,48 +358,43 @@ function isDuplicateHabitTitle(titleValue) {
  **/
 function createParseHabit() 
 {
-    var tuple = isValidHabitInputs();
-    if(tuple[0]) {
-        alert(tuple[1]);
-        return;
-    }
-    var titleValue = document.getElementById("title").value;
-    var habitValue = document.getElementById("habits").value;
-    var iconImgNum = document.getElementById("habits").selectedIndex;
-    var dayArray = document.getElementsByName("date[]");
-    var dayLength = dayArray.length;
-    var dayData = Array();
-    for (k = 0; k < dayLength; k++)
-    {
-        dayData[k] = dayArray[k].checked;
-    }
-    var dayString = JSON.stringify(dayData);
-
-    var freqArray = document.getElementsByName("day[]");
-    var freqLength = freqArray.length;
-    var freqData = Array();
-    var numDailyFreq = 0;
-    for (i = 0; i < freqLength; i++)
-    {
-        freqData[i] = freqArray[i].checked;
-
-        if(freqArray[i].checked === true) {
-            numDailyFreq = i + 1;
+    return new Promise(function(resolve,reject){
+        var titleValue = document.getElementById("title").value;
+        var habitValue = document.getElementById("habits").value;
+        var iconImgNum = document.getElementById("habits").selectedIndex;
+        var dayArray = document.getElementsByName("date[]");
+        var dayLength = dayArray.length;
+        var dayData = Array();
+        for (k = 0; k < dayLength; k++)
+        {
+            dayData[k] = dayArray[k].checked;
         }
-    }
-    //var freqString = JSON.stringify(freqData);
+        var dayString = JSON.stringify(dayData);
 
-    if(numDailyFreq===0)
-        var numDailyFreq = document.getElementById("others").value;
+        var freqArray = document.getElementsByName("day[]");
+        var freqLength = freqArray.length;
+        var freqData = Array();
+        var numDailyFreq = 0;
+        for (i = 0; i < freqLength; i++)
+        {
+            freqData[i] = freqArray[i].checked;
 
-    var d = new Date();
-    var n = d.getTime();
-    var idStr = n.toString();
-    var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
-    var idClean = id.replace(/ /g,'');
-    var progValue = 0;
-    
-    return new Promise(function(resolve,reject) {
+            if(freqArray[i].checked === true) {
+                numDailyFreq = i + 1;
+            }
+        }
+        //var freqString = JSON.stringify(freqData);
+
+        if(numDailyFreq===0)
+            var numDailyFreq = document.getElementById("others").value;
+
+        var d = new Date();
+        var n = d.getTime();
+        var idStr = n.toString();
+        var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
+        var idClean = id.replace(/ /g,'');
+        var progValue = 0;
+
         // Create new habit and add to current user, then resolve
         var HabitClass =  Parse.Object.extend("Habit");
         var newHabit = new HabitClass();
@@ -393,12 +408,14 @@ function createParseHabit()
         newHabit.set("dailyFreq", numDailyFreq);
         newHabit.set("streak", 0);
         newHabit.set("record", 0);
+
         var user = Parse.User.current();
         newHabit.save().then(function(habitParseObj){
             // We have the UserAccount, create parse relationship
             var relation = user.relation('habits');
             relation.add(habitParseObj);
-            user.save();
+            return user.save();
+        }).then(function(result){
             alert("Save success");
             resolve();
         },function(err){
@@ -472,4 +489,15 @@ function createHabit()
     // location.href='list.html';
 }
 
-
+function getUserHabits() {
+    return new Promise(function(resolve,reject){
+        var user = Parse.User.current();
+        var tagList = [];
+        var relations = user.relation('habits');
+        var query = relations.query();
+        query.equalTo("Habit");
+        relations.query().find().then(function(result){
+            resolve(result);
+        });
+    });
+}
