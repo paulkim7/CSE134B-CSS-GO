@@ -335,6 +335,7 @@ function clickAddHabit() {
             }
 
             createParseHabit().then(function(){
+                alert("Create habit success!");
                 location.href='list.html';
                 resolve(true);
             }).catch(function(err){
@@ -383,8 +384,7 @@ function createParseHabit()
                 numDailyFreq = i + 1;
             }
         }
-        //var freqString = JSON.stringify(freqData);
-
+        
         if(numDailyFreq===0)
             var numDailyFreq = document.getElementById("others").value;
 
@@ -416,7 +416,6 @@ function createParseHabit()
             relation.add(habitParseObj);
             return user.save();
         }).then(function(result){
-            alert("Save success");
             resolve();
         },function(err){
             console.log(err);
