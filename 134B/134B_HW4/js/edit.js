@@ -180,7 +180,7 @@ function updateParseHabit(habitName) {
             habit.set("iconNum", iconImgNum);  // Change later to reference file directly
             habit.set("day", dayString);
             habit.set("freq", freqData);
-            habit.set("dailyFreq", numDailyFreak);
+            habit.set("dailyFreq", dailyFreq);
 
             // Now save changes to parse
             habit.save().then(function(){
