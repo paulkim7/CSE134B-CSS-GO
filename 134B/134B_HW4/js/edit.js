@@ -188,7 +188,8 @@ function updateParseHabit(habit) {
                 resolve();
             },function(err){
                 reject(err['message']);
-        });
+            });
+        }
     });
 }
 

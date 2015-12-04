@@ -240,8 +240,6 @@ function isValidHabitInput(habitList) {
         }
     }
     var tuple = [inputsValidated,inputMsg];
-    console.log(tuple[0]);
-    console.log(tuple[1]);
     return tuple; 
 }
 
@@ -511,9 +509,6 @@ function getUserHabits() {
         var query = relations.query();
         query.equalTo("Habit");
         relations.query().find().then(function(result){
-            for(res of result) {
-                console.log(res.get("title"));
-            }
             resolve(result);
         });
     });
