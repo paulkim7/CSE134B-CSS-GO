@@ -88,7 +88,6 @@ function checkForLogin() {
  **/
 function createUser(email, pass) {
     return new Promise(function(resolve,reject) {
-        //logOut(); // For testing purposes, should never have to use
         var newUser = new Parse.User();
         if(!isValidEmail(email)){
             alert("Is invalid email");
@@ -109,8 +108,9 @@ function createUser(email, pass) {
         newUser.set("username",email);    // Username is email in this app
         newUser.set("password",pass);
         newUser.signUp().then(function(newUser){
-            resolve(newUser);    // Return new user object
+            resolve();    // Return new user object
             alert("success save");
+            location.href='list.html';
         },function(err){
             reject(err);
         });
@@ -323,7 +323,7 @@ function isValidHabitInput(habitList) {
  **/
 function clickAddHabit() {
     return new Promise(function(resolve,reject){
-        getUserHabits.then(function(habitList){
+        getUserHabits().then(function(habitList){
             var tuple = isValidHabitInput(habitList);
             if(!tuple[0]) {
                 alert(tuple[1]);
