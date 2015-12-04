@@ -209,7 +209,7 @@ window.onload = function () {
                         progVal = 0;
 
                         habit.set("progVal", progVal);
-                        habit.save().then(function(){},function(err){console.log(err['message'])});
+                        habit.save();
                     }
 
                     today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";

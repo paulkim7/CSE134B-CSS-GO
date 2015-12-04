@@ -20,8 +20,7 @@ function login(email, pass) {
             },
             error: function (user, error) {
                 // The login failed. Check error to see why.
-                alert(error['message']);
-                reject(error['message']);
+                reject(error);
             }
         });
     });

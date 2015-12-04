@@ -147,7 +147,6 @@ function isValidEditHabit(habitList, habitInd) {
  **/
 function updateParseHabit(habit) {
     return new Promise(function (resolve, reject) {
-        console.log(habit.get("title"));
         // Set values
         var titleValue = document.getElementById("title").value;
         var habitValue = document.getElementById("habits").value;
@@ -267,6 +266,100 @@ function uploadUserIcon(fileInput) {
         });
     });
 }
+
+function validateInputs() {
+    var titleValue = document.getElementById("title").value;
+    var habitValue = document.getElementById("habits").value;
+
+    var dayArray = document.getElementsByName("date[]");
+    var dailyFreqArray = document.getElementsByName("day[]");
+    var otherValue = document.getElementById("others").value;
+
+    var numDaysChecked = 0;
+    var numFreqChecked = 0;
+
+    var inputsValidated = true;
+    var inputMsg = "";
+
+    if (titleValue === "") {
+        inputMsg = "- Please enter a habit title.\n";
+        inputsValidated = false;
+    }
+
+    if (habitValue === "unselected") {
+        inputMsg = inputMsg + "- Please select an icon image.\n"
+        inputsValidated = false;
+    }
+
+    // Checks whether days are selected for the habit
+    for (i = 0; i < dayArray.length; i++) {
+        if (dayArray[i].checked === true) {
+            numDaysChecked++;
+        }
+    }
+
+    if (numDaysChecked === 0) {
+        inputMsg = inputMsg + "- Please select at least ONE day.\n";
+        inputsValidated = false;
+    }
+
+    // Checks whether daily frequency is checked
+    for (j = 0; j < dailyFreqArray.length; j++) {
+        if (dailyFreqArray[j].checked === true) {
+            numFreqChecked++;
+            break;
+        }
+    }
+
+    // If both daily frequency NOT checked and other value doesn't exist
+    if (numFreqChecked === 0 && otherValue === "") {
+        inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
+        inputsValidated = false;
+    }
+
+    if (inputsValidated === true) {
+        checkDuplicateTitle();
+    }
+    else {
+        alert(inputMsg);
+    }
+
+}
+
+function checkDuplicateTitle() {
+    var titleValue = document.getElementById("title").value;
+
+    var habitArray = JSON.parse(localStorage.getItem("habitList"));
+    var updatedHabitID = localStorage.getItem("habitEditID"); // ID of the habit you're editing
+
+    var j = 0
+
+    while (j < habitArray.length) {
+
+        var individualHabit = JSON.parse(habitArray[j]);
+
+        if (titleValue === individualHabit.title) {
+            if (individualHabit.id != updatedHabitID) {
+                alert("The following habit title already exists. Please edit the existing habit.");
+                return;
+            }
+        }
+
+        j++;
+
+    }
+    if (document.getElementById('habits').selectedIndex === 4) {
+        uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function () {
+            updateHabit();
+        }).catch(function (err) {
+            alert(err);
+        });
+    }
+    else {
+        updateHabit(titleValue);
+    }
+}
+
 
 // JQuery, create listeners when the document is ready
 $(document).ready(function () {
