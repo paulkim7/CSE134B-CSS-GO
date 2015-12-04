@@ -4,6 +4,10 @@ Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M
 window.onload = function () {
     checkForLogin();
     var user = Parse.User.current();
+    var logoutSent = document.getElementById("username");
+    
+    logoutSent.innerHTML = " [" + user.get("username") + "]";
+
     var tagList = [];
     var relations = user.relation('habits');
     var query = relations.query();

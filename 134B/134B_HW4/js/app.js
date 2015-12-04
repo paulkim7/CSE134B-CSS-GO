@@ -75,10 +75,7 @@ function checkForLogin() {
         alert("You must log in first.");
         location.href='login.html';
     }
-    else
-    {
-        alert(Parse.User.current().get("username"));
-    }
+
 }
 /**
  * createUser()
@@ -100,10 +97,7 @@ function createUser(email, pass) {
             reject("invalid pass");
             return;
         }
-        console.log(Parse.User.current());
 
-        console.log(email);
-        console.log(pass);
         newUser.set("username",email);    // Username is email in this app
         newUser.set("password",pass);
         newUser.signUp().then(function(newUser){
