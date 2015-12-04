@@ -18,11 +18,15 @@ window.onload = function () {
     var currentDay = currentDate.getDay();
     query.equalTo("Habit");
     relations.query().find().then(function (result) {
+
         if(result.length===0) {
             document.getElementById("noHabitContainer").className = "centered";
         }
-        for (habit of result) {
-
+       
+        var index;
+    for (index = 0; index < result.length; ++index) {
+ 
+            var habit = result[index];
             var i = habit.id;
             var title = habit.get("title");
             var iconLoc = habit.get("iconLoc");

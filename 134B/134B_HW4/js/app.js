@@ -127,13 +127,12 @@ function validateImageUpload(filename) {
 
     var extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length);
     var extList = ['jpg', 'jpeg', 'png', 'gif'];         // Array of all common image formats
-
-    for (ext of extList) {
-        if (extension === ext) {
+    var index;
+    for (index = 0; index < extList.length; ++index) {
+        if (extension === extList[index]) {
             return true;
         }
     }
-
     return false;
 }
 
