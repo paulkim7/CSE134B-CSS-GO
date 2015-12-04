@@ -195,37 +195,27 @@ window.onload = function () {
                 for (k = 0; k < arrayDaysChecked.length; k++) {
                     if ((arrayDaysChecked[k] === false) && (k === currentDay)) {
                         progress.style.visibility = "hidden";
-                        //today.style.visibility = "hidden";
                         today.innerHTML = "Habit is not available today.";
 
                     }
-
-                    if ((arrayDaysChecked[k] === true) && (k === currentDay)) {
-                        console.log("Previous Checked Day: " + habit.get("prevCheckedDay"));
-
-                        if (k != habit.get("prevCheckedDay")) {
-                            console.log("Different Day");
-                            if (progVal === 0) {
-                                streak = 0;
-                            }
-
-                            progress.value = 0;
-                            progVal = 0;
-
-                            habit.set("progVal", progVal);
-                            habit.save();
+                    if (k !== habit.get("prevCheckedDay")) {
+                        if (progVal === 0) {
+                            streak = 0;
                         }
-                        habit.set("prevCheckedDay",k);
+
+                        progress.value = 0;
+                        progVal = 0;
+
+                        habit.set("progVal", progVal);
                         habit.save();
-                        // localStorage.setItem("recentCheckedDay", k);
-
-                        today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
-
                     }
+                    var dayString = currentDate.toLocalDateString;
+                    habit.set("prevCheckedDay",dayString);
+                    habit.save();
 
+                    today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
                 }
             }
-
         }
     });
 

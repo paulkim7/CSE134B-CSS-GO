@@ -192,6 +192,11 @@ function isValidHabitInput(habitList) {
         inputsValidated = false;
     }
 
+    if (titleValue.length >= 30) {
+        inputMsg = inputMsg + "- Habit title must be under 30 characters.";
+        inputsValidated = false
+    }
+
     if (habitValue === "unselected") {
         inputMsg = inputMsg + "- Please select an icon image.\n"
         inputsValidated = false;
