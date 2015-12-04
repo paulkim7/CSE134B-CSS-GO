@@ -326,13 +326,13 @@ function clickAddHabit() {
         var tuple = isValidHabitInput(habitList);
         if(!tuple[0]) {
             alert(tuple[1]);
-            return
+            return;
         }
 
         createParseHabit().then(function(){
             alert("Create habit success!");
             location.href='list.html';
-            return
+            return;
         }).catch(function(err){
             alert(err);
         });
