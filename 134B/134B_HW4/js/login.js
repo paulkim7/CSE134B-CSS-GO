@@ -1,8 +1,3 @@
-// function onClickSignUp() {
-//   var signUpText = document.getElementById("signInMessage");
-//   signUpText.style.display = "block";
-// }
-
 // Returns true on valid, false on invalid
 function isValidEmail(email) {
     var re = /\S+@\S+\.\S+/;
