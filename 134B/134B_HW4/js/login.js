@@ -73,13 +73,19 @@ window.onload = function() {
 
 	if(localStorage.getItem("buttonStatus") === "Signup") {
 		button.value = "Signup";
-		button.onclick = function(){ onClickSignup(); };
+		button.onclick = function(){ 
+			onClickSignup(); 
+			mixpanel.track('Login');
+		};
 		accountQues.innerHTML = "Already have an account? <a href='#'' onclick='switchButton()'>Login</a>";
 		//alert("Signup Button");
 	}
 	else {
 		button.value = "Login";
-		button.onclick = function(){ onClickLogin(); };
+		button.onclick = function(){ 
+			onClickLogin(); 
+			mixpanel.track('SignUp');
+		};
 		accountQues.innerHTML = "Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>";
 		//alert("Login Button");
 	}

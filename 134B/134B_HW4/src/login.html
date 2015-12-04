@@ -58,7 +58,7 @@
                     h && h(b, c, d, f, g), g || (g = new Error(b)), a[e].q = a[e].q || [], a[e].q.push({
                         e: g})
                 }
-            }(window, document, "script", "//cdn.raygun.io/raygun4js/raygun.min.js", "rg4js");
+            }(window, document, "script", "https://cdn.raygun.io/raygun4js/raygun.min.js", "rg4js");
         </script>
         <script type="text/javascript">
             rg4js('apiKey', 'mJG6r6nPQv+eXMqzFALjJQ==');
@@ -92,13 +92,14 @@
        	</table>
        	<p id="signInMessage">Sign in successful! <span style="color: #4caf50">&#10004;</span></p>
        	<div class="buttons">
-<<<<<<< HEAD
-       		<input class="loginButton" type="button" value="Login" onclick="onClickLogin()">
+
+       		<input class="loginButton" type="button" value="Login" onclick="onClickLogin(); mixpanel.track('Login');">
           <!--<input class="signUpButton" type="button" value="Signup" onclick="onClickSignup()">-->
-=======
-       		<input class="loginButton" type="button" value="Login" onclick="onClickLogin();mixpanel.track('Login');">
+       		
+          <!-- 
+          <input class="loginButton" type="button" value="Login" onclick="onClickLogin();mixpanel.track('Login');">
           <input class="signUpButton" type="button" value="Signup" onclick="onClickSignup();mixpanel.track('SignUp');">
->>>>>>> origin/master
+        -->
         </div>
       </form>
 
