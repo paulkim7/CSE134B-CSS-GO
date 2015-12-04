@@ -198,6 +198,12 @@ function isValidHabitInput(habitList) {
         inputsValidated = false;
     }
 
+    // Make sure input value for OTHER is > 3
+    if(otherValue < 4) {
+        inputMsg = inputMsg + "- Please enter a value greater than 3 for other.\n";
+        inputsValidated = false;
+    }
+
     // Checks whether days are selected for the habit
     for (i = 0; i < dayArray.length; i++) {
         if (dayArray[i].checked === true) {
