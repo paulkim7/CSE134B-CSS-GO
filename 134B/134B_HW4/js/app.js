@@ -1,4 +1,3 @@
-
 // Initialize dependency (Parse backend)
 Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
 
@@ -385,31 +384,61 @@ function createParseHabit()
         var idClean = id.replace(/ /g,'');
         var progValue = 0;
 
-        // Create new habit and add to current user, then resolve
-        var HabitClass =  Parse.Object.extend("Habit");
-        var newHabit = new HabitClass();
-        //newHabit.set("id",idClean);
-        newHabit.set("title", titleValue);
-        newHabit.set("iconLoc", habitValue);
-        newHabit.set("iconNum", iconImgNum);  // Change later to reference file directly
-        newHabit.set("day", dayString);
-        newHabit.set("freq", freqData);
-        newHabit.set("progVal", progValue);
-        newHabit.set("dailyFreq", numDailyFreq);
-        newHabit.set("streak", 0);
-        newHabit.set("record", 0);
+        if(document.getElementById('habits').selectedIndex===4){
+            uploadUserIcon(document.getElementById("iconUploaderAdd")).then(function() {
+                // Create new habit and add to current user, then resolve
+                var HabitClass =  Parse.Object.extend("Habit");
+                var newHabit = new HabitClass();
+                //newHabit.set("id",idClean);
+                newHabit.set("title", titleValue);
+                newHabit.set("iconLoc", habitValue);
+                newHabit.set("iconNum", iconImgNum);  // Change later to reference file directly
+                newHabit.set("day", dayString);
+                newHabit.set("freq", freqData);
+                newHabit.set("progVal", progValue);
+                newHabit.set("dailyFreq", numDailyFreq);
+                newHabit.set("streak", 0);
+                newHabit.set("record", 0);
 
-        var user = Parse.User.current();
-        newHabit.save().then(function(habitParseObj){
-            // We have the UserAccount, create parse relationship
-            var relation = user.relation('habits');
-            relation.add(habitParseObj);
-            return user.save();
-        }).then(function(result){
-            resolve();
-        },function(err){
-            reject(err['message']);
-        });
+                var user = Parse.User.current();
+                newHabit.save().then(function(habitParseObj){
+                    // We have the UserAccount, create parse relationship
+                    var relation = user.relation('habits');
+                    relation.add(habitParseObj);
+                    return user.save();
+                }).then(function(result){
+                    resolve();
+                },function(err){
+                    reject(err['message']);
+                });        
+            });
+        }else {
+            // Create new habit and add to current user, then resolve
+            var HabitClass =  Parse.Object.extend("Habit");
+            var newHabit = new HabitClass();
+            //newHabit.set("id",idClean);
+            newHabit.set("title", titleValue);
+            newHabit.set("iconLoc", habitValue);
+            newHabit.set("iconNum", iconImgNum);  // Change later to reference file directly
+            newHabit.set("day", dayString);
+            newHabit.set("freq", freqData);
+            newHabit.set("progVal", progValue);
+            newHabit.set("dailyFreq", numDailyFreq);
+            newHabit.set("streak", 0);
+            newHabit.set("record", 0);
+
+            var user = Parse.User.current();
+            newHabit.save().then(function(habitParseObj){
+                // We have the UserAccount, create parse relationship
+                var relation = user.relation('habits');
+                relation.add(habitParseObj);
+                return user.save();
+            }).then(function(result){
+                resolve();
+            },function(err){
+                reject(err['message']);
+            });
+        }
     });
 }
 
