@@ -181,7 +181,7 @@ function uploadUserIcon(fileInput) {
  *
  * Return Value: Returns a tuple containing true if valid, false if invalid, and a err msg.
  **/
-function isValidHabitInput() {
+function isValidHabitInput(habitList) {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
     
@@ -231,110 +231,90 @@ function isValidHabitInput() {
         inputsValidated = false;
     }
 
-    return new Promise(function(resolve,reject){
-        isDuplicateHabitTitle(titleValue).then(function(isDup){
-            if(isDup) {
-                reject("Habit title already exists, please change.");
-            }
-            var tuple = [inputsValidated,inputMsg];
-            console.log(tuple[0]);
-            console.log(tuple[1]);
-            resolve(tuple); 
-        });
-    }); 
-}
-
-function validateInputs() {
-    var titleValue = document.getElementById("title").value;
-    var habitValue = document.getElementById("habits").value;
-    
-    var dayArray = document.getElementsByName("date[]");
-    var dailyFreqArray = document.getElementsByName("day[]");
-    var otherValue = document.getElementById("others").value;
-
-    var numDaysChecked = 0;
-    var numFreqChecked = 0;
-
-    var inputsValidated = true;
-    var inputMsg = "";
-
-    if( titleValue === "" ) {
-        inputMsg = "- Please enter a habit title.\n";
-        inputsValidated = false;
-    }
-    
-    if( habitValue === "unselected" ) {
-        inputMsg = inputMsg + "- Please select an icon image.\n"
-        inputsValidated = false;
-    }
-    
-    // Checks whether days are selected for the habit
-    for( i = 0; i < dayArray.length; i++) {
-        if( dayArray[i].checked === true ) {
-            numDaysChecked++;
-        }   
-    }
-
-    if( numDaysChecked === 0 ) {
-        inputMsg = inputMsg + "- Please select at least ONE day.\n";
-        inputsValidated = false;
-    }
-
-    // Checks whether daily frequency is checked
-    for( j = 0; j < dailyFreqArray.length; j++ ) {
-        if( dailyFreqArray[j].checked === true ) {
-            numFreqChecked++;
+    // Check for duplicate title in habitList
+    for(i=0;i<habitList.length;i++) {
+        if(habitList[i]===titleValue) {
+            inputMsg = inputMsg + "- Habit title already exists, please change.\n";
+            inputsValidated = false;
             break;
         }
     }
-
-    // If both daily frequency NOT checked and other value doesn't exist
-    if( numFreqChecked === 0 && otherValue === "" ) {
-        inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
-        inputsValidated = false;
-    }
-
-    if( inputsValidated === true ) {
-        if(!isDuplicateHabitTitle(titleValue)) {
-            // Filename parameter currently unused
-            if(document.getElementById('habits').selectedIndex===4)
-                uploadUserIcon(document.getElementById("iconUploaderAdd")).then(function() {
-                createHabit();
-                }).catch(function(err){
-                    alert(err);
-                }); 
-            else
-                createHabit();
-        }
-        else 
-            return;
-    }
-    else {
-        alert(inputMsg);
-    }
-
+    var tuple = [inputsValidated,inputMsg];
+    console.log(tuple[0]);
+    console.log(tuple[1]);
+    return tuple; 
 }
 
-/**
- * isDuplicateHabitTitle() 
- * Description: Check if the habit title already exists.
- * 
- * Inputs:
- *   titleValue -- The title value to be checked.
- * Return Val: Returns true if a habit with the same name already exists.
- *             False if titleValue does not exist as a habit title already.
- **/
-function isDuplicateHabitTitle(titleValue) {
-    return new Promise(function(resolve,reject){
-        getUserHabits().then(function(habits){
-            for(habit of habits) {
-                if(habit.get('title') === titleValue)
-                    resolve(true);
-            }
-            resolve(false);
-        });
-    });
-}
+// function validateInputs() {
+//     var titleValue = document.getElementById("title").value;
+//     var habitValue = document.getElementById("habits").value;
+    
+//     var dayArray = document.getElementsByName("date[]");
+//     var dailyFreqArray = document.getElementsByName("day[]");
+//     var otherValue = document.getElementById("others").value;
+
+//     var numDaysChecked = 0;
+//     var numFreqChecked = 0;
+
+//     var inputsValidated = true;
+//     var inputMsg = "";
+
+//     if( titleValue === "" ) {
+//         inputMsg = "- Please enter a habit title.\n";
+//         inputsValidated = false;
+//     }
+    
+//     if( habitValue === "unselected" ) {
+//         inputMsg = inputMsg + "- Please select an icon image.\n"
+//         inputsValidated = false;
+//     }
+    
+//     // Checks whether days are selected for the habit
+//     for( i = 0; i < dayArray.length; i++) {
+//         if( dayArray[i].checked === true ) {
+//             numDaysChecked++;
+//         }   
+//     }
+
+//     if( numDaysChecked === 0 ) {
+//         inputMsg = inputMsg + "- Please select at least ONE day.\n";
+//         inputsValidated = false;
+//     }
+
+//     // Checks whether daily frequency is checked
+//     for( j = 0; j < dailyFreqArray.length; j++ ) {
+//         if( dailyFreqArray[j].checked === true ) {
+//             numFreqChecked++;
+//             break;
+//         }
+//     }
+
+//     // If both daily frequency NOT checked and other value doesn't exist
+//     if( numFreqChecked === 0 && otherValue === "" ) {
+//         inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
+//         inputsValidated = false;
+//     }
+
+//     if( inputsValidated === true ) {
+//         if(!isDuplicateHabitTitle(titleValue)) {
+//             // Filename parameter currently unused
+//             if(document.getElementById('habits').selectedIndex===4)
+//                 uploadUserIcon(document.getElementById("iconUploaderAdd")).then(function() {
+//                 createHabit();
+//                 }).catch(function(err){
+//                     alert(err);
+//                 }); 
+//             else
+//                 createHabit();
+//         }
+//         else 
+//             return;
+//     }
+//     else {
+//         alert(inputMsg);
+//     }
+
+// }
 
 
 /**
@@ -343,8 +323,8 @@ function isDuplicateHabitTitle(titleValue) {
  **/
 function clickAddHabit() {
     return new Promise(function(resolve,reject){
-        isValidHabitInput().then(function(validationReturn){
-            var tuple = validationReturn;
+        getUserHabits.then(function(habitList){
+            var tuple = isValidHabitInput(habitList);
             if(!tuple[0]) {
                 alert(tuple[1]);
                 reject(false);
@@ -402,7 +382,7 @@ function createParseHabit()
         }
         
         if(numDailyFreq===0)
-            var numDailyFreq = document.getElementById("others").value;
+            var numDailyFreq = Number(document.getElementById("others").value);
 
         var d = new Date();
         var n = d.getTime();
@@ -442,67 +422,67 @@ function createParseHabit()
 
 
 
-function createHabit()
-{
-    var titleValue = document.getElementById("title").value;
-    var habitValue = document.getElementById("habits").value;
-    var iconImgNum = document.getElementById("habits").selectedIndex;
-    var dayArray = document.getElementsByName("date[]");
-    var dayLength = dayArray.length;
-    var dayData = Array();
-    for (k = 0; k < dayLength; k++)
-    {
-        dayData[k] = dayArray[k].checked;
-    }
-    var dayString = JSON.stringify(dayData);
+// function createHabit()
+// {
+//     var titleValue = document.getElementById("title").value;
+//     var habitValue = document.getElementById("habits").value;
+//     var iconImgNum = document.getElementById("habits").selectedIndex;
+//     var dayArray = document.getElementsByName("date[]");
+//     var dayLength = dayArray.length;
+//     var dayData = Array();
+//     for (k = 0; k < dayLength; k++)
+//     {
+//         dayData[k] = dayArray[k].checked;
+//     }
+//     var dayString = JSON.stringify(dayData);
 
-    var freqArray = document.getElementsByName("day[]");
-    var freqLength = freqArray.length;
-    var freqData = Array();
-    var numDailyFreq = 0;
-    for (i = 0; i < freqLength; i++)
-    {
-        freqData[i] = freqArray[i].checked;
+//     var freqArray = document.getElementsByName("day[]");
+//     var freqLength = freqArray.length;
+//     var freqData = Array();
+//     var numDailyFreq = 0;
+//     for (i = 0; i < freqLength; i++)
+//     {
+//         freqData[i] = freqArray[i].checked;
 
-        if(freqArray[i].checked === true) {
-            numDailyFreq = i + 1;
-        }
-    }
-    var freqString = JSON.stringify(freqData);
+//         if(freqArray[i].checked === true) {
+//             numDailyFreq = i + 1;
+//         }
+//     }
+//     var freqString = JSON.stringify(freqData);
 
-    if(numDailyFreq===0)
-        var numDailyFreq = document.getElementById("others").value;
+//     if(numDailyFreq===0)
+//         var numDailyFreq = document.getElementById("others").value;
 
-    var d = new Date();
-    var n = d.getTime();
-    var idStr = n.toString();
-    var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
-    var idClean = id.replace(/ /g,'');
-    var progValue = 0;
+//     var d = new Date();
+//     var n = d.getTime();
+//     var idStr = n.toString();
+//     var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
+//     var idClean = id.replace(/ /g,'');
+//     var progValue = 0;
 
-    var habitObject = {id: idClean, title: titleValue, icon: habitValue, iconNum: iconImgNum, day: dayString, freq: freqString, progVal: progValue, dailyFreq: numDailyFreq, streak: 0, record: 0};
-    var habit = JSON.stringify(habitObject);
-    var habitList = localStorage.getItem("habitList");
+//     var habitObject = {id: idClean, title: titleValue, icon: habitValue, iconNum: iconImgNum, day: dayString, freq: freqString, progVal: progValue, dailyFreq: numDailyFreq, streak: 0, record: 0};
+//     var habit = JSON.stringify(habitObject);
+//     var habitList = localStorage.getItem("habitList");
     
-    if(!habitList)
-    {
-        var newHabitList = Array();
-        newHabitList.push(habit);
-        localStorage.setItem("habitList", JSON.stringify(newHabitList));
-        //location.href='list.html';
-    }
-    else
-    {
-        var parList = JSON.parse(habitList);
-        parList.push(habit);
-        localStorage.setItem("habitList", JSON.stringify(parList));
-        //location.href='list.html';
-    }
+//     if(!habitList)
+//     {
+//         var newHabitList = Array();
+//         newHabitList.push(habit);
+//         localStorage.setItem("habitList", JSON.stringify(newHabitList));
+//         //location.href='list.html';
+//     }
+//     else
+//     {
+//         var parList = JSON.parse(habitList);
+//         parList.push(habit);
+//         localStorage.setItem("habitList", JSON.stringify(parList));
+//         //location.href='list.html';
+//     }
     
-    //var formData = new FormData(document.querySelector('form'));
+//     //var formData = new FormData(document.querySelector('form'));
     
-    // location.href='list.html';
-}
+//     // location.href='list.html';
+// }
 
 function removeParseHabit(habitId){
     return new Promise(function(resolve,reject){
