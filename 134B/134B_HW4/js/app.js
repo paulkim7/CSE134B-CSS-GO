@@ -537,3 +537,7 @@ function getUserHabits() {
         });
     });
 }
+function storeHabitID(habitID)
+{
+    localStorage.setItem("habitEditID", habitID);
+}

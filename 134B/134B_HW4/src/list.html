@@ -13,7 +13,8 @@
         <script src="../js/edit.js"></script>
         <script src="../js/app.js"></script>
 
-        <!-- start Mixpanel --><script type="text/javascript">(function (e, b) {
+        <!-- start Mixpanel -->
+        <script type="text/javascript">(function (e, b) {
                 if (!b.__SV) {
                     var a, f, i, g;
                     window.mixpanel = b;
@@ -85,7 +86,6 @@
                 var liElem = element.parentNode.parentNode;
                 var habitId = liElem.id;
 
-
                 var HabitClass = Parse.Object.extend("Habit");
                 var query = new Parse.Query(HabitClass);
                 query.equalTo("objectId",habitId);
@@ -94,87 +94,69 @@
                         console.log("Error: Habit not found in database");
                     }
                     var habit = returnArray[0];
-
+                    
                     // Paul put all your code here, access elements like below
                     var streak = habit.get("streak");
-                });
+                    var progressVal = habit.get("progVal");
+                    var dailyFreq = habit.get("dailyFreq");
+                    var record = habit.get("record");
 
+                    console.log("Parse Habit Object: " + streak);
 
+                                   // Gets access to progress element
+                    var progressElem = liElem.getElementsByClassName("progressBar")[0];
+                    var streakRecordMsg = liElem.getElementsByClassName("message-total")[0];
+                    var msgElement = liElem.getElementsByClassName("message-today")[0];
 
+                    //Uncomment later
+                    console.log(progressElem);
+                    console.log(msgElement);
+                    console.log(streakRecordMsg);
 
-                // Gets access to progress element
-                var progressElem = liElem.getElementsByClassName("progressBar")[0];
-                var streakRecordMsg = liElem.getElementsByClassName("message-total")[0];
-                var msgElement = liElem.getElementsByClassName("message-today")[0];
+                    var habitNotAvailMsg = "Habit is not available today.";
 
-
-                var arrayHabit = JSON.parse(localStorage.getItem("habitList"));
-
-                // update streak & record value in the actual local storage
-
-                var i = 0;
-
-                // identifies which habit's progress bar & message to update
-                while( i < arrayHabit.length ) {
-
-                    var individualHabit = JSON.parse(arrayHabit[i]);
-                    var dailyFreqType;
-
-                    if( msgElement.innerHTML === "Habit is not available today.") {
+                    // If habit not available, do nothing
+                    if(msgElement.innerHTML === habitNotAvailMsg) {
                         return;
                     }
-                    
 
-                    if( habitId === ("habit-" + individualHabit.id) ) {
-                        dailyFreqType = individualHabit.dailyFreq;
- 
-
-                        if( individualHabit.progVal === dailyFreqType ) {
-                            return;
-                        }
-
-                        if( individualHabit.progVal === (dailyFreqType - 1) ) {
-                            individualHabit.streak++;
-                            individualHabit.progVal = dailyFreqType;
-
-                            if( individualHabit.record === 0 ) {
-                                individualHabit.record = individualHabit.streak;
-                            }
-
-                            if( (individualHabit.record != 0) && (individualHabit.streak > individualHabit.record) ) {
-                                individualHabit.record = individualHabit.streak;
-                            }
-
-                            progressElem.value = dailyFreqType;
-
-                            streakRecordMsg.innerHTML = "<strong> " + individualHabit.streak + "</strong> days in a row! Best Record: <strong> " + individualHabit.record +"</strong><br><br>\n<progress value='" + dailyFreqType + "'" + "max='" + dailyFreqType + "'" + "></progress" ;
-
-                            msgElement.innerHTML = "Completed <strong>" + dailyFreqType + "/" + dailyFreqType + "</strong> for today!";
-
-                            arrayHabit[i] = JSON.stringify(individualHabit);
-
-                        }
-                        else {
-                        
-                        individualHabit.progVal++;
-                        
-                        progressElem.value = individualHabit.progVal;
-
-                        arrayHabit[i] = JSON.stringify(individualHabit);
-
-                        msgElement.innerHTML = "Completed <strong>" + individualHabit.progVal + "/" + dailyFreqType + "</strong> for today!";
-
-                        }
-
-                        break;
+                    // If progress bar value equals the maximum value, do nothing
+                    if(progressVal === dailyFreq) {
+                        return;
                     }
 
-                    i++;
-                }
+                    if(progressVal === (dailyFreq - 1)) {
+                        streak++;
+                        progressVal++; // increment
+                        progressElem.value = progressVal; // updates progress bar value
 
-                localStorage.setItem("habitList", JSON.stringify(arrayHabit));
+                        // update record
+                        if(record === 0) {
+                            record = streak; // LOOK OVER AGAIN
+                        }
+                        if( (record != 0) && (streak > record) ) {
+                            record = streak;
+                        }
 
-                //msgElement.style.visibility = "visible";
+                        streakRecordMsg.innerHTML = "<strong> " + streak + "</strong> days in a row! Best Record: <strong> " + record +"</strong><br><br>\n<progress value='" + progressVal + "'" + "max='" + dailyFreq + "'" + "></progress" ;
+
+                        msgElement.innerHTML = "Completed <strong>" + dailyFreq + "/" + dailyFreq + "</strong> for today!";
+                    }
+                    else {
+                        progressVal++; // increment
+                        progressElem.value = progressVal; // updates progress bar value    
+
+                        msgElement.innerHTML = "Completed <strong>" + progressVal + "/" + dailyFreq + "</strong> for today!";
+
+                    }
+
+                    habit.set("streak", streak); // set attributes in habit object
+                    habit.set("record", record);
+                    habit.set("progVal", progressVal);
+
+                    habit.save(); // updates to Parse
+                });
+
             }
 
             function deleteHabit(element) {
