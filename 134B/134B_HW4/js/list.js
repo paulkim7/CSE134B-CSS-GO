@@ -53,7 +53,6 @@ window.onload = function () {
                     !document.getElementById('iconImg-' + i) &&
                     !document.getElementById('info-' + i))
             {
-
                 var list = document.createElement("li");
                 var nameLi = document.createElement("li");
                 var nameDiv = document.createElement("div");
@@ -192,13 +191,16 @@ window.onload = function () {
 
                 var arrayDaysChecked = JSON.parse(day);
 
-                for (k = 0; k < arrayDaysChecked.length; k++) {
-                    if ((arrayDaysChecked[k] === false) && (k === currentDay)) {
-                        progress.style.visibility = "hidden";
-                        today.innerHTML = "Habit is not available today.";
+                if (arrayDaysChecked[currentDay] === false) {
+                    progress.style.visibility = "hidden";
+                    today.innerHTML = "Habit is not available today.";
 
-                    }
-                    if (k !== habit.get("prevCheckedDay")) {
+                } else {
+                    // var dayString = currentDate.toLocalDateString;
+                    var dayString = "3dJ";
+
+                   if (dayString !== habit.get("prevCheckedDay")) {
+                        console.log("new day");
                         if (progVal === 0) {
                             streak = 0;
                         }
@@ -209,12 +211,11 @@ window.onload = function () {
                         habit.set("progVal", progVal);
                         habit.save();
                     }
-                    var dayString = currentDate.toLocalDateString;
-                    habit.set("prevCheckedDay",dayString);
-                    habit.save();
 
                     today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
                 }
+                habit.set("prevCheckedDay",dayString);
+                habit.save();
             }
         }
     });

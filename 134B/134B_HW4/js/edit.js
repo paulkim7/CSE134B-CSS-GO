@@ -178,10 +178,18 @@ function updateParseHabit(habit) {
 
         var iconUploader = document.getElementById("iconUploaderEdit");
 
+        var dayArrayResetFlag = false;
+        var oldArray = JSON.parse(habit.get("day"));
+        for(i=0;i<oldArray.length;i++){
+            if(oldArray[i]!==dayArray[i]) {
+                dayArrayResetFlag = true;
+            }
+        }
+
         if (document.getElementById('habits').selectedIndex === 4 && iconUploader.files.length > 0) {
             uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function () {
                 // change individualHabit.dailyFreq to dailyFreq if there's a problem
-                if (habit.get("dailyFreq") !== dailyFreq) {
+                if (habit.get("dailyFreq") !== dailyFreq || dayArrayResetFlag) {
                     habit.set("progVal", 0);
                     habit.set("streak", 0);
                     habit.set("record", 0);
@@ -204,7 +212,7 @@ function updateParseHabit(habit) {
             });
         } else {
             // change individualHabit.dailyFreq to dailyFreq if there's a problem
-            if (habit.get("dailyFreq") !== dailyFreq) {
+            if (habit.get("dailyFreq") !== dailyFreq || dayArrayResetFlag) {
                 habit.set("progVal", 0);
                 habit.set("streak", 0);
                 habit.set("record", 0);
@@ -257,30 +265,6 @@ function uploadUserIcon(fileInput) {
             }
         });
     });
-}
-
-
-function editHabit(element) {
-    var child = element.parentNode.parentNode;
-
-    var habitToEdit = localStorage.getItem("habitList");
-    var arrayHabit = JSON.parse(habitToEdit);
-
-    var i = 0;
-
-    while (i < arrayHabit.length) {
-
-        var individualHabit = JSON.parse(arrayHabit[i]);
-
-        if (child.id == ("habit-" + individualHabit.id)) {
-
-            localStorage.setItem("editHabit", JSON.stringify(individualHabit));
-
-            break;
-        }
-
-        i++;
-    }
 }
 
 function validateInputs() {
