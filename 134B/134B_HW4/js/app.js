@@ -180,7 +180,7 @@ function uploadUserIcon(fileInput) {
  *
  * Return Value: Returns a tuple containing true if valid, false if invalid, and a err msg.
  **/
-function isValidHaibtInput(habitList) {
+function isValidHabitInput(habitList) {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
     
@@ -389,7 +389,6 @@ function createParseHabit()
                 // Create new habit and add to current user, then resolve
                 var HabitClass =  Parse.Object.extend("Habit");
                 var newHabit = new HabitClass();
-                habitValue = document.getElementById("img4").value;
                 //newHabit.set("id",idClean);
                 newHabit.set("title", titleValue);
                 newHabit.set("iconLoc", habitValue);
