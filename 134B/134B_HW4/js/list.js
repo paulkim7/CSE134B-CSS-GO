@@ -79,7 +79,7 @@ window.onload = function () {
             var br = document.createElement("br");
             var progress = document.createElement("progress");
 
-            list.setAttribute("id", "habit-" + i);
+            list.setAttribute("id", i);
             nameLi.setAttribute("id", "nameLi-" + i);
             nameDiv.setAttribute("id", "nameDiv-" + i);
             totalSpan.setAttribute("id", "totalSpan-" + i);
