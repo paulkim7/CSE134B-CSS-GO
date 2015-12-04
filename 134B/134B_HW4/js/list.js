@@ -2,36 +2,49 @@
 Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
 
 window.onload = function () {
-
+    checkForLogin();
     var user = Parse.User.current();
     var tagList = [];
     var relations = user.relation('habits');
     var query = relations.query();
+    var output = document.getElementById('habit-list');
+    var currentDate = new Date();
+    var currentDay = currentDate.getDay();
     query.equalTo("Habit");
     relations.query().find().then(function(result){
         for(habit of result)
         {
             // For each habit, do stuff in this for each loop to make it RESTFUL
+            console.log(habit);
+            
             console.log("Habit: " + habit.get("title"));
-        }
-    });
+        
+   
 
 
-    var output = document.getElementById('habit-list');
-    var habitArray = JSON.parse(localStorage.getItem("habitList"));
-    var habitLength = habitArray.length;
-    console.log(habitArray);
-    console.log("Habit List Length: " + habitLength);
-    var ind = 0;
+    
+//    var habitArray = JSON.parse(localStorage.getItem("habitList"));
+//    var habitLength = habitArray.length;
+//    console.log(habitArray);
+//    console.log("Habit List Length: " + habitLength);
+//    var ind = 0;
 
-    var currentDate = new Date();
-    var currentDay = currentDate.getDay();
+    
 
-    while (ind < habitLength)
-    {
-        var habit1 = JSON.parse(habitArray[ind]);
-        var i = habit1.id;
 
+//    while (ind < habitLength)
+//    {
+//       var habit1 = JSON.parse(habitArray[ind]);
+        var i = habit.id;
+        var title=habit.get("title");
+        var iconLoc=habit.get("iconLoc");
+        var iconNum=habit.get("iconNum");  // Change later to reference file directly
+        var day=habit.get("day");
+        var freq=habit.get("freq");
+        var progVal=habit.get("progVal");
+        var dailyFreq=habit.get("dailyFreq");
+        var streak=habit.get("streak");
+        var record=habit.get("record");
         if (!document.getElementById('habit-' + i) &&
                 !document.getElementById('nameLi-' + i) &&
                 !document.getElementById('nameDiv-' + i) &&
@@ -95,10 +108,10 @@ window.onload = function () {
             nameDiv.setAttribute("class", "habit-name");
             info.setAttribute("class", "habit-info");
             iconImg.setAttribute("class", "habit-icon");
-            iconImg.setAttribute("src", habit1.icon);
+            iconImg.setAttribute("src", iconLoc);
             iconImg.setAttribute("alt", "habit icon");
             progress.setAttribute("class", "progressBar");
-            nameDiv.innerHTML = habit1.title;
+            nameDiv.innerHTML = title;
 
             // Habit info
             nameLi.appendChild(nameDiv);
@@ -126,24 +139,24 @@ window.onload = function () {
             messSvg.appendChild(messLine2);
 
             // Progress value & max
-            progress.value = habit1.progVal;
+            progress.value = progVal;
 
 
 
 
             // add if/else statement to determine if dailyFreq is from button or OTHER RECORD
-            if( habit1.dailyFreq === 0 ) {
-                progress.max = habit1.freqOther;
-                today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.freqOther + "</strong> for today!";
+            if( dailyFreq === 0 ) {
+                progress.max = dailyFreq;
+                today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
             }
             else {
-                progress.max = habit1.dailyFreq;
-                today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
+                progress.max = dailyFreq;
+                today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
             }
 
 
             // Streak and record number added
-            totalSpan.innerHTML = "<strong> " + habit1.streak + "</strong> days in a row! Best Record: <strong> " + habit1.record +"</strong><br><br>";
+            totalSpan.innerHTML = "<strong> " + streak + "</strong> days in a row! Best Record: <strong> " + record +"</strong><br><br>";
 
             //today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
             today.setAttribute("class", "message-today");
@@ -193,7 +206,7 @@ window.onload = function () {
             output.appendChild(list);
 
 
-            var arrayDaysChecked = JSON.parse(habit1.day);
+            var arrayDaysChecked = JSON.parse(day);
 
             for( k = 0; k < arrayDaysChecked.length; k++ ) {
                 if( (arrayDaysChecked[k] === false) && (k === 5) ) {
@@ -208,29 +221,30 @@ window.onload = function () {
 
                     
                     if(k != localStorage.getItem("recentCheckedDay")) {
-                        if(habit1.progVal === 0) {
-                            habit1.streak = 0;
+                        if(progVal === 0) {
+                            streak = 0;
                         }
 
                         progress.value = 0;
-                        habit1.progVal = 0;
+                        progVal = 0;
                     }
 
                     localStorage.setItem("recentCheckedDay", k);
 
-                    today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
+                    today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
 
                 }  
 
-                habitArray[ind] = JSON.stringify(habit1);
+//                habitArray[ind] = JSON.stringify(habit1);
             }            
         }
 
-        ind++;
+       // ind++;
     }
+     });
 
     // place here?
-    localStorage.setItem("habitList", JSON.stringify(habitArray));
+//    localStorage.setItem("habitList", JSON.stringify(habitArray));
 
 };
 

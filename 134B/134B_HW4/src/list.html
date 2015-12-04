@@ -11,6 +11,8 @@
         <script src="../js/list.js">
         </script>
         <script src="../js/edit.js"></script>
+        <script src="../js/app.js"></script>
+
         <!-- start Mixpanel --><script type="text/javascript">(function (e, b) {
                 if (!b.__SV) {
                     var a, f, i, g;
@@ -76,7 +78,7 @@
             </ul>
         </section>
 
-        <button type="button" id="addHabit" onclick="location.href = 'add.html; mixpanel.track('addHabit');'" title="add habit">+</button>
+        <button type="button" id="addHabit" onclick="mixpanel.track('addHabit'); location.href = 'add.html';" title="add habit">+</button>
 
         <script type="text/javascript">
             function updateMsgProgBar(element) {

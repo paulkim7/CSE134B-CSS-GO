@@ -53,9 +53,14 @@ function logOut() {
     Parse.User.logOut().then(function(){
         var user = Parse.User.current();
         if(user === null)
+        {
+            location.href = 'login.html';
             return true;
+        }
         else
+        {
             return false;
+        }
     });
 
 }
@@ -65,6 +70,17 @@ function logOut() {
 //*  Parse Functions go here
 //*
 //*****************************
+function checkForLogin() {
+    var currentUser = Parse.User.current();
+    if (!currentUser) {
+        // do stuff with the user
+        location.href='login.html';
+    }
+    else
+    {
+        alert(Parse.User.current().get("username"));
+    }
+}
 /**
  * createUser()
  * Description: Create new Parse user using the
@@ -72,7 +88,7 @@ function logOut() {
  **/
 function createUser(email, pass) {
     return new Promise(function(resolve,reject) {
-        logOut(); // For testing purposes, should never have to use
+        //logOut(); // For testing purposes, should never have to use
         var newUser = new Parse.User();
         if(!isValidEmail(email)){
             alert("Is invalid email");

@@ -10,6 +10,9 @@
         <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.6.7.min.js"></script>
         <script src="../js/app.js"></script>
         <script src="../js/add.js"></script>
+        <script type="text/javascript">
+            window.onload = checkForLogin();
+        </script>
         <!-- start Mixpanel --><script type="text/javascript">(function (e, b) {
                 if (!b.__SV) {
                     var a, f, i, g;
@@ -67,8 +70,8 @@
             rg4js('enablePulse', true);
         </script>
     </head>
-    <body>
-
+    <body >
+        <button type="button" id="addHabit" onclick="logOut()" title="add habit">+</button>
         <div class="forms">
             <h2>Add A Habit</h2>
             <form>

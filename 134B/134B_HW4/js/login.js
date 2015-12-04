@@ -20,10 +20,10 @@ function isValidPassword(pass) {
 function onClickSignup() {
 	var email = document.getElementById("usermail").value;
 	var pass = document.getElementById("password").value;
-
+        alert("SHITTY");
 	createUser(email,pass).then(function(user){
 		alert("User sign in complete!");
-		//window.location.href = "list.html";
+                location.href = "welcome.html";
 	}).catch(function(err){
 		// Handle error here
 		console.log(err);
@@ -36,7 +36,7 @@ function onClickLogin() {
 
 	login(email,pass).then(function(user) {
 		alert("Welcome " + user.get("username"));
-		//window.location.href = "list.html";
+		window.location.href = "list.html";
 	}).catch(function(err){
 		// Handle error here
 		console.log(err);
