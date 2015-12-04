@@ -1,1 +1,95 @@
-function checkForUserLogin(){var n=Parse.User.current();checkForCacheUser()&&(alert("Welcome "+n.get("username")),location.href="./src/list.html")}function isValidEmail(n){var e=/\S+@\S+\.\S+/;return e.test(n)}function isValidPassword(n){var e=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}$/;return e.test(n)}function onClickSignup(){var n=document.getElementById("usermail").value,e=document.getElementById("password").value;createUser(n,e).then(function(n){alert("User sign in complete!"),location.href="./src/welcome.html"})["catch"](function(n){alert("Error: "+n.message),console.log(n.message)})}function onClickLogin(){var n=document.getElementById("usermail").value,e=document.getElementById("password").value;login(n,e).then(function(n){alert("Welcome "+n.get("username")),window.location.href="./src/list.html"})["catch"](function(n){console.log(n)})}function switchButton(){var n=document.getElementsByClassName("loginButton")[0],e=document.getElementById("loginOrSignup");"Login"===n.value?(n.value="Signup",e.innerHTML="Already have an account? <a href='#'' onclick='switchButton()'>Login</a>"):(n.value="Login",e.innerHTML="Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>"),localStorage.setItem("buttonStatus",n.value)}checkForUserLogin(),window.onload=function(){if(null!==localStorage.getItem("buttonStatus")){var n=document.getElementsByClassName("loginButton")[0],e=document.getElementById("loginOrSignup");"Signup"===localStorage.getItem("buttonStatus")?(n.value="Signup",n.onclick=function(){onClickSignup(),mixpanel.track("Login")},e.innerHTML="Already have an account? <a href='#'' onclick='switchButton()'>Login</a>"):(n.value="Login",n.onclick=function(){onClickLogin(),mixpanel.track("SignUp")},e.innerHTML="Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>")}};
+
+function checkForUserLogin() {
+    var user = Parse.User.current();
+    if(checkForCacheUser()) {
+        alert("Welcome " + user.get("username"));
+        location.href = "list.html";
+    }
+}
+
+checkForUserLogin();
+
+// Returns true on valid, false on invalid
+function isValidEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+// Check for one cap letter, one numerical character, and a pass length of 5<=x<=15
+function isValidPassword(pass) {
+    var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,10}$/;
+    return re.test(pass);
+
+}
+
+
+function onClickSignup() {
+    var email = document.getElementById("usermail").value;
+    var pass = document.getElementById("password").value;
+    createUser(email, pass).then(function (user) {
+        alert("User sign in complete!");
+        location.href = "welcome.html";
+    }).catch(function (err) {
+        alert("Error: " + err["message"]);
+        // Handle error here
+        console.log(err["message"]);
+    });
+}
+
+function onClickLogin() {
+    var email = document.getElementById("usermail").value;
+    var pass = document.getElementById("password").value;
+
+    login(email, pass).then(function (user) {
+        alert("Welcome " + user.get("username"));
+        window.location.href = "list.html";
+    }).catch(function (err) {
+        // Handle error here
+        console.log(err);
+    });
+}
+
+function switchButton() {
+
+    var button = document.getElementsByClassName("loginButton")[0];
+    var accountQues = document.getElementById("loginOrSignup");
+
+    if (button.value === "Login") {
+        button.value = "Signup";
+        accountQues.innerHTML = "Already have an account? <a href='#'' onclick='switchButton()'>Login</a>";
+    }
+    else {
+        button.value = "Login";
+        accountQues.innerHTML = "Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>";
+    }
+
+    // Change later
+    localStorage.setItem("buttonStatus", button.value);
+
+}
+
+window.onload = function () {
+    if (localStorage.getItem("buttonStatus") === null) {
+        return;
+    }
+    var button = document.getElementsByClassName("loginButton")[0];
+    var accountQues = document.getElementById("loginOrSignup");
+    if (localStorage.getItem("buttonStatus") === "Signup") {
+        button.value = "Signup";
+        button.onclick = function () {
+            onClickSignup();
+            mixpanel.track('Login');
+        };
+        accountQues.innerHTML = "Already have an account? <a href='#'' onclick='switchButton()'>Login</a>";
+        //alert("Signup Button");
+    }
+    else {
+        button.value = "Login";
+        button.onclick = function () {
+            onClickLogin();
+            mixpanel.track('SignUp');
+        };
+        accountQues.innerHTML = "Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>";
+    }
+}
+
