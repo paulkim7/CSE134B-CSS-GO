@@ -36,12 +36,13 @@ function clickEditHabit() {
                     habitIndex = i;      // Set current index of the habit we want to this
             }
 
-            var habit = habitList[habitInd];
+            var habit = habitList[habitIndex];
 
-            var tuple = isValidEditHabit(habitList, habitInd);
+            var tuple = isValidEditHabit(habitList, habitIndex);
             if(!tuple[0]) {
                 alert(tuple[1]);
                 reject(false);
+                return;
             }
 
             updateParseHabit(habit).then(function(){
