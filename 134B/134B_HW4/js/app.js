@@ -233,7 +233,7 @@ function isValidHabitInput(habitList) {
 
     // Check for duplicate title in habitList
     for(i=0;i<habitList.length;i++) {
-        if(habitList[i]===titleValue) {
+        if(habitList[i].get("title")===titleValue) {
             inputMsg = inputMsg + "- Habit title already exists, please change.\n";
             inputsValidated = false;
             break;
@@ -322,21 +322,19 @@ function isValidHabitInput(habitList) {
  * Description: Button handler to handle everything it leads to more concise code
  **/
 function clickAddHabit() {
-    return new Promise(function(resolve,reject){
-        getUserHabits().then(function(habitList){
-            var tuple = isValidHabitInput(habitList);
-            if(!tuple[0]) {
-                alert(tuple[1]);
-                reject(false);
-            }
+    getUserHabits().then(function(habitList){
+        var tuple = isValidHabitInput(habitList);
+        if(!tuple[0]) {
+            alert(tuple[1]);
+            return
+        }
 
-            createParseHabit().then(function(){
-                alert("Create habit success!");
-                location.href='list.html';
-                resolve(true);
-            }).catch(function(err){
-                alert(err);
-            });
+        createParseHabit().then(function(){
+            alert("Create habit success!");
+            location.href='list.html';
+            return
+        }).catch(function(err){
+            alert(err);
         });
     });
 }
@@ -414,8 +412,7 @@ function createParseHabit()
         }).then(function(result){
             resolve();
         },function(err){
-            console.log(err);
-            reject(err);
+            reject(err['message']);
         });
     });
 }
@@ -508,11 +505,13 @@ function removeParseHabit(habitId){
 function getUserHabits() {
     return new Promise(function(resolve,reject){
         var user = Parse.User.current();
-        var tagList = [];
         var relations = user.relation('habits');
         var query = relations.query();
         query.equalTo("Habit");
         relations.query().find().then(function(result){
+            for(res of result) {
+                console.log(res.get("title"));
+            }
             resolve(result);
         });
     });

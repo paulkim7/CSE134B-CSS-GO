@@ -27,33 +27,30 @@ function readURL(input) {
  *               Rejects on error.
  **/
 function clickEditHabit() {
-    return new Promise(function(resolve,reject){
-        getUserHabits().then(function(habitList){
-            var habitId = localStorage.getItem("habitEditID");
-            var habitIndex;
-            for(i=0;i<habitList.length;i++) {
-                if(habitList[i].get("objectId")===habitId)
-                    habitIndex = i;      // Set current index of the habit we want to this
-            }
+    getUserHabits().then(function(habitList){
+        var habitId = localStorage.getItem("habitEditID");
+        var habitIndex;
+        for(i=0;i<habitList.length;i++) {
+            if(habitList[i].id===habitId)
+                habitIndex = i;      // Set current index of the habit we want to this
+        }
 
-            var habit = habitList[habitIndex];
+        var habit = habitList[habitIndex];
 
-            var tuple = isValidEditHabit(habitList, habitIndex);
-            if(!tuple[0]) {
-                alert(tuple[1]);
-                reject(false);
-                return;
-            }
+        var tuple = isValidEditHabit(habitList, habitIndex);
+        if(!tuple[0]) {
+            alert(tuple[1]);
+            return;
+        }
 
-            updateParseHabit(habit).then(function(){
-                alert("Edit success!");
-                location.href='list.html';
-                resolve(true);
-            }).catch(function(err){
-                alert(err);
-            });
-        });        
-    });
+        updateParseHabit(habit).then(function(){
+            alert("Edit success!");
+            location.href='list.html';
+            return;
+        }).catch(function(err){
+            alert(err);
+        });
+    });        
 }
 
 /** 
@@ -166,10 +163,10 @@ function updateParseHabit(habit) {
         }
 
         if(dailyFreq===0)
-            dailyFreq = document.getElementById("others").value;
-
+            dailyFreq = Number(document.getElementById("others").value);
+        
         // change individualHabit.dailyFreq to dailyFreq if there's a problem
-        if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
+        if( habit.get("dailyFreq") !== dailyFreq ) {
             habit.set("progVal", 0);
             habit.set("streak", 0);
             habit.set("record", 0);
@@ -184,11 +181,12 @@ function updateParseHabit(habit) {
         habit.set("dailyFreq", dailyFreq);
 
         // Now save changes to parse
-        habit.save().then(function(){
+        habit.save().then(function(habitParseObj){
             resolve();
         },function(err){
-            reject(err);
+            reject(err['message']);
         });
+
     });
 }
 
