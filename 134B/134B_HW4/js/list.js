@@ -236,5 +236,6 @@ function confirmDelete(element) {
 
     if(deleteConfirm) {
         deleteHabit(element);
+        removeParseHabit();
     }
 }

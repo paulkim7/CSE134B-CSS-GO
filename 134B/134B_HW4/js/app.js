@@ -339,8 +339,6 @@ function clickAddHabit() {
     });
 }
 
-
-// TODO handle verification input in seperate function
 /** 
  * createParseHabit() 
  * Description: Creates Parse Habit object by pulling values
@@ -354,66 +352,70 @@ function clickAddHabit() {
 function createParseHabit() 
 {
     return new Promise(function(resolve,reject){
-        var titleValue = document.getElementById("title").value;
-        var habitValue = document.getElementById("habits").value;
-        var iconImgNum = document.getElementById("habits").selectedIndex;
-        var dayArray = document.getElementsByName("date[]");
-        var dayLength = dayArray.length;
-        var dayData = Array();
-        for (k = 0; k < dayLength; k++)
-        {
-            dayData[k] = dayArray[k].checked;
+        if(document.getElementById('habits').selectedIndex===4) {
+            uploadUserIcon(document.getElementById("iconUploaderAdd")).then(function() {
+                var titleValue = document.getElementById("title").value;
+                var habitValue = document.getElementById("habits").value;
+                var iconImgNum = document.getElementById("habits").selectedIndex;
+                var dayArray = document.getElementsByName("date[]");
+                var dayLength = dayArray.length;
+                var dayData = Array();
+                for (k = 0; k < dayLength; k++)
+                {
+                    dayData[k] = dayArray[k].checked;
+                }
+                var dayString = JSON.stringify(dayData);
+
+                var freqArray = document.getElementsByName("day[]");
+                var freqLength = freqArray.length;
+                var freqData = Array();
+                var numDailyFreq = 0;
+                for (i = 0; i < freqLength; i++)
+                {
+                    freqData[i] = freqArray[i].checked;
+
+                    if(freqArray[i].checked === true) {
+                        numDailyFreq = i + 1;
+                    }
+                }
+                
+                if(numDailyFreq===0)
+                    var numDailyFreq = Number(document.getElementById("others").value);
+
+                var d = new Date();
+                var n = d.getTime();
+                var idStr = n.toString();
+                var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
+                var idClean = id.replace(/ /g,'');
+                var progValue = 0;
+
+                // Create new habit and add to current user, then resolve
+                var HabitClass =  Parse.Object.extend("Habit");
+                var newHabit = new HabitClass();
+                //newHabit.set("id",idClean);
+                newHabit.set("title", titleValue);
+                newHabit.set("iconLoc", habitValue);
+                newHabit.set("iconNum", iconImgNum);  // Change later to reference file directly
+                newHabit.set("day", dayString);
+                newHabit.set("freq", freqData);
+                newHabit.set("progVal", progValue);
+                newHabit.set("dailyFreq", numDailyFreq);
+                newHabit.set("streak", 0);
+                newHabit.set("record", 0);
+
+                var user = Parse.User.current();
+                return newHabit.save();
+            }).then(function(habitParseObj){
+                // We have the UserAccount, create parse relationship
+                var relation = user.relation('habits');
+                relation.add(habitParseObj);
+                return user.save();
+            }).then(function(result){
+                resolve();
+            },function(err){
+                reject(err['message']);
+            });
         }
-        var dayString = JSON.stringify(dayData);
-
-        var freqArray = document.getElementsByName("day[]");
-        var freqLength = freqArray.length;
-        var freqData = Array();
-        var numDailyFreq = 0;
-        for (i = 0; i < freqLength; i++)
-        {
-            freqData[i] = freqArray[i].checked;
-
-            if(freqArray[i].checked === true) {
-                numDailyFreq = i + 1;
-            }
-        }
-        
-        if(numDailyFreq===0)
-            var numDailyFreq = Number(document.getElementById("others").value);
-
-        var d = new Date();
-        var n = d.getTime();
-        var idStr = n.toString();
-        var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
-        var idClean = id.replace(/ /g,'');
-        var progValue = 0;
-
-        // Create new habit and add to current user, then resolve
-        var HabitClass =  Parse.Object.extend("Habit");
-        var newHabit = new HabitClass();
-        //newHabit.set("id",idClean);
-        newHabit.set("title", titleValue);
-        newHabit.set("iconLoc", habitValue);
-        newHabit.set("iconNum", iconImgNum);  // Change later to reference file directly
-        newHabit.set("day", dayString);
-        newHabit.set("freq", freqData);
-        newHabit.set("progVal", progValue);
-        newHabit.set("dailyFreq", numDailyFreq);
-        newHabit.set("streak", 0);
-        newHabit.set("record", 0);
-
-        var user = Parse.User.current();
-        newHabit.save().then(function(habitParseObj){
-            // We have the UserAccount, create parse relationship
-            var relation = user.relation('habits');
-            relation.add(habitParseObj);
-            return user.save();
-        }).then(function(result){
-            resolve();
-        },function(err){
-            reject(err['message']);
-        });
     });
 }
 
