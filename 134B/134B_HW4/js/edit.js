@@ -28,21 +28,30 @@ function readURL(input) {
  **/
 function clickEditHabit() {
     return new Promise(function(resolve,reject){
-        isValidEditHabit().then(function(validationReturn){
-            var tuple = validationReturn;
+        getUserHabits().then(function(habitList){
+            var habitId = localStorage.getItem("habitEditID");
+            var habitIndex;
+            for(i=0;i<habitList.length;i++) {
+                if(habitList[i].get("objectId")===habitId)
+                    habitIndex = i;      // Set current index of the habit we want to this
+            }
+
+            var habit = habitList[habitInd];
+
+            var tuple = isValidEditHabit(habitList, habitInd);
             if(!tuple[0]) {
                 alert(tuple[1]);
                 reject(false);
             }
 
-            createParseHabit().then(function(){
+            updateParseHabit(habit).then(function(){
                 alert("Edit success!");
                 location.href='list.html';
                 resolve(true);
             }).catch(function(err){
                 alert(err);
             });
-        });
+        });        
     });
 }
 
@@ -50,9 +59,12 @@ function clickEditHabit() {
  * isValidHabitInput()
  * Description: Takes the add habit inputs and makes sure they are valid.
  *
+ * Inputs:
+ *   habitList -- List of Parse Habit objects
+ *   habitInd  -- The index of the current habit being edited
  * Return Value: Returns a tuple containing true if valid, false if invalid, and a err msg.
  **/
-function isValidEditHabit() {
+function isValidEditHabit(habitList, habitInd) {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
     
@@ -102,17 +114,16 @@ function isValidEditHabit() {
         inputsValidated = false;
     }
 
-    return new Promise(function(resolve,reject){
-        isDuplicateHabitTitle(titleValue).then(function(isDup){
-            if(isDup) {       // TODO handle duplicate but ignoring original
-                reject("Habit title already exists, please change.");
-            }
-            var tuple = [inputsValidated,inputMsg];
-            console.log(tuple[0]);
-            console.log(tuple[1]);
-            resolve(tuple); 
-        });
-    }); 
+    // Check for dup title
+    for(i=0;i<habitList.length;i++) {
+        if(habitList[i].get("title")===titleValue && i!==habitInd) {
+            inputMsg = inputMsg + "- Habit title already exists, please change.";
+            inputsValidated = false;
+        }
+
+    }
+    var tuple = [inputsValidated,inputMsg];
+    return tuple; 
 }
 
 
@@ -125,72 +136,59 @@ function isValidEditHabit() {
  * Return Value: Returns a Promise to resolve if saved succesfully,
  *               rejects on failure.
  **/
-function updateParseHabit(habitName) {
+function updateParseHabit(habit) {
     return new Promise(function(resolve,reject){
-        var user = Parse.User.current();
-        var habitQuery = new Parse.query(user);
-        habitQuery.equalTo('title',habitName);
-        habitQuery.find().then(function(habitList){
-            if(habitList!==1)
-                reject("Error retrieving habit");
+        // Set values
+        var titleValue = document.getElementById("title").value;
+        var habitValue = document.getElementById("habits").value;
+        var iconImgNum = document.getElementById("habits").selectedIndex;
+        var dayArray = document.getElementsByName("date[]");
+        var dayLength = dayArray.length;
+        var dayData = Array();
+        for (k = 0; k < dayLength; k++)
+        {
+            dayData[k] = dayArray[k].checked;
+        }
+        var dayString = JSON.stringify(dayData);
 
-            var habit = habitList[0];
-            // You have one habit now, do stuff
+        var freqArray = document.getElementsByName("day[]");
+        var freqLength = freqArray.length;
+        var freqData = Array();
+        var dailyFreq = 0;
+        for (i = 0; i < freqLength; i++)
+        {
+            freqData[i] = freqArray[i].checked;
 
-            // Set values
-            var titleValue = document.getElementById("title").value;
-            var habitValue = document.getElementById("habits").value;
-            var iconImgNum = document.getElementById("habits").selectedIndex;
-
-            var dayArray = document.getElementsByName("date[]");
-            var dayLength = dayArray.length;
-            var dayData = Array();
-            for (k = 0; k < dayLength; k++)
-            {
-                dayData[k] = dayArray[k].checked;
+            if( freqArray[i].checked === true ) {
+                dailyFreq = i + 1;
             }
-            var dayString = JSON.stringify(dayData);
+        }
 
-            var freqArray = document.getElementsByName("day[]");
-            var freqLength = freqArray.length;
-            var freqData = Array();
-            var dailyFreq = 0;
-            for (i = 0; i < freqLength; i++)
-            {
-                freqData[i] = freqArray[i].checked;
+        if(dailyFreq===0)
+            dailyFreq = document.getElementById("others").value;
 
-                if( freqArray[i].checked === true ) {
-                    dailyFreq = i + 1;
-                }
-            }
+        // change individualHabit.dailyFreq to dailyFreq if there's a problem
+        if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
+            habit.set("progVal", 0);
+            habit.set("streak", 0);
+            habit.set("record", 0);
+        }
+        var iconUploader = document.getElementById("iconUploaderEdit");
+        if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+            habit.set("iconLoc", habitValue);                 // and user icon was selected before
+        habit.set("title", titleValue);
+        habit.set("iconNum", iconImgNum);  // Change later to reference file directly
+        habit.set("day", dayString);
+        habit.set("freq", freqData);
+        habit.set("dailyFreq", dailyFreq);
 
-            if(dailyFreq===0)
-                dailyFreq = document.getElementById("others").value;
-
-            // change individualHabit.dailyFreq to dailyFreq if there's a problem
-            if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
-                habit.set("progVal", 0);
-                habit.set("streak", 0);
-                habit.set("record", 0);
-            }
-            var iconUploader = document.getElementById("iconUploaderEdit");
-            if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
-                habit.set("iconLoc", habitValue);                 // and user icon was selected before
-            habit.set("title", titleValue);
-            habit.set("iconNum", iconImgNum);  // Change later to reference file directly
-            habit.set("day", dayString);
-            habit.set("freq", freqData);
-            habit.set("dailyFreq", dailyFreq);
-
-            // Now save changes to parse
-            habit.save().then(function(){
-                resolve();
-            },function(err){
-                reject(err);
-            });
+        // Now save changes to parse
+        habit.save().then(function(){
+            resolve();
+        },function(err){
+            reject(err);
         });
     });
-    //location.href = 'list.html'; Do this on sucess maybe
 }
 
 function updateHabit() {
@@ -384,39 +382,19 @@ function validateInputs() {
 
 }
 
-function getUserHabits() {
-    return new Promise(function(resolve,reject){
-        var user = Parse.User.current();
-        var tagList = [];
-        var relations = user.relation('habits');
-        var query = relations.query();
-        query.equalTo("Habit");
-        relations.query().find().then(function(result){
-            resolve(result);
-        });
-    });
-}
+// function getUserHabits() {
+//     return new Promise(function(resolve,reject){
+//         var user = Parse.User.current();
+//         var tagList = [];
+//         var relations = user.relation('habits');
+//         var query = relations.query();
+//         query.equalTo("Habit");
+//         relations.query().find().then(function(result){
+//             resolve(result);
+//         });
+//     });
+// }
 
-/**
- * isDuplicateHabitTitle() 
- * Description: Check if the habit title already exists.
- * 
- * Inputs:
- *   titleValue -- The title value to be checked.
- * Return Val: Returns true if a habit with the same name already exists.
- *             False if titleValue does not exist as a habit title already.
- **/
-function isDuplicateHabitTitle(titleValue) {
-    return new Promise(function(resolve,reject){
-        getUserHabits().then(function(habits){
-            for(habit of habits) {
-                if(habit.get('title') === titleValue)
-                    resolve(true);
-            }
-            resolve(false);
-        });
-    });
-}
 
 function checkDuplicateTitle() {
     var titleValue = document.getElementById("title").value;
