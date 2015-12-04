@@ -13,7 +13,8 @@
         <script type="text/javascript">
             window.onload = checkForLogin();
         </script>
-        <!-- start Mixpanel --><script type="text/javascript">(function (e, b) {
+        <!-- start Mixpanel -->
+        <script type="text/javascript">(function (e, b) {
                 if (!b.__SV) {
                     var a, f, i, g;
                     window.mixpanel = b;
@@ -83,33 +84,22 @@
                     }
                     var habit = returnArray[0];
                     
-                    // Paul put all your code here, access elements like below
             var title=habit.get("title");
             var iconLoc=habit.get("iconLoc");
             var iconNum=habit.get("iconNum");  // Change later to reference file directly
             var day=habit.get("day");
-            console.log(day);
             var freq=habit.get("freq");
-            console.log(freq);
             var progVal=habit.get("progVal");
             var dailyFreq=habit.get("dailyFreq");
             var streak=habit.get("streak");
             var record=habit.get("record");
-                    console.log(habit.get("title"));
-                    // TODO, use the same localStorage, but set it using Parse data and not more localStorage data
-//                var habitToEdit = localStorage.getItem("habitEditID");
-//                var habitToEditObj = JSON.parse(habitToEdit);
-//                
-//                localStorage.setItem("habitEditID", habitToEditObj.id);
-//                localStorage.setItem("habitBeforeChanges", JSON.stringify(habitToEditObj));
-                document.getElementById("title").value = title;
-                //var i = 1;
 
-//                var iconNum = habitToEditObj.iconNum;
+                document.getElementById("title").value = title;
+
                 selectImage("icon"+iconNum,"img"+iconNum);
 
                 var arrayDays = JSON.parse(day);
-                console.log(arrayDays);
+                
                 var j = 0;
                 while (j < arrayDays.length) {
                     if (arrayDays[j] === true) {
@@ -204,7 +194,6 @@
                 </div>
                 <p><label><span id="others_text">Others: </span><input id="others" type="number" min="4" name="day" placeholder="More than 3 times"></label></p>
                  <p id="save_p"><input id="save" type="button" value="Save It" onclick="clickEditHabit();mixpanel.track('SaveEdits');"></p>
-      <!--           <p id="save_p"><input id="save" type="button" value="Save It" onclick="validateInputs();mixpanel.track('SaveEdits');"></p> -->
 
             </form>
 

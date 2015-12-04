@@ -138,11 +138,9 @@ window.onload = function () {
                 // Streak and record number added
                 totalSpan.innerHTML = "<strong> " + streak + "</strong> days in a row! Best Record: <strong> " + record +"</strong><br><br>";
 
-                //today.innerHTML = "Completed <strong> " + habit1.progVal + "/" + habit1.dailyFreq + "</strong> for today!";
                 today.setAttribute("class", "message-today");
                 messDiv.setAttribute("class", "message");
-                //totalSpan.appendChild(messSvg);
-                //totalSpan.appendChild(br);
+
                 totalSpan.appendChild(progress);
 
                 messDiv.appendChild(totalSpan);
@@ -241,7 +239,6 @@ function confirmDelete(element) {
 
     if(deleteConfirm) {
         deleteHabit(element);
-        console.log("e : " +element.id);
         removeParseHabit(element.id);
     }
 }

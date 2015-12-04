@@ -216,83 +216,6 @@ function updateParseHabit(habit) {
     });
 }
 
-// function updateHabit() {
-//     var removedHabit = localStorage.getItem("habitList");
-//     var arrayHabit = JSON.parse(removedHabit);
-
-//     var j = 0;
-
-//     // If I have the index number in which it's in, it's easier (figure out more efficient way)
-//     // Inefficient way
-//     while (j < arrayHabit.length) {
-
-//         var individualHabit = JSON.parse(arrayHabit[j]);
-//         var updatedHabitID = localStorage.getItem("habitEditID");
-//         var habitBeforeEdit = JSON.parse(localStorage.getItem("habitBeforeChanges"));
-
-//         if (updatedHabitID === individualHabit.id) {
-            
-//             var titleValue = document.getElementById("title").value;
-//             var habitValue = document.getElementById("habits").value;
-//             var iconImgNum = document.getElementById("habits").selectedIndex;
-
-//             var dayArray = document.getElementsByName("date[]");
-//             var dayLength = dayArray.length;
-//             var dayData = Array();
-//             for (k = 0; k < dayLength; k++)
-//             {
-//                 dayData[k] = dayArray[k].checked;
-//             }
-//             var dayString = JSON.stringify(dayData);
-
-//             var freqArray = document.getElementsByName("day[]");
-//             var freqLength = freqArray.length;
-//             var freqData = Array();
-//             var dailyFreq = 0;
-//             for (i = 0; i < freqLength; i++)
-//             {
-//                 freqData[i] = freqArray[i].checked;
-
-//                 if( freqArray[i].checked === true ) {
-//                     dailyFreq = i + 1;
-//                 }
-//             }
-
-//             if(dailyFreq===0)
-//                 individualHabit.dailyFreq = document.getElementById("others").value;
-//             else
-//                 individualHabit.dailyFreq = dailyFreq;
-
-
-//             // change individualHabit.dailyFreq to dailyFreq if there's a problem
-//             if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
-//                 individualHabit.progVal = 0;
-//                 individualHabit.streak = 0;
-//                 individualHabit.record = 0;
-//             }
-//             var freqString = JSON.stringify(freqData);
-
-//             individualHabit.iconNum = iconImgNum;
-//             individualHabit.title = titleValue;
-//             var iconUploader = document.getElementById("iconUploaderEdit");
-//             if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
-//                 individualHabit.icon = habitValue;           // and user icon was selected before
-//             individualHabit.day = dayString;
-
-//             individualHabit.freq = freqString;
-//             arrayHabit[j] = JSON.stringify(individualHabit);
-
-//             break;
-//         }
-
-//         j++;
-
-//     }
-//     localStorage.setItem("habitList", JSON.stringify(arrayHabit));
-
-//   //  location.href = 'list.html';
-// }
-
 // recurring code, TODO remove and merge app.js calls with this file
 function uploadUserIcon(fileInput) {
     return new Promise(function(resolve, reject){
@@ -406,20 +329,6 @@ function validateInputs() {
     }
 
 }
-
-// function getUserHabits() {
-//     return new Promise(function(resolve,reject){
-//         var user = Parse.User.current();
-//         var tagList = [];
-//         var relations = user.relation('habits');
-//         var query = relations.query();
-//         query.equalTo("Habit");
-//         relations.query().find().then(function(result){
-//             resolve(result);
-//         });
-//     });
-// }
-
 
 function checkDuplicateTitle() {
     var titleValue = document.getElementById("title").value;

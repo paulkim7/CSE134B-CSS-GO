@@ -95,8 +95,6 @@
                         console.log("Error: Habit not found in database");
                     }
                     var habit = returnArray[0];
-                    
-                    // Paul put all your code here, access elements like below
                     var streak = habit.get("streak");
                     var progressVal = habit.get("progVal");
                     var dailyFreq = habit.get("dailyFreq");
@@ -157,32 +155,6 @@
                 var child = element.parentNode.parentNode;
                 var parent = child.parentNode;
                 parent.removeChild(child);
-
-                // // Must delete the habit from the habit array as well
-                // var removedHabit = localStorage.getItem("habitList");
-                // var arrayHabit = JSON.parse(removedHabit);
-
-                // var j = 0;
-
-                // Possible TODO, we can pass uniquely created element ID and just call remove on that, can put in 
-                // jquery slideUp or fadeOut animations in easily that way
-                // If I have the index number in which it's in, it's easier (figure out more efficient way)
-
-            //     while( j < arrayHabit.length ) {
-                    
-            //         var individualHabit = JSON.parse(arrayHabit[j]);
-
-            //         if(child.id == ("habit-" + individualHabit.id) ) {
-            //             arrayHabit.splice(j, 1);
-            //             break;
-            //         }
-
-            //         j++;
-            //     }
-
-            //     //remove the habit of which you clicked the delete button 
-            //     localStorage.setItem("habitList", JSON.stringify(arrayHabit));
-
             }
 
         </script>

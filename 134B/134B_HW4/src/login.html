@@ -9,7 +9,8 @@
 		<link rel="stylesheet" href="../css/login.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.6.7.min.js"></script>
-        <!-- start Mixpanel --><script type="text/javascript">(function (e, b) {
+        <!-- start Mixpanel -->
+        <script type="text/javascript">(function (e, b) {
                 if (!b.__SV) {
                     var a, f, i, g;
                     window.mixpanel = b;
@@ -91,15 +92,9 @@
           </tr>
        	</table>
        	<p id="signInMessage">Sign in successful! <span style="color: #4caf50">&#10004;</span></p>
-       	<div class="buttons">
-
-       		<!--<input class="loginButton" type="button" value="Login" onclick="onClickLogin(); mixpanel.track('Login');">-->
-          <!--<input class="signUpButton" type="button" value="Signup" onclick="onClickSignup()">-->
-       		
-          
+       	<div class="buttons">          
           <input class="loginButton" type="button" value="Login" onclick="onClickLogin();mixpanel.track('Login');">
           <input class="signUpButton" type="button" value="Signup" onclick="onClickSignup();mixpanel.track('SignUp');">
-      
         </div>
       </form>
 
