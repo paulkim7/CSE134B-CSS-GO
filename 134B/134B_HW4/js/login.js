@@ -1,5 +1,6 @@
 
 function checkForUserLogin() {
+    var user = Parse.User.current();
     if(checkForCacheUser()) {
         alert("Welcome " + user.get("username"));
         location.href = "list.html";
