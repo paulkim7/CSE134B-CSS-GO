@@ -49,6 +49,10 @@ body{
 #addHabit:active{border: 2px solid gray; background: rgba(33, 72, 100); box-shadow: 0 0 10px gray;}
 #addHabit:focus{outline-style:none;}
 
+div#nav{
+    text-align: right;
+}
+
 /* phone */
 @media only screen
     and (max-width: 500px) {
