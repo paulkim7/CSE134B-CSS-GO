@@ -37,10 +37,10 @@ function checkForCacheUser() {
     var currentUser = Parse.User.current();
     if (currentUser) {
         // do stuff with the user
-        return currentUser;
+        return true;
     } else {
         // show the signup or login page
-        return null;
+        return false;
     }
 }
 
@@ -163,7 +163,7 @@ function uploadUserIcon(fileInput) {
             processData: false,
             contentType: false,
             success: function(data) {
-                alert("File available at: " + data.url);
+                // alert("File available at: " + data.url);
                 document.getElementById("img4").value = data.url;
                 resolve(0);
             },
@@ -502,6 +502,27 @@ function createHabit()
     //var formData = new FormData(document.querySelector('form'));
     
     // location.href='list.html';
+}
+
+function removeParseHabit(habitId){
+    return new Promise(function(resolve,reject){
+        var HabitClass = Parse.Object.extend("Habit");
+        var query = new Parse.Query(HabitClass);
+        query.equalTo("objectId",habitId);
+        query.find().then(function(returnArray){
+            if(returnArray.length!==1) {
+                reject("Could not find your habit in the table.");
+            }
+
+            var habit = returnArray[0];
+            return habit.destroy();
+        }).then(function(){
+            resolve();
+        },function(err){
+            alert(err["message"]);
+            reject();
+        });
+    });
 }
 
 function getUserHabits() {

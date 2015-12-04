@@ -15,14 +15,6 @@ window.onload = function () {
         for(habit of result)
         {
             // For each habit, do stuff in this for each loop to make it RESTFUL
-            console.log(habit);
-            
-            console.log("Habit: " + habit.get("title"));
-        
-   
-
-
-    
 //    var habitArray = JSON.parse(localStorage.getItem("habitList"));
 //    var habitLength = habitArray.length;
 //    console.log(habitArray);

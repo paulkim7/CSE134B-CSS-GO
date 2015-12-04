@@ -20,13 +20,13 @@ function isValidPassword(pass) {
 function onClickSignup() {
 	var email = document.getElementById("usermail").value;
 	var pass = document.getElementById("password").value;
-        alert("SHITTY");
 	createUser(email,pass).then(function(user){
 		alert("User sign in complete!");
                 location.href = "welcome.html";
 	}).catch(function(err){
+		alert("Error: " + err["message"]);
 		// Handle error here
-		console.log(err);
+		console.log(err["message"]);
 	});
 }
 

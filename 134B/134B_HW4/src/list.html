@@ -83,7 +83,24 @@
         <script type="text/javascript">
             function updateMsgProgBar(element) {
                 var liElem = element.parentNode.parentNode;
-                var habitID = liElem.id;
+                var habitId = liElem.id;
+
+
+                var HabitClass = Parse.Object.extend("Habit");
+                var query = new Parse.Query(HabitClass);
+                query.equalTo("objectId",habitId);
+                query.find().then(function(returnArray){
+                    if(returnArray.length!==1) {
+                        console.log("Error: Habit not found in database");
+                    }
+                    var habit = returnArray[0];
+
+                    // Paul put all your code here, access elements like below
+                    var streak = habit.get("streak");
+                });
+
+
+
 
                 // Gets access to progress element
                 var progressElem = liElem.getElementsByClassName("progressBar")[0];
@@ -108,7 +125,7 @@
                     }
                     
 
-                    if( habitID === ("habit-" + individualHabit.id) ) {
+                    if( habitId === ("habit-" + individualHabit.id) ) {
                         dailyFreqType = individualHabit.dailyFreq;
  
 
