@@ -389,6 +389,7 @@ function createParseHabit()
                 // Create new habit and add to current user, then resolve
                 var HabitClass =  Parse.Object.extend("Habit");
                 var newHabit = new HabitClass();
+                habitValue = document.getElementById("img4").value;
                 //newHabit.set("id",idClean);
                 newHabit.set("title", titleValue);
                 newHabit.set("iconLoc", habitValue);
