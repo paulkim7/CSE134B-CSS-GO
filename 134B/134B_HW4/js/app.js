@@ -74,6 +74,7 @@ function checkForLogin() {
     var currentUser = Parse.User.current();
     if (!currentUser) {
         // do stuff with the user
+        alert("You must log in first.");
         location.href='login.html';
     }
     else
