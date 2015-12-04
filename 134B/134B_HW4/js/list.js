@@ -201,17 +201,23 @@ window.onload = function () {
                     }
 
                     if ((arrayDaysChecked[k] === true) && (k === currentDay)) {
+                        console.log("Previous Checked Day: " + habit.get("prevCheckedDay"));
 
-                        if (k != localStorage.getItem("recentCheckedDay")) {
+                        if (k != habit.get("prevCheckedDay")) {
+                            console.log("Different Day");
                             if (progVal === 0) {
                                 streak = 0;
                             }
 
                             progress.value = 0;
                             progVal = 0;
-                        }
 
-                        localStorage.setItem("recentCheckedDay", k);
+                            habit.set("progVal", progVal);
+                            habit.save();
+                        }
+                        habit.set("prevCheckedDay",k);
+                        habit.save();
+                        // localStorage.setItem("recentCheckedDay", k);
 
                         today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
 
