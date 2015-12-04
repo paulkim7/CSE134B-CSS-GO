@@ -63,14 +63,11 @@ function switchButton() {
 }
 
 window.onload = function() {
-
 	if(localStorage.getItem("buttonStatus") === null) {
 		return;
 	}
-
 	var button = document.getElementsByClassName("loginButton")[0];
 	var accountQues = document.getElementById("loginOrSignup");
-
 	if(localStorage.getItem("buttonStatus") === "Signup") {
 		button.value = "Signup";
 		button.onclick = function(){ 
@@ -87,8 +84,6 @@ window.onload = function() {
 			mixpanel.track('SignUp');
 		};
 		accountQues.innerHTML = "Don't have an account? <a href='#'' onclick='switchButton()'>Signup</a>";
-		//alert("Login Button");
 	}
-
 }
 

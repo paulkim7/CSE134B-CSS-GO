@@ -164,6 +164,7 @@ window.onload = function () {
 
                 done.setAttribute("onclick", "updateMsgProgBar(this);");
                 edit.setAttribute("onclick", "storeHabitID('"+i+"'); location.href='edit.html'");
+                del.setAttribute("id",i);
                 del.setAttribute("onclick", "confirmDelete(this);");
 
                 del.appendChild(delImg);
@@ -236,6 +237,7 @@ function confirmDelete(element) {
 
     if(deleteConfirm) {
         deleteHabit(element);
-        removeParseHabit();
+        console.log("e : " +element.id);
+        removeParseHabit(element.id);
     }
 }
