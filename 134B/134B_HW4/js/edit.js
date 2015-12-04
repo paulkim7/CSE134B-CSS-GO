@@ -165,7 +165,9 @@ function updateParseHabit(habit) {
         if(dailyFreq===0)
             dailyFreq = Number(document.getElementById("others").value);
 
-        if(document.getElementById('habits').selectedIndex===4){
+        var iconUploader = document.getElementById("iconUploaderEdit");
+
+        if(document.getElementById('habits').selectedIndex===4 && iconUploader.files.length>0){
             uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function() {
                 // change individualHabit.dailyFreq to dailyFreq if there's a problem
                 if( habit.get("dailyFreq") !== dailyFreq ) {
@@ -174,7 +176,6 @@ function updateParseHabit(habit) {
                     habit.set("record", 0);
                 }
                 habitValue = document.getElementById("img4").value;
-                var iconUploader = document.getElementById("iconUploaderEdit");
                 if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
                     habit.set("iconLoc", habitValue);                 // and user icon was selected before
                 habit.set("title", titleValue);
