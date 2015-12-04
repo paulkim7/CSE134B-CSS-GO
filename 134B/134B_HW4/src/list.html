@@ -101,18 +101,11 @@
                     var progressVal = habit.get("progVal");
                     var dailyFreq = habit.get("dailyFreq");
                     var record = habit.get("record");
-
-                    console.log("Parse Habit Object: " + streak);
-
-                                   // Gets access to progress element
+                    
+                    // Gets access to progress element
                     var progressElem = liElem.getElementsByClassName("progressBar")[0];
                     var streakRecordMsg = liElem.getElementsByClassName("message-total")[0];
                     var msgElement = liElem.getElementsByClassName("message-today")[0];
-
-                    //Uncomment later
-                    console.log(progressElem);
-                    console.log(msgElement);
-                    console.log(streakRecordMsg);
 
                     var habitNotAvailMsg = "Habit is not available today.";
 
@@ -165,31 +158,30 @@
                 var parent = child.parentNode;
                 parent.removeChild(child);
 
-                // Must delete the habit from the habit array as well
-                var removedHabit = localStorage.getItem("habitList");
-                var arrayHabit = JSON.parse(removedHabit);
+                // // Must delete the habit from the habit array as well
+                // var removedHabit = localStorage.getItem("habitList");
+                // var arrayHabit = JSON.parse(removedHabit);
 
-                var j = 0;
+                // var j = 0;
 
                 // Possible TODO, we can pass uniquely created element ID and just call remove on that, can put in 
                 // jquery slideUp or fadeOut animations in easily that way
                 // If I have the index number in which it's in, it's easier (figure out more efficient way)
 
-                while( j < arrayHabit.length ) {
+            //     while( j < arrayHabit.length ) {
                     
-                    var individualHabit = JSON.parse(arrayHabit[j]);
+            //         var individualHabit = JSON.parse(arrayHabit[j]);
 
-                    if(child.id == ("habit-" + individualHabit.id) ) {
-                        arrayHabit.splice(j, 1);
-                        break;
-                    }
+            //         if(child.id == ("habit-" + individualHabit.id) ) {
+            //             arrayHabit.splice(j, 1);
+            //             break;
+            //         }
 
-                    j++;
-                }
+            //         j++;
+            //     }
 
-                //remove the habit of which you clicked the delete button 
-
-                localStorage.setItem("habitList", JSON.stringify(arrayHabit));
+            //     //remove the habit of which you clicked the delete button 
+            //     localStorage.setItem("habitList", JSON.stringify(arrayHabit));
 
             }
 

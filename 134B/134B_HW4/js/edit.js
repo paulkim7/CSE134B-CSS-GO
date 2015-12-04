@@ -136,60 +136,56 @@ function isValidEditHabit(habitList, habitInd) {
  **/
 function updateParseHabit(habit) {
     return new Promise(function(resolve,reject){
-        if(document.getElementById('habits').selectedIndex===4) {
-            uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function() {
-                // Set values
-                var titleValue = document.getElementById("title").value;
-                var habitValue = document.getElementById("habits").value;
-                var iconImgNum = document.getElementById("habits").selectedIndex;
-                var dayArray = document.getElementsByName("date[]");
-                var dayLength = dayArray.length;
-                var dayData = Array();
-                for (k = 0; k < dayLength; k++)
-                {
-                    dayData[k] = dayArray[k].checked;
-                }
-                var dayString = JSON.stringify(dayData);
-
-                var freqArray = document.getElementsByName("day[]");
-                var freqLength = freqArray.length;
-                var freqData = Array();
-                var dailyFreq = 0;
-                for (i = 0; i < freqLength; i++)
-                {
-                    freqData[i] = freqArray[i].checked;
-
-                    if( freqArray[i].checked === true ) {
-                        dailyFreq = i + 1;
-                    }
-                }
-
-                if(dailyFreq===0)
-                    dailyFreq = Number(document.getElementById("others").value);
-
-                // change individualHabit.dailyFreq to dailyFreq if there's a problem
-                if( habit.get("dailyFreq") !== dailyFreq ) {
-                    habit.set("progVal", 0);
-                    habit.set("streak", 0);
-                    habit.set("record", 0);
-                }
-                var iconUploader = document.getElementById("iconUploaderEdit");
-                if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
-                    habit.set("iconLoc", habitValue);                 // and user icon was selected before
-                habit.set("title", titleValue);
-                habit.set("iconNum", iconImgNum);  // Change later to reference file directly
-                habit.set("day", dayString);
-                habit.set("freq", freqData);
-                habit.set("dailyFreq", dailyFreq);
-
-                // Now save changes to parse
-                return habit.save()
-            }).then(function(habitParseObj){
-                resolve();
-            },function(err){
-                reject(err['message']);
-            });
+        // Set values
+        var titleValue = document.getElementById("title").value;
+        var habitValue = document.getElementById("habits").value;
+        var iconImgNum = document.getElementById("habits").selectedIndex;
+        var dayArray = document.getElementsByName("date[]");
+        var dayLength = dayArray.length;
+        var dayData = Array();
+        for (k = 0; k < dayLength; k++)
+        {
+            dayData[k] = dayArray[k].checked;
         }
+        var dayString = JSON.stringify(dayData);
+
+        var freqArray = document.getElementsByName("day[]");
+        var freqLength = freqArray.length;
+        var freqData = Array();
+        var dailyFreq = 0;
+        for (i = 0; i < freqLength; i++)
+        {
+            freqData[i] = freqArray[i].checked;
+
+            if( freqArray[i].checked === true ) {
+                dailyFreq = i + 1;
+            }
+        }
+
+        if(dailyFreq===0)
+            dailyFreq = Number(document.getElementById("others").value);
+
+        // change individualHabit.dailyFreq to dailyFreq if there's a problem
+        if( habit.get("dailyFreq") !== dailyFreq ) {
+            habit.set("progVal", 0);
+            habit.set("streak", 0);
+            habit.set("record", 0);
+        }
+        var iconUploader = document.getElementById("iconUploaderEdit");
+        if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+            habit.set("iconLoc", habitValue);                 // and user icon was selected before
+        habit.set("title", titleValue);
+        habit.set("iconNum", iconImgNum);  // Change later to reference file directly
+        habit.set("day", dayString);
+        habit.set("freq", freqData);
+        habit.set("dailyFreq", dailyFreq);
+
+        // Now save changes to parse
+        habit.save().then(function(habitParseObj){
+            resolve();
+        },function(err){
+            reject(err['message']);
+        });
     });
 }
 
