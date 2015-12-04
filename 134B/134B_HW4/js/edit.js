@@ -86,12 +86,6 @@ function isValidEditHabit(habitList, habitInd) {
         inputsValidated = false;
     }
 
-    // Make sure input value for OTHER is > 3
-    if(otherValue < 4) {
-        inputMsg = inputMsg + "- Please enter a value greater than 3 for other.\n";
-        inputsValidated = false;
-    }
-
     // Checks whether days are selected for the habit
     for (i = 0; i < dayArray.length; i++) {
         if (dayArray[i].checked === true) {
@@ -115,6 +109,12 @@ function isValidEditHabit(habitList, habitInd) {
     // If both daily frequency NOT checked and other value doesn't exist
     if (numFreqChecked === 0 && otherValue === "") {
         inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
+        inputsValidated = false;
+    }
+
+        // Make sure input value for OTHER is > 3
+    if((numFreqChecked === 0) && (otherValue < 4)) {
+        inputMsg = inputMsg + "- Please enter a value greater than 3 for other.\n";
         inputsValidated = false;
     }
 

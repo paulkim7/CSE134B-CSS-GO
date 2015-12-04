@@ -152,8 +152,9 @@ form{
     padding-left: 25px;
     padding-bottom: 20px;
 }
-div label input {
+div > label input {
     margin-right:100px;
+    display: none;
 }
 
 #ck-button {  
