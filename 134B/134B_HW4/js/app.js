@@ -11,17 +11,17 @@ Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M
  * Return Val: Returns the Parse object if the username is found and
  *             the password matches, returns null if nah
  **/
-function login(email,pass) {
-    return new Promise(function(resolve,reject) {
+function login(email, pass) {
+    return new Promise(function (resolve, reject) {
         Parse.User.logIn(email, pass, {
-              success: function(user) {
+            success: function (user) {
                 // Do stuff after successful login.
                 resolve(user);
-              },
-              error: function(user, error) {
+            },
+            error: function (user, error) {
                 // The login failed. Check error to see why.
                 reject(error);
-              }
+            }
         });
     });
 }
@@ -49,9 +49,9 @@ function checkForCacheUser() {
  *               or true on success.
  **/
 function logOut() {
-    Parse.User.logOut().then(function(){
+    Parse.User.logOut().then(function () {
         var user = Parse.User.current();
-        if(user === null)
+        if (user === null)
         {
             location.href = 'login.html';
             return true;
@@ -73,7 +73,7 @@ function checkForLogin() {
     if (!checkForCacheUser()) {
         // do stuff with the user
         alert("You must log in first.");
-        location.href='login.html';
+        location.href = 'login.html';
     }
 
 }
@@ -83,28 +83,28 @@ function checkForLogin() {
  *              Parse specific User class
  **/
 function createUser(email, pass) {
-    return new Promise(function(resolve,reject) {
+    return new Promise(function (resolve, reject) {
         var newUser = new Parse.User();
-        if(!isValidEmail(email)){
+        if (!isValidEmail(email)) {
             alert("Is invalid email");
             reject("invalid email");
             return;
         }
 
         // Check for one cap letter, one numerical character, and a pass length of 5<=x<=15
-        if(!isValidPassword(pass)) {
+        if (!isValidPassword(pass)) {
             alert("Password must contain one capital letter, one number, and must be between 5 and 15 characters");
             reject("invalid pass");
             return;
         }
 
-        newUser.set("username",email);    // Username is email in this app
-        newUser.set("password",pass);
-        newUser.signUp().then(function(newUser){
+        newUser.set("username", email);    // Username is email in this app
+        newUser.set("password", pass);
+        newUser.signUp().then(function (newUser) {
             resolve();    // Return new user object
             alert("success save");
-            location.href='list.html';
-        },function(err){
+            location.href = 'list.html';
+        }, function (err) {
             reject(err);
         });
     });
@@ -122,15 +122,15 @@ function createUser(email, pass) {
  **/
 function validateImageUpload(filename) {
     // Check for a file-extension, return false if none
-    if(filename.lastIndexOf(".")===(-1)) {
+    if (filename.lastIndexOf(".") === (-1)) {
         return false;
     }
 
-    var extension = filename.substring(filename.lastIndexOf(".")+1,filename.length);
-    var extList = ['jpg','jpeg','png','gif'];         // Array of all common image formats
+    var extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length);
+    var extList = ['jpg', 'jpeg', 'png', 'gif'];         // Array of all common image formats
 
-    for(ext of extList) {
-        if(extension === ext) {
+    for (ext of extList) {
+        if (extension === ext) {
             return true;
         }
     }
@@ -139,14 +139,14 @@ function validateImageUpload(filename) {
 }
 
 function uploadUserIcon(fileInput) {
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         var file = fileInput.files[0];
-    
+
         var serverUrl = 'https://api.parse.com/1/files/' + file.name;
 
         $.ajax({
             type: "POST",
-            beforeSend: function(request) {
+            beforeSend: function (request) {
                 request.setRequestHeader("X-Parse-Application-Id", 'd2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb');
                 request.setRequestHeader("X-Parse-REST-API-Key", 'F74LnjmLlP0yCRE9wUEyoo0H3T23UWrf9UqZ5eAR');
                 request.setRequestHeader("Content-Type", file.type);
@@ -155,16 +155,16 @@ function uploadUserIcon(fileInput) {
             data: file,
             processData: false,
             contentType: false,
-            success: function(data) {
+            success: function (data) {
                 // alert("File available at: " + data.url);
                 document.getElementById("img4").value = data.url;
                 resolve(0);
             },
-            error: function(data) {
+            error: function (data) {
                 var obj = jQuery.parseJSON(data);
                 reject(obj.error);
             }
-        }); 
+        });
     });
 }
 
@@ -177,7 +177,7 @@ function uploadUserIcon(fileInput) {
 function isValidHabitInput(habitList) {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
-    
+
     var dayArray = document.getElementsByName("date[]");
     var dailyFreqArray = document.getElementsByName("day[]");
     var otherValue = document.getElementById("others").value;
@@ -188,52 +188,52 @@ function isValidHabitInput(habitList) {
     var inputsValidated = true;
     var inputMsg = "";
 
-    if( titleValue === "" ) {
+    if (titleValue === "") {
         inputMsg = "- Please enter a habit title.\n";
         inputsValidated = false;
     }
-    
-    if( habitValue === "unselected" ) {
+
+    if (habitValue === "unselected") {
         inputMsg = inputMsg + "- Please select an icon image.\n"
         inputsValidated = false;
     }
-    
+
     // Checks whether days are selected for the habit
-    for( i = 0; i < dayArray.length; i++) {
-        if( dayArray[i].checked === true ) {
+    for (i = 0; i < dayArray.length; i++) {
+        if (dayArray[i].checked === true) {
             numDaysChecked++;
-        }   
+        }
     }
 
-    if( numDaysChecked === 0 ) {
+    if (numDaysChecked === 0) {
         inputMsg = inputMsg + "- Please select at least ONE day.\n";
         inputsValidated = false;
     }
 
     // Checks whether daily frequency is checked
-    for( j = 0; j < dailyFreqArray.length; j++ ) {
-        if( dailyFreqArray[j].checked === true ) {
+    for (j = 0; j < dailyFreqArray.length; j++) {
+        if (dailyFreqArray[j].checked === true) {
             numFreqChecked++;
             break;
         }
     }
 
     // If both daily frequency NOT checked and other value doesn't exist
-    if( numFreqChecked === 0 && otherValue === "" ) {
+    if (numFreqChecked === 0 && otherValue === "") {
         inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
         inputsValidated = false;
     }
 
     // Check for duplicate title in habitList
-    for(i=0;i<habitList.length;i++) {
-        if(habitList[i].get("title")===titleValue) {
+    for (i = 0; i < habitList.length; i++) {
+        if (habitList[i].get("title") === titleValue) {
             inputMsg = inputMsg + "- Habit title already exists, please change.\n";
             inputsValidated = false;
             break;
         }
     }
-    var tuple = [inputsValidated,inputMsg];
-    return tuple; 
+    var tuple = [inputsValidated, inputMsg];
+    return tuple;
 }
 
 /**
@@ -241,18 +241,18 @@ function isValidHabitInput(habitList) {
  * Description: Button handler to handle everything it leads to more concise code
  **/
 function clickAddHabit() {
-    getUserHabits().then(function(habitList){
+    getUserHabits().then(function (habitList) {
         var tuple = isValidHabitInput(habitList);
-        if(!tuple[0]) {
+        if (!tuple[0]) {
             alert(tuple[1]);
             return;
         }
 
-        createParseHabit().then(function(){
+        createParseHabit().then(function () {
             alert("Create habit success!");
-            location.href='list.html';
+            location.href = 'list.html';
             return;
-        }).catch(function(err){
+        }).catch(function (err) {
             alert(err);
         });
     });
@@ -268,9 +268,9 @@ function clickAddHabit() {
  * Return Value: Returns a Promise to return a resolve on success,
  *               or rejects Promise on failure.
  **/
-function createParseHabit() 
+function createParseHabit()
 {
-    return new Promise(function(resolve,reject){
+    return new Promise(function (resolve, reject) {
         var titleValue = document.getElementById("title").value;
         var habitValue = document.getElementById("habits").value;
         var iconImgNum = document.getElementById("habits").selectedIndex;
@@ -291,25 +291,25 @@ function createParseHabit()
         {
             freqData[i] = freqArray[i].checked;
 
-            if(freqArray[i].checked === true) {
+            if (freqArray[i].checked === true) {
                 numDailyFreq = i + 1;
             }
         }
-        
-        if(numDailyFreq===0)
+
+        if (numDailyFreq === 0)
             var numDailyFreq = Number(document.getElementById("others").value);
 
         var d = new Date();
         var n = d.getTime();
         var idStr = n.toString();
-        var id = titleValue.substring(0,4)+idStr.substring(idStr.length - 3);
-        var idClean = id.replace(/ /g,'');
+        var id = titleValue.substring(0, 4) + idStr.substring(idStr.length - 3);
+        var idClean = id.replace(/ /g, '');
         var progValue = 0;
 
-        if(document.getElementById('habits').selectedIndex===4){
-            uploadUserIcon(document.getElementById("iconUploaderAdd")).then(function() {
+        if (document.getElementById('habits').selectedIndex === 4) {
+            uploadUserIcon(document.getElementById("iconUploaderAdd")).then(function () {
                 // Create new habit and add to current user, then resolve
-                var HabitClass =  Parse.Object.extend("Habit");
+                var HabitClass = Parse.Object.extend("Habit");
                 var newHabit = new HabitClass();
                 habitValue = document.getElementById("img4").value;
                 //newHabit.set("id",idClean);
@@ -324,20 +324,20 @@ function createParseHabit()
                 newHabit.set("record", 0);
 
                 var user = Parse.User.current();
-                newHabit.save().then(function(habitParseObj){
+                newHabit.save().then(function (habitParseObj) {
                     // We have the UserAccount, create parse relationship
                     var relation = user.relation('habits');
                     relation.add(habitParseObj);
                     return user.save();
-                }).then(function(result){
+                }).then(function (result) {
                     resolve();
-                },function(err){
+                }, function (err) {
                     reject(err['message']);
-                });        
+                });
             });
-        }else {
+        } else {
             // Create new habit and add to current user, then resolve
-            var HabitClass =  Parse.Object.extend("Habit");
+            var HabitClass = Parse.Object.extend("Habit");
             var newHabit = new HabitClass();
             //newHabit.set("id",idClean);
             newHabit.set("title", titleValue);
@@ -351,35 +351,35 @@ function createParseHabit()
             newHabit.set("record", 0);
 
             var user = Parse.User.current();
-            newHabit.save().then(function(habitParseObj){
+            newHabit.save().then(function (habitParseObj) {
                 // We have the UserAccount, create parse relationship
                 var relation = user.relation('habits');
                 relation.add(habitParseObj);
                 return user.save();
-            }).then(function(result){
+            }).then(function (result) {
                 resolve();
-            },function(err){
+            }, function (err) {
                 reject(err['message']);
             });
         }
     });
 }
 
-function removeParseHabit(habitId){
-    return new Promise(function(resolve,reject){
+function removeParseHabit(habitId) {
+    return new Promise(function (resolve, reject) {
         var HabitClass = Parse.Object.extend("Habit");
         var query = new Parse.Query(HabitClass);
-        query.equalTo("objectId",habitId);
-        query.find().then(function(returnArray){
-            if(returnArray.length!==1) {
+        query.equalTo("objectId", habitId);
+        query.find().then(function (returnArray) {
+            if (returnArray.length !== 1) {
                 reject("Could not find your habit in the table.");
             }
 
             var habit = returnArray[0];
             return habit.destroy();
-        }).then(function(){
+        }).then(function () {
             resolve();
-        },function(err){
+        }, function (err) {
             alert(err["message"]);
             reject();
         });
@@ -387,12 +387,12 @@ function removeParseHabit(habitId){
 }
 
 function getUserHabits() {
-    return new Promise(function(resolve,reject){
+    return new Promise(function (resolve, reject) {
         var user = Parse.User.current();
         var relations = user.relation('habits');
         var query = relations.query();
         query.equalTo("Habit");
-        relations.query().find().then(function(result){
+        relations.query().find().then(function (result) {
             resolve(result);
         });
     });

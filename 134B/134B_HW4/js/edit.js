@@ -27,30 +27,30 @@ function readURL(input) {
  *               Rejects on error.
  **/
 function clickEditHabit() {
-    getUserHabits().then(function(habitList){
+    getUserHabits().then(function (habitList) {
         var habitId = localStorage.getItem("habitEditID");
         var habitIndex;
-        for(i=0;i<habitList.length;i++) {
-            if(habitList[i].id===habitId)
+        for (i = 0; i < habitList.length; i++) {
+            if (habitList[i].id === habitId)
                 habitIndex = i;      // Set current index of the habit we want to this
         }
 
         var habit = habitList[habitIndex];
 
         var tuple = isValidEditHabit(habitList, habitIndex);
-        if(!tuple[0]) {
+        if (!tuple[0]) {
             alert(tuple[1]);
             return;
         }
 
-        updateParseHabit(habit).then(function(){
+        updateParseHabit(habit).then(function () {
             alert("Edit success!");
-            location.href='list.html';
+            location.href = 'list.html';
             return;
-        }).catch(function(err){
+        }).catch(function (err) {
             alert(err);
         });
-    });        
+    });
 }
 
 /** 
@@ -65,7 +65,7 @@ function clickEditHabit() {
 function isValidEditHabit(habitList, habitInd) {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
-    
+
     var dayArray = document.getElementsByName("date[]");
     var dailyFreqArray = document.getElementsByName("day[]");
     var otherValue = document.getElementById("others").value;
@@ -76,52 +76,52 @@ function isValidEditHabit(habitList, habitInd) {
     var inputsValidated = true;
     var inputMsg = "";
 
-    if( titleValue === "" ) {
+    if (titleValue === "") {
         inputMsg = "- Please enter a habit title.\n";
         inputsValidated = false;
     }
-    
-    if( habitValue === "unselected" ) {
+
+    if (habitValue === "unselected") {
         inputMsg = inputMsg + "- Please select an icon image.\n"
         inputsValidated = false;
     }
-    
+
     // Checks whether days are selected for the habit
-    for( i = 0; i < dayArray.length; i++) {
-        if( dayArray[i].checked === true ) {
+    for (i = 0; i < dayArray.length; i++) {
+        if (dayArray[i].checked === true) {
             numDaysChecked++;
-        }   
+        }
     }
 
-    if( numDaysChecked === 0 ) {
+    if (numDaysChecked === 0) {
         inputMsg = inputMsg + "- Please select at least ONE day.\n";
         inputsValidated = false;
     }
 
     // Checks whether daily frequency is checked
-    for( j = 0; j < dailyFreqArray.length; j++ ) {
-        if( dailyFreqArray[j].checked === true ) {
+    for (j = 0; j < dailyFreqArray.length; j++) {
+        if (dailyFreqArray[j].checked === true) {
             numFreqChecked++;
             break;
         }
     }
 
     // If both daily frequency NOT checked and other value doesn't exist
-    if( numFreqChecked === 0 && otherValue === "" ) {
+    if (numFreqChecked === 0 && otherValue === "") {
         inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
         inputsValidated = false;
     }
 
     // Check for dup title
-    for(i=0;i<habitList.length;i++) {
-        if(habitList[i].get("title")===titleValue && i!==habitInd) {
+    for (i = 0; i < habitList.length; i++) {
+        if (habitList[i].get("title") === titleValue && i !== habitInd) {
             inputMsg = inputMsg + "- Habit title already exists, please change.";
             inputsValidated = false;
         }
 
     }
-    var tuple = [inputsValidated,inputMsg];
-    return tuple; 
+    var tuple = [inputsValidated, inputMsg];
+    return tuple;
 }
 
 
@@ -135,7 +135,7 @@ function isValidEditHabit(habitList, habitInd) {
  *               rejects on failure.
  **/
 function updateParseHabit(habit) {
-    return new Promise(function(resolve,reject){
+    return new Promise(function (resolve, reject) {
         // Set values
         var titleValue = document.getElementById("title").value;
         var habitValue = document.getElementById("habits").value;
@@ -157,26 +157,26 @@ function updateParseHabit(habit) {
         {
             freqData[i] = freqArray[i].checked;
 
-            if( freqArray[i].checked === true ) {
+            if (freqArray[i].checked === true) {
                 dailyFreq = i + 1;
             }
         }
 
-        if(dailyFreq===0)
+        if (dailyFreq === 0)
             dailyFreq = Number(document.getElementById("others").value);
 
         var iconUploader = document.getElementById("iconUploaderEdit");
 
-        if(document.getElementById('habits').selectedIndex===4 && iconUploader.files.length>0){
-            uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function() {
+        if (document.getElementById('habits').selectedIndex === 4 && iconUploader.files.length > 0) {
+            uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function () {
                 // change individualHabit.dailyFreq to dailyFreq if there's a problem
-                if( habit.get("dailyFreq") !== dailyFreq ) {
+                if (habit.get("dailyFreq") !== dailyFreq) {
                     habit.set("progVal", 0);
                     habit.set("streak", 0);
                     habit.set("record", 0);
                 }
                 habitValue = document.getElementById("img4").value;
-                if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+                if (iconImgNum !== 4 || iconUploader.files.length > 0) // Do not change value if no custom icon selected
                     habit.set("iconLoc", habitValue);                 // and user icon was selected before
                 habit.set("title", titleValue);
                 habit.set("iconNum", iconImgNum);  // Change later to reference file directly
@@ -185,21 +185,21 @@ function updateParseHabit(habit) {
                 habit.set("dailyFreq", dailyFreq);
 
                 // Now save changes to parse
-                habit.save().then(function(habitParseObj){
+                habit.save().then(function (habitParseObj) {
                     resolve();
-                },function(err){
+                }, function (err) {
                     reject(err['message']);
                 });
             });
-        }else{
+        } else {
             // change individualHabit.dailyFreq to dailyFreq if there's a problem
-            if( habit.get("dailyFreq") !== dailyFreq ) {
+            if (habit.get("dailyFreq") !== dailyFreq) {
                 habit.set("progVal", 0);
                 habit.set("streak", 0);
                 habit.set("record", 0);
             }
             var iconUploader = document.getElementById("iconUploaderEdit");
-            if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+            if (iconImgNum !== 4 || iconUploader.files.length > 0) // Do not change value if no custom icon selected
                 habit.set("iconLoc", habitValue);                 // and user icon was selected before
             habit.set("title", titleValue);
             habit.set("iconNum", iconImgNum);  // Change later to reference file directly
@@ -208,9 +208,9 @@ function updateParseHabit(habit) {
             habit.set("dailyFreq", dailyFreq);
 
             // Now save changes to parse
-            habit.save().then(function(habitParseObj){
+            habit.save().then(function (habitParseObj) {
                 resolve();
-            },function(err){
+            }, function (err) {
                 reject(err['message']);
             });
         }
@@ -219,14 +219,14 @@ function updateParseHabit(habit) {
 
 // recurring code, TODO remove and merge app.js calls with this file
 function uploadUserIcon(fileInput) {
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         var file = fileInput.files[0];
-    
+
         var serverUrl = 'https://api.parse.com/1/files/' + file.name;
 
         $.ajax({
             type: "POST",
-            beforeSend: function(request) {
+            beforeSend: function (request) {
                 request.setRequestHeader("X-Parse-Application-Id", 'd2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb');
                 request.setRequestHeader("X-Parse-REST-API-Key", 'F74LnjmLlP0yCRE9wUEyoo0H3T23UWrf9UqZ5eAR');
                 request.setRequestHeader("Content-Type", file.type);
@@ -235,33 +235,33 @@ function uploadUserIcon(fileInput) {
             data: file,
             processData: false,
             contentType: false,
-            success: function(data) {
+            success: function (data) {
                 alert("File available at: " + data.url);
                 document.getElementById("img4").value = data.url;
                 resolve(0);
             },
-            error: function(data) {
+            error: function (data) {
                 var obj = jQuery.parseJSON(data);
                 reject(obj.error);
             }
-        }); 
+        });
     });
 }
 
 
 function editHabit(element) {
-	var child = element.parentNode.parentNode;
+    var child = element.parentNode.parentNode;
 
-	var habitToEdit = localStorage.getItem("habitList");
-	var arrayHabit = JSON.parse(habitToEdit);
+    var habitToEdit = localStorage.getItem("habitList");
+    var arrayHabit = JSON.parse(habitToEdit);
 
-	var i = 0;
+    var i = 0;
 
-	while( i < arrayHabit.length ) {
-                    
+    while (i < arrayHabit.length) {
+
         var individualHabit = JSON.parse(arrayHabit[i]);
 
-        if(child.id == ("habit-" + individualHabit.id) ) {
+        if (child.id == ("habit-" + individualHabit.id)) {
 
             localStorage.setItem("editHabit", JSON.stringify(individualHabit));
 
@@ -275,7 +275,7 @@ function editHabit(element) {
 function validateInputs() {
     var titleValue = document.getElementById("title").value;
     var habitValue = document.getElementById("habits").value;
-    
+
     var dayArray = document.getElementsByName("date[]");
     var dailyFreqArray = document.getElementsByName("day[]");
     var otherValue = document.getElementById("others").value;
@@ -286,43 +286,43 @@ function validateInputs() {
     var inputsValidated = true;
     var inputMsg = "";
 
-    if( titleValue === "" ) {
+    if (titleValue === "") {
         inputMsg = "- Please enter a habit title.\n";
         inputsValidated = false;
     }
-    
-    if( habitValue === "unselected" ) {
+
+    if (habitValue === "unselected") {
         inputMsg = inputMsg + "- Please select an icon image.\n"
         inputsValidated = false;
     }
-    
+
     // Checks whether days are selected for the habit
-    for( i = 0; i < dayArray.length; i++) {
-        if( dayArray[i].checked === true ) {
+    for (i = 0; i < dayArray.length; i++) {
+        if (dayArray[i].checked === true) {
             numDaysChecked++;
-        }   
+        }
     }
 
-    if( numDaysChecked === 0 ) {
+    if (numDaysChecked === 0) {
         inputMsg = inputMsg + "- Please select at least ONE day.\n";
         inputsValidated = false;
     }
 
     // Checks whether daily frequency is checked
-    for( j = 0; j < dailyFreqArray.length; j++ ) {
-        if( dailyFreqArray[j].checked === true ) {
+    for (j = 0; j < dailyFreqArray.length; j++) {
+        if (dailyFreqArray[j].checked === true) {
             numFreqChecked++;
             break;
         }
     }
 
     // If both daily frequency NOT checked and other value doesn't exist
-    if( numFreqChecked === 0 && otherValue === "" ) {
+    if (numFreqChecked === 0 && otherValue === "") {
         inputMsg = inputMsg + "- Please specify daily frequency of habit.\n";
         inputsValidated = false;
     }
 
-    if( inputsValidated === true ) {
+    if (inputsValidated === true) {
         checkDuplicateTitle();
     }
     else {
@@ -333,18 +333,18 @@ function validateInputs() {
 
 function checkDuplicateTitle() {
     var titleValue = document.getElementById("title").value;
-    
+
     var habitArray = JSON.parse(localStorage.getItem("habitList"));
     var updatedHabitID = localStorage.getItem("habitEditID"); // ID of the habit you're editing
 
     var j = 0
 
-    while( j < habitArray.length ) {
-                    
+    while (j < habitArray.length) {
+
         var individualHabit = JSON.parse(habitArray[j]);
 
-        if( titleValue === individualHabit.title ) {
-            if( individualHabit.id != updatedHabitID ) {
+        if (titleValue === individualHabit.title) {
+            if (individualHabit.id != updatedHabitID) {
                 alert("The following habit title already exists. Please edit the existing habit.");
                 return;
             }
@@ -353,12 +353,12 @@ function checkDuplicateTitle() {
         j++;
 
     }
-    if(document.getElementById('habits').selectedIndex===4) {
-        uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function() {
-        updateHabit();
-        }).catch(function(err){
+    if (document.getElementById('habits').selectedIndex === 4) {
+        uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function () {
+            updateHabit();
+        }).catch(function (err) {
             alert(err);
-        }); 
+        });
     }
     else {
         updateHabit(titleValue);
@@ -367,25 +367,25 @@ function checkDuplicateTitle() {
 
 
 // JQuery, create listeners when the document is ready
-$(document).ready(function() {
+$(document).ready(function () {
     // Handle checkbox for daily frequency, allow only one to be selected at a time,
     // or, only the custom input
-    $("#freq1Btn").click(function() {
+    $("#freq1Btn").click(function () {
         $("#freq1Btn").toggle();
         $("#freq2Btn").prop("checked", false);
         $("#freq3Btn").prop("checked", false);
     });
-    $("#freq2Btn").click(function() {
+    $("#freq2Btn").click(function () {
         $("#freq2Btn").toggle();
         $("#freq1Btn").prop("checked", false);
         $("#freq3Btn").prop("checked", false);
     });
-    $("#freq3Btn").click(function() {   
+    $("#freq3Btn").click(function () {
         $("#freq3Btn").toggle();
         $("#freq1Btn").prop("checked", false);
         $("#freq2Btn").prop("checked", false);
     });
-    $("#others").click(function() {
+    $("#others").click(function () {
         $("#freq1Btn").prop("checked", false);
         $("#freq2Btn").prop("checked", false);
         $("#freq3Btn").prop("checked", false);

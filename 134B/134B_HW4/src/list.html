@@ -80,7 +80,8 @@
             </ul>
         </section>
 
-        <button type="button" id="addHabit" onclick="mixpanel.track('addHabit'); location.href = 'add.html';" title="add habit">+</button>
+        <button type="button" id="addHabit" onclick="mixpanel.track('addHabit');
+                location.href = 'add.html';" title="add habit">+</button>
 
         <script type="text/javascript">
             function updateMsgProgBar(element) {
@@ -89,9 +90,9 @@
 
                 var HabitClass = Parse.Object.extend("Habit");
                 var query = new Parse.Query(HabitClass);
-                query.equalTo("objectId",habitId);
-                query.find().then(function(returnArray){
-                    if(returnArray.length!==1) {
+                query.equalTo("objectId", habitId);
+                query.find().then(function (returnArray) {
+                    if (returnArray.length !== 1) {
                         console.log("Error: Habit not found in database");
                     }
                     var habit = returnArray[0];
@@ -99,7 +100,7 @@
                     var progressVal = habit.get("progVal");
                     var dailyFreq = habit.get("dailyFreq");
                     var record = habit.get("record");
-                    
+
                     // Gets access to progress element
                     var progressElem = liElem.getElementsByClassName("progressBar")[0];
                     var streakRecordMsg = liElem.getElementsByClassName("message-total")[0];
@@ -108,29 +109,29 @@
                     var habitNotAvailMsg = "Habit is not available today.";
 
                     // If habit not available, do nothing
-                    if(msgElement.innerHTML === habitNotAvailMsg) {
+                    if (msgElement.innerHTML === habitNotAvailMsg) {
                         return;
                     }
 
                     // If progress bar value equals the maximum value, do nothing
-                    if(progressVal === dailyFreq) {
+                    if (progressVal === dailyFreq) {
                         return;
                     }
 
-                    if(progressVal === (dailyFreq - 1)) {
+                    if (progressVal === (dailyFreq - 1)) {
                         streak++;
                         progressVal++; // increment
                         progressElem.value = progressVal; // updates progress bar value
 
                         // update record
-                        if(record === 0) {
+                        if (record === 0) {
                             record = streak; // LOOK OVER AGAIN
                         }
-                        if( (record != 0) && (streak > record) ) {
+                        if ((record != 0) && (streak > record)) {
                             record = streak;
                         }
 
-                        streakRecordMsg.innerHTML = "<strong> " + streak + "</strong> days in a row! Best Record: <strong> " + record +"</strong><br><br>\n<progress value='" + progressVal + "'" + "max='" + dailyFreq + "'" + "></progress" ;
+                        streakRecordMsg.innerHTML = "<strong> " + streak + "</strong> days in a row! Best Record: <strong> " + record + "</strong><br><br>\n<progress value='" + progressVal + "'" + "max='" + dailyFreq + "'" + "></progress";
 
                         msgElement.innerHTML = "Completed <strong>" + dailyFreq + "/" + dailyFreq + "</strong> for today!";
                     }

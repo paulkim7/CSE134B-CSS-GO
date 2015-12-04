@@ -55,14 +55,14 @@ div#nav{
 
 /* phone */
 @media only screen
-    and (max-width: 500px) {
-        section{width:350px;margin: 0 auto;}
-        .message{right:5px;bottom:80px;font-size: small;}
+and (max-width: 500px) {
+    section{width:350px;margin: 0 auto;}
+    .message{right:5px;bottom:80px;font-size: small;}
 }
 
 /* desktop, tablet */
 @media only screen
-    and (min-width: 500px) {
+and (min-width: 500px) {
     section{width:500px;margin: 0 auto;}
     .message{right:60px;bottom:80px;}
 }

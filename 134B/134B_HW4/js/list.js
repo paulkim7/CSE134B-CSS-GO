@@ -5,7 +5,7 @@ window.onload = function () {
     checkForLogin();
     var user = Parse.User.current();
     var logoutSent = document.getElementById("username");
-    
+
     logoutSent.innerHTML = " [" + user.get("username") + "]";
 
     var tagList = [];
@@ -15,40 +15,40 @@ window.onload = function () {
     var currentDate = new Date();
     var currentDay = currentDate.getDay();
     query.equalTo("Habit");
-    relations.query().find().then(function(result){
-        for(habit of result) {
+    relations.query().find().then(function (result) {
+        for (habit of result) {
 
             var i = habit.id;
-            var title=habit.get("title");
-            var iconLoc=habit.get("iconLoc");
-            var iconNum=habit.get("iconNum");  // Change later to reference file directly
-            var day=habit.get("day");
-            var freq=habit.get("freq");
-            var progVal=habit.get("progVal");
-            var dailyFreq=habit.get("dailyFreq");
-            var streak=habit.get("streak");
-            var record=habit.get("record");
-        
+            var title = habit.get("title");
+            var iconLoc = habit.get("iconLoc");
+            var iconNum = habit.get("iconNum");  // Change later to reference file directly
+            var day = habit.get("day");
+            var freq = habit.get("freq");
+            var progVal = habit.get("progVal");
+            var dailyFreq = habit.get("dailyFreq");
+            var streak = habit.get("streak");
+            var record = habit.get("record");
+
             if (!document.getElementById('habit-' + i) &&
-                !document.getElementById('nameLi-' + i) &&
-                !document.getElementById('nameDiv-' + i) &&
-                !document.getElementById('totalSpan-' + i) &&
-                !document.getElementById('messSvg-' + i) &&
-                !document.getElementById('messLine1-' + i) &&
-                !document.getElementById('messLine2-' + i) &&
-                !document.getElementById('today-' + i) &&
-                !document.getElementById('habitOp-' + i) &&
-                !document.getElementById('done-' + i) &&
-                !document.getElementById('edit-' + i) &&
-                !document.getElementById('del-' + i) &&
-                !document.getElementById('doneImg-' + i) &&
-                !document.getElementById('editImg-' + i) &&
-                !document.getElementById('delImg-' + i) &&
-                !document.getElementById('iconLi-' + i) &&
-                !document.getElementById('iconImg-' + i) &&
-                !document.getElementById('info-' + i)) 
+                    !document.getElementById('nameLi-' + i) &&
+                    !document.getElementById('nameDiv-' + i) &&
+                    !document.getElementById('totalSpan-' + i) &&
+                    !document.getElementById('messSvg-' + i) &&
+                    !document.getElementById('messLine1-' + i) &&
+                    !document.getElementById('messLine2-' + i) &&
+                    !document.getElementById('today-' + i) &&
+                    !document.getElementById('habitOp-' + i) &&
+                    !document.getElementById('done-' + i) &&
+                    !document.getElementById('edit-' + i) &&
+                    !document.getElementById('del-' + i) &&
+                    !document.getElementById('doneImg-' + i) &&
+                    !document.getElementById('editImg-' + i) &&
+                    !document.getElementById('delImg-' + i) &&
+                    !document.getElementById('iconLi-' + i) &&
+                    !document.getElementById('iconImg-' + i) &&
+                    !document.getElementById('info-' + i))
             {
-        
+
                 var list = document.createElement("li");
                 var nameLi = document.createElement("li");
                 var nameDiv = document.createElement("div");
@@ -126,7 +126,7 @@ window.onload = function () {
                 progress.value = progVal;
 
                 // add if/else statement to determine if dailyFreq is from button or OTHER RECORD
-                if( dailyFreq === 0 ) {
+                if (dailyFreq === 0) {
                     progress.max = dailyFreq;
                     today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
                 }
@@ -136,7 +136,7 @@ window.onload = function () {
                 }
 
                 // Streak and record number added
-                totalSpan.innerHTML = "<strong> " + streak + "</strong> days in a row! Best Record: <strong> " + record +"</strong><br><br>";
+                totalSpan.innerHTML = "<strong> " + streak + "</strong> days in a row! Best Record: <strong> " + record + "</strong><br><br>";
 
                 today.setAttribute("class", "message-today");
                 messDiv.setAttribute("class", "message");
@@ -165,8 +165,8 @@ window.onload = function () {
                 del.setAttribute("type", "button");
 
                 done.setAttribute("onclick", "updateMsgProgBar(this);");
-                edit.setAttribute("onclick", "storeHabitID('"+i+"'); location.href='edit.html'");
-                del.setAttribute("id",i);
+                edit.setAttribute("onclick", "storeHabitID('" + i + "'); location.href='edit.html'");
+                del.setAttribute("id", i);
                 del.setAttribute("onclick", "confirmDelete(this);");
 
                 del.appendChild(delImg);
@@ -187,18 +187,18 @@ window.onload = function () {
 
                 var arrayDaysChecked = JSON.parse(day);
 
-                for( k = 0; k < arrayDaysChecked.length; k++ ) {
-                    if( (arrayDaysChecked[k] === false) && (k === currentDay) ) {
+                for (k = 0; k < arrayDaysChecked.length; k++) {
+                    if ((arrayDaysChecked[k] === false) && (k === currentDay)) {
                         progress.style.visibility = "hidden";
                         //today.style.visibility = "hidden";
                         today.innerHTML = "Habit is not available today.";
 
                     }
-                    
-                    if( (arrayDaysChecked[k] === true) && (k === currentDay) ) {
 
-                        if(k != localStorage.getItem("recentCheckedDay")) {
-                            if(progVal === 0) {
+                    if ((arrayDaysChecked[k] === true) && (k === currentDay)) {
+
+                        if (k != localStorage.getItem("recentCheckedDay")) {
+                            if (progVal === 0) {
                                 streak = 0;
                             }
 
@@ -210,9 +210,9 @@ window.onload = function () {
 
                         today.innerHTML = "Completed <strong> " + progVal + "/" + dailyFreq + "</strong> for today!";
 
-                    }  
+                    }
 
-                }            
+                }
             }
 
         }
@@ -220,13 +220,13 @@ window.onload = function () {
 
 };
 
-function getParseHabits(userId){
+function getParseHabits(userId) {
     // Get user account using userId
     var userClass = Parse.object.extend("UserAccount");
     var userQuery = new Parse.query(userClass);
-    return new Promise(function(resolve,reject){
-        userQuery.equalTo("id",userId).find().then(function(userList){
-            if(userList===undefined || userList.size!==1) {
+    return new Promise(function (resolve, reject) {
+        userQuery.equalTo("id", userId).find().then(function (userList) {
+            if (userList === undefined || userList.size !== 1) {
                 reject();
             }
             resolve(userList[0].get(habits));
@@ -237,7 +237,7 @@ function getParseHabits(userId){
 function confirmDelete(element) {
     var deleteConfirm = confirm("Are you sure you want to delete this habit?");
 
-    if(deleteConfirm) {
+    if (deleteConfirm) {
         deleteHabit(element);
         removeParseHabit(element.id);
     }

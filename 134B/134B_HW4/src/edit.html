@@ -74,83 +74,83 @@
     <body>
         <script>
             function onStart() {
-                 var HabitClass = Parse.Object.extend("Habit");
+                var HabitClass = Parse.Object.extend("Habit");
                 var query = new Parse.Query(HabitClass);
                 var habitId = localStorage.getItem("habitEditID");
-                query.equalTo("objectId",habitId);
-                query.find().then(function(returnArray){
-                    if(returnArray.length!==1) {
+                query.equalTo("objectId", habitId);
+                query.find().then(function (returnArray) {
+                    if (returnArray.length !== 1) {
                         console.log("Error: Habit not found in database");
                     }
                     var habit = returnArray[0];
-                    
-            var title=habit.get("title");
-            var iconLoc=habit.get("iconLoc");
-            var iconNum=habit.get("iconNum");  // Change later to reference file directly
-            var day=habit.get("day");
-            var freq=habit.get("freq");
-            var progVal=habit.get("progVal");
-            var dailyFreq=habit.get("dailyFreq");
-            var streak=habit.get("streak");
-            var record=habit.get("record");
 
-                document.getElementById("title").value = title;
+                    var title = habit.get("title");
+                    var iconLoc = habit.get("iconLoc");
+                    var iconNum = habit.get("iconNum");  // Change later to reference file directly
+                    var day = habit.get("day");
+                    var freq = habit.get("freq");
+                    var progVal = habit.get("progVal");
+                    var dailyFreq = habit.get("dailyFreq");
+                    var streak = habit.get("streak");
+                    var record = habit.get("record");
 
-                selectImage("icon"+iconNum,"img"+iconNum);
+                    document.getElementById("title").value = title;
 
-                var arrayDays = JSON.parse(day);
-                
-                var j = 0;
-                while (j < arrayDays.length) {
-                    if (arrayDays[j] === true) {
-                        if (j === 0) {
-                            document.getElementById("sun").checked = true;
+                    selectImage("icon" + iconNum, "img" + iconNum);
+
+                    var arrayDays = JSON.parse(day);
+
+                    var j = 0;
+                    while (j < arrayDays.length) {
+                        if (arrayDays[j] === true) {
+                            if (j === 0) {
+                                document.getElementById("sun").checked = true;
+                            }
+                            if (j === 1) {
+                                document.getElementById("mon").checked = true;
+                            }
+                            if (j === 2) {
+                                document.getElementById("tues").checked = true;
+                            }
+                            if (j === 3) {
+                                document.getElementById("wed").checked = true;
+                            }
+                            if (j === 4) {
+                                document.getElementById("thurs").checked = true;
+                            }
+                            if (j === 5) {
+                                document.getElementById("fri").checked = true;
+                            }
+                            if (j === 6) {
+                                document.getElementById("sat").checked = true;
+                            }
                         }
-                        if (j === 1) {
-                            document.getElementById("mon").checked = true;
-                        }
-                        if (j === 2) {
-                            document.getElementById("tues").checked = true;
-                        }
-                        if (j === 3) {
-                            document.getElementById("wed").checked = true;
-                        }
-                        if (j === 4) {
-                            document.getElementById("thurs").checked = true;
-                        }
-                        if (j === 5) {
-                            document.getElementById("fri").checked = true;
-                        }
-                        if (j === 6) {
-                            document.getElementById("sat").checked = true;
-                        }
+
+                        j++;
                     }
 
-                    j++;
-                }
+                    var arrayFreq = freq;
 
-                var arrayFreq = freq;
+                    var k = 0;
 
-                var k = 0;
-
-                while (k < arrayFreq.length) {
-                    if (arrayFreq[k] === true) {
-                        if (k === 0) {
-                            document.getElementById("freq1Btn").checked = true;
+                    while (k < arrayFreq.length) {
+                        if (arrayFreq[k] === true) {
+                            if (k === 0) {
+                                document.getElementById("freq1Btn").checked = true;
+                            }
+                            if (k === 1) {
+                                document.getElementById("freq2Btn").checked = true;
+                            }
+                            if (k === 2) {
+                                document.getElementById("freq3Btn").checked = true;
+                            }
                         }
-                        if (k === 1) {
-                            document.getElementById("freq2Btn").checked = true;
-                        }
-                        if (k === 2) {
-                            document.getElementById("freq3Btn").checked = true;
-                        }
+                        k++;
                     }
-                    k++;
-                }
-                var otherFreq = document.getElementById("others");
-                if(dailyFreq>3)
-                    document.getElementById("others").value = dailyFreq;
-            });
+                    var otherFreq = document.getElementById("others");
+                    if (dailyFreq > 3)
+                        document.getElementById("others").value = dailyFreq;
+                });
             }
 
             window.onload = onStart;
@@ -161,12 +161,12 @@
                 <p><label><span id="title_text">Habit Title</span></label></p>
                 <p><input id="title" type="text" name="fullname" placeholder="Exercise 30 minutes"></p>
                 <p><label>Habit Icon</label></p>
-                <img id="icon1" class="icon" onclick="selectImage('icon1','img1');" src="../img/sleep.jpg" alt="../img/sleep.jpg"/>
-				<img id="icon2" class="icon" onclick="selectImage('icon2','img2');" src="../img/salad.jpg" alt="../img/salad.jpg"/>
-				<img id="icon3" class="icon" onclick="selectImage('icon3','img3');" src="../img/run.jpg" alt="../img/run.jpg"/>
-				<input type="file" id='iconUploaderEdit' class ="hidden" accept=".png,.jpg,.jpeg,.gif" onchange="readURL(this)" name='Upload Own Image'>
+                <img id="icon1" class="icon" onclick="selectImage('icon1', 'img1');" src="../img/sleep.jpg" alt="../img/sleep.jpg"/>
+                <img id="icon2" class="icon" onclick="selectImage('icon2', 'img2');" src="../img/salad.jpg" alt="../img/salad.jpg"/>
+                <img id="icon3" class="icon" onclick="selectImage('icon3', 'img3');" src="../img/run.jpg" alt="../img/run.jpg"/>
+                <input type="file" id='iconUploaderEdit' class ="hidden" accept=".png,.jpg,.jpeg,.gif" onchange="readURL(this)" name='Upload Own Image'>
                 <img id="icon4" class="icon" onclick="$('#iconUploaderEdit').click();" src="../img/add.png" alt="../img/add.png"/>
-                
+
                 <p><label>Weekly Frequency</label></p>
                 <div id="ck-button">
                     <label> <input type="checkbox" name="date[]" value="sunday" id="sun"><span>Sun</span></label>
@@ -193,7 +193,8 @@
                     <span id="times">times</span>
                 </div>
                 <p><label><span id="others_text">Others: </span><input id="others" type="number" min="4" name="day" placeholder="More than 3 times"></label></p>
-                 <p id="save_p"><input id="save" type="button" value="Save It" onclick="clickEditHabit();mixpanel.track('SaveEdits');"></p>
+                <p id="save_p"><input id="save" type="button" value="Save It" onclick="clickEditHabit();
+                        mixpanel.track('SaveEdits');"></p>
 
             </form>
 
