@@ -1,6 +1,5 @@
 
 function checkForUserLogin() {
-    alert("checkfor user");
     if(checkForCacheUser()) {
         alert("Welcome " + user.get("username"));
         location.href = "list.html";
