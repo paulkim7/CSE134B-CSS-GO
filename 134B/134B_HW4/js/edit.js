@@ -165,106 +165,133 @@ function updateParseHabit(habit) {
         if(dailyFreq===0)
             dailyFreq = Number(document.getElementById("others").value);
 
-        // change individualHabit.dailyFreq to dailyFreq if there's a problem
-        if( habit.get("dailyFreq") !== dailyFreq ) {
-            habit.set("progVal", 0);
-            habit.set("streak", 0);
-            habit.set("record", 0);
-        }
-        var iconUploader = document.getElementById("iconUploaderEdit");
-        if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
-            habit.set("iconLoc", habitValue);                 // and user icon was selected before
-        habit.set("title", titleValue);
-        habit.set("iconNum", iconImgNum);  // Change later to reference file directly
-        habit.set("day", dayString);
-        habit.set("freq", freqData);
-        habit.set("dailyFreq", dailyFreq);
+        if(document.getElementById('habits').selectedIndex===4){
+            uploadUserIcon(document.getElementById("iconUploaderEdit")).then(function() {
+                // change individualHabit.dailyFreq to dailyFreq if there's a problem
+                if( habit.get("dailyFreq") !== dailyFreq ) {
+                    habit.set("progVal", 0);
+                    habit.set("streak", 0);
+                    habit.set("record", 0);
+                }
+                habitValue = document.getElementById("iconUploaderEdit").value;
+                var iconUploader = document.getElementById("iconUploaderEdit");
+                if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+                    habit.set("iconLoc", habitValue);                 // and user icon was selected before
+                habit.set("title", titleValue);
+                habit.set("iconNum", iconImgNum);  // Change later to reference file directly
+                habit.set("day", dayString);
+                habit.set("freq", freqData);
+                habit.set("dailyFreq", dailyFreq);
 
-        // Now save changes to parse
-        habit.save().then(function(habitParseObj){
-            resolve();
-        },function(err){
-            reject(err['message']);
-        });
+                // Now save changes to parse
+                habit.save().then(function(habitParseObj){
+                    resolve();
+                },function(err){
+                    reject(err['message']);
+                });
+            });
+        }else{
+            // change individualHabit.dailyFreq to dailyFreq if there's a problem
+            if( habit.get("dailyFreq") !== dailyFreq ) {
+                habit.set("progVal", 0);
+                habit.set("streak", 0);
+                habit.set("record", 0);
+            }
+            var iconUploader = document.getElementById("iconUploaderEdit");
+            if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+                habit.set("iconLoc", habitValue);                 // and user icon was selected before
+            habit.set("title", titleValue);
+            habit.set("iconNum", iconImgNum);  // Change later to reference file directly
+            habit.set("day", dayString);
+            habit.set("freq", freqData);
+            habit.set("dailyFreq", dailyFreq);
+
+            // Now save changes to parse
+            habit.save().then(function(habitParseObj){
+                resolve();
+            },function(err){
+                reject(err['message']);
+            });
+        }
     });
 }
 
-function updateHabit() {
-    var removedHabit = localStorage.getItem("habitList");
-    var arrayHabit = JSON.parse(removedHabit);
+// function updateHabit() {
+//     var removedHabit = localStorage.getItem("habitList");
+//     var arrayHabit = JSON.parse(removedHabit);
 
-    var j = 0;
+//     var j = 0;
 
-    // If I have the index number in which it's in, it's easier (figure out more efficient way)
-    // Inefficient way
-    while (j < arrayHabit.length) {
+//     // If I have the index number in which it's in, it's easier (figure out more efficient way)
+//     // Inefficient way
+//     while (j < arrayHabit.length) {
 
-        var individualHabit = JSON.parse(arrayHabit[j]);
-        var updatedHabitID = localStorage.getItem("habitEditID");
-        var habitBeforeEdit = JSON.parse(localStorage.getItem("habitBeforeChanges"));
+//         var individualHabit = JSON.parse(arrayHabit[j]);
+//         var updatedHabitID = localStorage.getItem("habitEditID");
+//         var habitBeforeEdit = JSON.parse(localStorage.getItem("habitBeforeChanges"));
 
-        if (updatedHabitID === individualHabit.id) {
+//         if (updatedHabitID === individualHabit.id) {
             
-            var titleValue = document.getElementById("title").value;
-            var habitValue = document.getElementById("habits").value;
-            var iconImgNum = document.getElementById("habits").selectedIndex;
+//             var titleValue = document.getElementById("title").value;
+//             var habitValue = document.getElementById("habits").value;
+//             var iconImgNum = document.getElementById("habits").selectedIndex;
 
-            var dayArray = document.getElementsByName("date[]");
-            var dayLength = dayArray.length;
-            var dayData = Array();
-            for (k = 0; k < dayLength; k++)
-            {
-                dayData[k] = dayArray[k].checked;
-            }
-            var dayString = JSON.stringify(dayData);
+//             var dayArray = document.getElementsByName("date[]");
+//             var dayLength = dayArray.length;
+//             var dayData = Array();
+//             for (k = 0; k < dayLength; k++)
+//             {
+//                 dayData[k] = dayArray[k].checked;
+//             }
+//             var dayString = JSON.stringify(dayData);
 
-            var freqArray = document.getElementsByName("day[]");
-            var freqLength = freqArray.length;
-            var freqData = Array();
-            var dailyFreq = 0;
-            for (i = 0; i < freqLength; i++)
-            {
-                freqData[i] = freqArray[i].checked;
+//             var freqArray = document.getElementsByName("day[]");
+//             var freqLength = freqArray.length;
+//             var freqData = Array();
+//             var dailyFreq = 0;
+//             for (i = 0; i < freqLength; i++)
+//             {
+//                 freqData[i] = freqArray[i].checked;
 
-                if( freqArray[i].checked === true ) {
-                    dailyFreq = i + 1;
-                }
-            }
+//                 if( freqArray[i].checked === true ) {
+//                     dailyFreq = i + 1;
+//                 }
+//             }
 
-            if(dailyFreq===0)
-                individualHabit.dailyFreq = document.getElementById("others").value;
-            else
-                individualHabit.dailyFreq = dailyFreq;
+//             if(dailyFreq===0)
+//                 individualHabit.dailyFreq = document.getElementById("others").value;
+//             else
+//                 individualHabit.dailyFreq = dailyFreq;
 
 
-            // change individualHabit.dailyFreq to dailyFreq if there's a problem
-            if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
-                individualHabit.progVal = 0;
-                individualHabit.streak = 0;
-                individualHabit.record = 0;
-            }
-            var freqString = JSON.stringify(freqData);
+//             // change individualHabit.dailyFreq to dailyFreq if there's a problem
+//             if( individualHabit.dailyFreq != habitBeforeEdit.dailyFreq ) {
+//                 individualHabit.progVal = 0;
+//                 individualHabit.streak = 0;
+//                 individualHabit.record = 0;
+//             }
+//             var freqString = JSON.stringify(freqData);
 
-            individualHabit.iconNum = iconImgNum;
-            individualHabit.title = titleValue;
-            var iconUploader = document.getElementById("iconUploaderEdit");
-            if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
-                individualHabit.icon = habitValue;           // and user icon was selected before
-            individualHabit.day = dayString;
+//             individualHabit.iconNum = iconImgNum;
+//             individualHabit.title = titleValue;
+//             var iconUploader = document.getElementById("iconUploaderEdit");
+//             if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
+//                 individualHabit.icon = habitValue;           // and user icon was selected before
+//             individualHabit.day = dayString;
 
-            individualHabit.freq = freqString;
-            arrayHabit[j] = JSON.stringify(individualHabit);
+//             individualHabit.freq = freqString;
+//             arrayHabit[j] = JSON.stringify(individualHabit);
 
-            break;
-        }
+//             break;
+//         }
 
-        j++;
+//         j++;
 
-    }
-    localStorage.setItem("habitList", JSON.stringify(arrayHabit));
+//     }
+//     localStorage.setItem("habitList", JSON.stringify(arrayHabit));
 
-  //  location.href = 'list.html';
-}
+//   //  location.href = 'list.html';
+// }
 
 // recurring code, TODO remove and merge app.js calls with this file
 function uploadUserIcon(fileInput) {
