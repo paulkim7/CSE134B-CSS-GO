@@ -1,3 +1,14 @@
+
+function checkForUserLogin() {
+    alert("checkfor user");
+    if(checkForCacheUser()) {
+        alert("Welcome " + user.get("username"));
+        location.href = "list.html";
+    }
+}
+
+checkForUserLogin();
+
 // Returns true on valid, false on invalid
 function isValidEmail(email) {
     var re = /\S+@\S+\.\S+/;

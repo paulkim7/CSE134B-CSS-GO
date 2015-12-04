@@ -101,9 +101,8 @@ function createUser(email, pass) {
         newUser.set("username", email);    // Username is email in this app
         newUser.set("password", pass);
         newUser.signUp().then(function (newUser) {
+            alert("User account successfully created.");
             resolve();    // Return new user object
-            alert("success save");
-            location.href = 'list.html';
         }, function (err) {
             reject(err);
         });
@@ -374,7 +373,6 @@ function removeParseHabit(habitId) {
             if (returnArray.length !== 1) {
                 reject("Could not find your habit in the table.");
             }
-
             var habit = returnArray[0];
             return habit.destroy();
         }).then(function () {

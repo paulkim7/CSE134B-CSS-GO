@@ -24,13 +24,6 @@ body {
     margin: 0 auto;
     top: 15%;
     width: 500px;
-    /*
-    left: 50%;
-  
-    -webkit-transform: translateY(-75%);
-    -moz-transform: translateY(-75%);
-    -ms-transform: translateY(-75%);
-    transform: translate(-50%, -75%); */
 }
 
 @media (max-width: 450px) {

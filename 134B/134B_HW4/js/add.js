@@ -9,7 +9,7 @@
  * Output: Returns true on success or false if invalid input.
  **/
 function validateCustomDays(input) {
-    if (typeof input != integer) {
+    if (typeof input !== integer) {
         return false;
     } else if (input > Number.MAX_VALUE) {
         return false;

@@ -8,10 +8,10 @@
         <link rel="stylesheet" type="text/css" href="../css/list.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.6.7.min.js"></script>
-        <script src="../js/list.js">
-        </script>
         <script src="../js/edit.js"></script>
         <script src="../js/app.js"></script>
+        <script src="../js/list.js"></script>
+
 
         <!-- start Mixpanel -->
         <script type="text/javascript">(function (e, b) {
@@ -79,6 +79,10 @@
             <ul id="habit-list">
             </ul>
         </section>
+
+        <div id="noHabitContainer" class="hidden">
+            <h3>You currently have no habits, <a href="add.html">Click here to add a habit</a>
+        </div>
 
         <button type="button" id="addHabit" onclick="mixpanel.track('addHabit');
                 location.href = 'add.html';" title="add habit">+</button>

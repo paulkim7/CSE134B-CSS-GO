@@ -1,8 +1,10 @@
 // Initialize dependency (Parse backend)
 Parse.initialize("d2claNl95q01NDPLvJ5c6wss7ePAqKGn9l048Zqb", "N344LtQrb8LdEIKU1M4dlsMSUZiXf1fEtSY16Of7");
 
+checkForLogin();  // Do this before everything is loaded
+
+
 window.onload = function () {
-    checkForLogin();
     var user = Parse.User.current();
     var logoutSent = document.getElementById("username");
 
@@ -16,6 +18,9 @@ window.onload = function () {
     var currentDay = currentDate.getDay();
     query.equalTo("Habit");
     relations.query().find().then(function (result) {
+        if(result.length===0) {
+            document.getElementById("noHabitContainer").className = "centered";
+        }
         for (habit of result) {
 
             var i = habit.id;
