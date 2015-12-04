@@ -448,7 +448,7 @@ function checkDuplicateTitle() {
         }); 
     }
     else {
-        updateHabit();
+        updateHabit(titleValue);
     }
 }
 

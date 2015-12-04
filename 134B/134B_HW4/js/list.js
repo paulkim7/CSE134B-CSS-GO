@@ -163,7 +163,7 @@ window.onload = function () {
                 del.setAttribute("type", "button");
 
                 done.setAttribute("onclick", "updateMsgProgBar(this);");
-                edit.setAttribute("onclick", "updateParseHabit('"+title+"'); location.href='edit.html'");
+                edit.setAttribute("onclick", "storeHabitID('"+i+"'); location.href='edit.html'");
                 del.setAttribute("onclick", "confirmDelete(this);");
 
                 del.appendChild(delImg);

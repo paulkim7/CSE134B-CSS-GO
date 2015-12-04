@@ -73,20 +73,43 @@
     <body>
         <script>
             function onStart() {
-                // TODO, use the same localStorage, but set it using Parse data and not more localStorage data
-                var habitToEdit = localStorage.getItem("editHabit");
-                var habitToEditObj = JSON.parse(habitToEdit);
-                
-                localStorage.setItem("habitEditID", habitToEditObj.id);
-                localStorage.setItem("habitBeforeChanges", JSON.stringify(habitToEditObj));
-                document.getElementById("title").value = habitToEditObj.title;
-                var i = 1;
+                 var HabitClass = Parse.Object.extend("Habit");
+                var query = new Parse.Query(HabitClass);
+                var habitId = localStorage.getItem("habitEditID");
+                query.equalTo("objectId",habitId);
+                query.find().then(function(returnArray){
+                    if(returnArray.length!==1) {
+                        console.log("Error: Habit not found in database");
+                    }
+                    var habit = returnArray[0];
+                    
+                    // Paul put all your code here, access elements like below
+            var title=habit.get("title");
+            var iconLoc=habit.get("iconLoc");
+            var iconNum=habit.get("iconNum");  // Change later to reference file directly
+            var day=habit.get("day");
+            console.log(day);
+            var freq=habit.get("freq");
+            console.log(freq);
+            var progVal=habit.get("progVal");
+            var dailyFreq=habit.get("dailyFreq");
+            var streak=habit.get("streak");
+            var record=habit.get("record");
+                    console.log(habit.get("title"));
+                    // TODO, use the same localStorage, but set it using Parse data and not more localStorage data
+//                var habitToEdit = localStorage.getItem("habitEditID");
+//                var habitToEditObj = JSON.parse(habitToEdit);
+//                
+//                localStorage.setItem("habitEditID", habitToEditObj.id);
+//                localStorage.setItem("habitBeforeChanges", JSON.stringify(habitToEditObj));
+                document.getElementById("title").value = title;
+                //var i = 1;
 
-                var iconNum = habitToEditObj.iconNum;
+//                var iconNum = habitToEditObj.iconNum;
                 selectImage("icon"+iconNum,"img"+iconNum);
 
-                var arrayDays = JSON.parse(habitToEditObj.day);
-                
+                var arrayDays = JSON.parse(day);
+                console.log(arrayDays);
                 var j = 0;
                 while (j < arrayDays.length) {
                     if (arrayDays[j] === true) {
@@ -116,7 +139,7 @@
                     j++;
                 }
 
-                var arrayFreq = JSON.parse(habitToEditObj.freq);
+                var arrayFreq = freq;
 
                 var k = 0;
 
@@ -135,8 +158,9 @@
                     k++;
                 }
                 var otherFreq = document.getElementById("others");
-                if(habitToEditObj.dailyFreq>3)
-                    document.getElementById("others").value=habitToEditObj.dailyFreq;
+                if(dailyFreq>3)
+                    document.getElementById("others").value = dailyFreq;
+            });
             }
 
             window.onload = onStart;
