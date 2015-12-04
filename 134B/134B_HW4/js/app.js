@@ -328,6 +328,7 @@ function clickAddHabit() {
             if(!tuple[0]) {
                 alert(tuple[1]);
                 reject(false);
+                return;
             }
 
             createParseHabit().then(function(){
