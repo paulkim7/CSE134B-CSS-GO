@@ -173,7 +173,7 @@ function updateParseHabit(habit) {
                     habit.set("streak", 0);
                     habit.set("record", 0);
                 }
-                habitValue = document.getElementById("iconUploaderEdit").value;
+                habitValue = document.getElementById("img4").value;
                 var iconUploader = document.getElementById("iconUploaderEdit");
                 if(iconImgNum!==4 || iconUploader.files.length>0 ) // Do not change value if no custom icon selected
                     habit.set("iconLoc", habitValue);                 // and user icon was selected before
